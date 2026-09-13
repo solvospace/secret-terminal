@@ -1,21 +1,14 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState, useRef } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
-import {
-    formatValueIntoCommaSeparated,
-    roundOffNumber,
-    formatValueInUsdCompact,
-} from "@secret-terminal/services/utils.service";
-import { useCoinAnalysisContext } from "@/contexts/coin-analysis.context";
+import { formatValueIntoCommaSeparated, formatValueInUsdCompact } from "@secret-terminal/services/utils.service";
 import { FaCaretUp, FaCaretDown } from "react-icons/fa";
 import { Info } from "lucide-react";
 import { coinKeyList, coinSymbolImageSize } from "@/constants/app.constants";
 import type { CoinAnalysis } from "@/interfaces/coin-analysis.interface";
 import useCoinInfo from "@/hooks/use-coin-info";
 import CoinDetailsDialog from "@/components/features/coin-details/coin-details-dialog";
-import { StCoin } from "@secret-terminal/types/coin-list.types";
 import {
     InteractiveTooltip,
     InteractiveTooltipTrigger,
@@ -104,10 +97,14 @@ function CoinInfo({ coinProperties }: Bindings) {
                                     </div>
 
                                     <div className="font-medium">
-                                        {formatValueIntoCommaSeparated(
-                                            Number(coinInfo[coinKeyItem.key as keyof typeof coinInfo]),
-                                            0,
-                                            true,
+                                        {coinInfo[coinKeyItem.key as keyof typeof coinInfo] ? (
+                                            formatValueIntoCommaSeparated(
+                                                Number(coinInfo[coinKeyItem.key as keyof typeof coinInfo]),
+                                                0,
+                                                true,
+                                            )
+                                        ) : (
+                                            <div className="no-value-text">No data</div>
                                         )}
                                     </div>
                                 </div>
