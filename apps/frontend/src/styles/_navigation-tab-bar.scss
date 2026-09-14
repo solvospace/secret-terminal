@@ -1,25 +1,19 @@
 .navigation-tab-bar {
     [data-slot="tabs"] {
-        box-shadow: unset;
-        border: unset;
-        border-radius: var(--border-radius);
         max-width: max-content;
         margin: auto;
         overflow: auto hidden;
-        display: flex;
-        align-items: center;
+        border-radius: var(--border-radius);
 
         [data-slot="tabs-list"] {
-            border-color: var(--border-color);
             background-color: var(--main-bg-color);
-            box-shadow: var(--box-shadow);
-            border-radius: unset;
-            align-items: center;
+            border-radius: var(--border-radius);
+            border: unset;
+            box-shadow: unset;
 
             [data-state="active"] {
                 background-color: var(--tab-active-bg-color);
                 color: var(--tab-active-text-color);
-                box-shadow: unset;
             }
 
             [data-slot="tooltip-trigger"],
@@ -76,22 +70,23 @@
     }
 }
 
-@media (width < 920) {
+@media (width < 720) {
     .navigation-tab-bar {
         [data-slot="tabs"] {
             box-shadow: var(--box-shadow);
-            border: 1px solid var(--border-color);
-        }
 
-        [data-slot="tabs-list"] {
+            [data-slot="tabs-list"] {
+                border: 1px solid var(--border-color);
+                box-shadow: var(--box-shadow);
 
-            button,
-            a {
-                min-width: 50px !important;
-            }
+                button,
+                a {
+                    min-width: 50px !important;
+                }
 
-            [data-slot="tabs-trigger"] {
-                padding: 4px 6px;
+                [data-slot="tabs-trigger"] {
+                    padding: 4px 6px;
+                }
             }
         }
     }
