@@ -8,11 +8,12 @@
         "lint": "turbo lint"
     },
     "devDependencies": {
-        "@types/node": "24.1.0",
         "concurrently": "^10.0.5",
         "turbo": "^2.10.12",
-        "typescript": "7.0.2",
-        "wait-on": "^9.1.0"
+        "wait-on": "^9.1.0",
+        "@types/node": "24.1.0",
+        "typescript": "6.0.3",
+        "eslint": "9.39.1"
     },
     "packageManager": "pnpm@12.4.1",
     "engines": {

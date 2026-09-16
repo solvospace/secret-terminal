@@ -7,6 +7,7 @@
         "dev": "node --watch --inspect=9230 --import tsx src/server.ts",
         "build": "pnpm run prisma:generate && tsc -p tsconfig.json",
         "start": "node ./dist/src/server.js",
+        "lint": "eslint .",
         "prisma:generate": "tsx scripts/prisma-generate.ts",
         "prisma:migrate": "tsx scripts/prisma-migrate.ts",
         "postinstall": "pnpm run prisma:generate"
@@ -18,6 +19,9 @@
     "dependencies": {
         "@prisma/adapter-pg": "^7.8.0",
         "@prisma/client": "^7.8.0",
+        "@secret-terminal/services": "workspace:*",
+        "@secret-terminal/types": "workspace:*",
+        "axios": "^1.19.0",
         "bcrypt": "^6.0.0",
         "cookie-parser": "^1.4.7",
         "cors": "^2.8.6",
@@ -28,12 +32,10 @@
         "jsonwebtoken": "^9.0.3",
         "pg": "^8.21.0",
         "resend": "^6.12.4",
-        "zod": "^4.4.3",
-        "axios": "^1.19.0",
-        "@secret-terminal/services": "workspace:*",
-        "@secret-terminal/types": "workspace:*"
+        "zod": "^4.4.3"
     },
     "devDependencies": {
+        "@eslint/js": "9.39.1",
         "@types/bcrypt": "^6.0.0",
         "@types/cookie-parser": "^1.4.10",
         "@types/cors": "^2.8.19",
@@ -44,10 +46,12 @@
         "@types/swagger-jsdoc": "^6.0.4",
         "@types/swagger-ui-express": "^4.1.8",
         "dotenv": "^17.4.2",
+        "globals": "^17.12.0",
         "prisma": "^7.8.0",
         "ts-node": "^10.9.2",
         "ts-node-dev": "^2.0.0",
-        "tsx": "^4.22.3"
+        "tsx": "^4.22.3",
+        "typescript-eslint": "^8.70.0"
     },
     "overrides": {
         "find-my-way": "9.7.0",
