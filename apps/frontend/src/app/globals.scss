@@ -174,7 +174,7 @@
 
     --main-bg-color: #181a21;
     --hover-bg-color: #20232c;
-    --top-bg-color: #14161c;
+    --top-bg-color: #1d2028;
 
     --text-color: #e8eaf0;
 
@@ -206,6 +206,8 @@
 
     --scrollbar-thumb: #30343e;
     --scrollbar-track: #111318;
+
+    --profile-bg-color: var(--main-bg-color);
 }
 
 @layer base {
