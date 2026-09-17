@@ -116,12 +116,6 @@
                 color: var(--text-color);
                 cursor: pointer;
 
-                &:focus-visible {
-                    outline: 1px solid var(--main-color);
-                    border: 1px solid var(--main-color);
-                    box-shadow: unset;
-                }
-
                 &:hover {
                     &:disabled {
                         background-color: unset;
