@@ -82,9 +82,9 @@ function CoinInfo({ coinProperties }: Bindings) {
 
                                         {coinKeyItem.toolTipValue ? (
                                             <InteractiveTooltip>
-                                                <InteractiveTooltipTrigger asChild>
-                                                    <Info size={"15"} />
-                                                </InteractiveTooltipTrigger>
+                                                <InteractiveTooltipTrigger
+                                                    render={<Info size={"15"} />}
+                                                ></InteractiveTooltipTrigger>
 
                                                 <InteractiveTooltipContent
                                                     side="bottom"

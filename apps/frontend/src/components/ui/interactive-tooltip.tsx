@@ -24,7 +24,8 @@ type InteractiveTooltipProps = {
 };
 
 type InteractiveTooltipTriggerProps = {
-    children: React.ReactNode;
+    children?: React.ReactNode;
+    render?: React.ReactElement;
 };
 
 type InteractiveTooltipContentProps = {

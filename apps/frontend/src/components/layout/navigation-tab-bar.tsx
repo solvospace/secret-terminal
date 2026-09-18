@@ -33,22 +33,24 @@ export default function NavigationTabBar(bindings: Bindings) {
                             <Fragment key={tab.id}>
                                 {tab.disabled ? (
                                     <InteractiveTooltip>
-                                        <InteractiveTooltipTrigger asChild>
-                                            <button
-                                                type="button"
-                                                className="tab-disabled"
-                                                aria-label={tab.name}
-                                            >
-                                                {onMobile && (
-                                                    <Icon
-                                                        className="size-[20px]"
-                                                        size={iconSize}
-                                                    />
-                                                )}
+                                        <InteractiveTooltipTrigger
+                                            render={
+                                                <button
+                                                    type="button"
+                                                    className="tab-disabled"
+                                                    aria-label={tab.name}
+                                                >
+                                                    {onMobile && (
+                                                        <Icon
+                                                            className="size-[20px]"
+                                                            size={iconSize}
+                                                        />
+                                                    )}
 
-                                                <div className={`${onMobile && "text-[10px]"}`}>{tab.name}</div>
-                                            </button>
-                                        </InteractiveTooltipTrigger>
+                                                    <div className={`${onMobile && "text-[10px]"}`}>{tab.name}</div>
+                                                </button>
+                                            }
+                                        ></InteractiveTooltipTrigger>
 
                                         <InteractiveTooltipContent
                                             side="top"
