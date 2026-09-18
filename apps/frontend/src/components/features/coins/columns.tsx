@@ -12,7 +12,7 @@ import {
 } from "@secret-terminal/services/utils.service";
 import { ChevronsUpDown, ArrowUp, ArrowDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/menu";
 import { coinSymbolImageSize } from "@/constants/app.constants";
 import {
     InteractiveTooltip,
@@ -48,22 +48,24 @@ export const columns: ColumnDef<StCoin>[] = [
 
             return (
                 <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button
-                            variant="ghost"
-                            className="sorting-btn"
-                            disabled={table.options.meta?.fetchingList}
-                        >
-                            Coin
-                            {currentSortingValue === "id_asc" ? (
-                                <ArrowUp />
-                            ) : currentSortingValue === "id_desc" ? (
-                                <ArrowDown />
-                            ) : (
-                                <ChevronsUpDown />
-                            )}
-                        </Button>
-                    </DropdownMenuTrigger>
+                    <DropdownMenuTrigger
+                        render={
+                            <Button
+                                variant="ghost"
+                                className="sorting-btn"
+                                disabled={table.options.meta?.fetchingList}
+                            >
+                                Coin
+                                {currentSortingValue === "id_asc" ? (
+                                    <ArrowUp />
+                                ) : currentSortingValue === "id_desc" ? (
+                                    <ArrowDown />
+                                ) : (
+                                    <ChevronsUpDown />
+                                )}
+                            </Button>
+                        }
+                    ></DropdownMenuTrigger>
 
                     <DropdownMenuContent>
                         <DropdownMenuItem
@@ -228,22 +230,24 @@ export const columns: ColumnDef<StCoin>[] = [
 
             return (
                 <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button
-                            variant="ghost"
-                            className="sorting-btn"
-                            disabled={table.options.meta?.fetchingList}
-                        >
-                            Volume
-                            {currentSortingValue === "volume_asc" ? (
-                                <ArrowUp />
-                            ) : currentSortingValue === "volume_desc" ? (
-                                <ArrowDown />
-                            ) : (
-                                <ChevronsUpDown />
-                            )}
-                        </Button>
-                    </DropdownMenuTrigger>
+                    <DropdownMenuTrigger
+                        render={
+                            <Button
+                                variant="ghost"
+                                className="sorting-btn"
+                                disabled={table.options.meta?.fetchingList}
+                            >
+                                Volume
+                                {currentSortingValue === "volume_asc" ? (
+                                    <ArrowUp />
+                                ) : currentSortingValue === "volume_desc" ? (
+                                    <ArrowDown />
+                                ) : (
+                                    <ChevronsUpDown />
+                                )}
+                            </Button>
+                        }
+                    ></DropdownMenuTrigger>
 
                     <DropdownMenuContent>
                         <DropdownMenuItem
@@ -307,22 +311,24 @@ export const columns: ColumnDef<StCoin>[] = [
 
             return (
                 <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button
-                            variant="ghost"
-                            className="sorting-btn"
-                            disabled={table.options.meta?.fetchingList}
-                        >
-                            Market Cap.
-                            {currentSortingValue === "market_cap_asc" ? (
-                                <ArrowUp />
-                            ) : currentSortingValue === "market_cap_desc" ? (
-                                <ArrowDown />
-                            ) : (
-                                <ChevronsUpDown />
-                            )}
-                        </Button>
-                    </DropdownMenuTrigger>
+                    <DropdownMenuTrigger
+                        render={
+                            <Button
+                                variant="ghost"
+                                className="sorting-btn"
+                                disabled={table.options.meta?.fetchingList}
+                            >
+                                Market Cap.
+                                {currentSortingValue === "market_cap_asc" ? (
+                                    <ArrowUp />
+                                ) : currentSortingValue === "market_cap_desc" ? (
+                                    <ArrowDown />
+                                ) : (
+                                    <ChevronsUpDown />
+                                )}
+                            </Button>
+                        }
+                    ></DropdownMenuTrigger>
 
                     <DropdownMenuContent>
                         <DropdownMenuItem
