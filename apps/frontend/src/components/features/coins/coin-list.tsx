@@ -4,7 +4,7 @@ import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/in
 import { Search, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { columns } from "@/components/features/coins/columns";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { getRowsPerPageDefaultValue } from "@secret-terminal/services/utils.service";
 import { coinsTableContextMenuList } from "@/constants/app.constants";
 import useCoinList from "@/hooks/use-coin-list";
@@ -93,16 +93,18 @@ function CoinList() {
                             </SelectTrigger>
 
                             <SelectContent>
-                                {rowsPerPageListRef.current.map((rowsPerPage) => {
-                                    return (
-                                        <SelectItem
-                                            key={rowsPerPage + "-rows"}
-                                            value={String(rowsPerPage)}
-                                        >
-                                            {rowsPerPage}
-                                        </SelectItem>
-                                    );
-                                })}
+                                <SelectGroup>
+                                    {rowsPerPageListRef.current.map((rowsPerPage) => {
+                                        return (
+                                            <SelectItem
+                                                key={rowsPerPage + "-rows"}
+                                                value={String(rowsPerPage)}
+                                            >
+                                                {rowsPerPage}
+                                            </SelectItem>
+                                        );
+                                    })}
+                                </SelectGroup>
                             </SelectContent>
                         </Select>
                     </div>
