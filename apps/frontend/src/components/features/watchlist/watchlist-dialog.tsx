@@ -93,10 +93,6 @@ export default function WatchlistDialog(bindings: Bindings) {
                             watchlists={watchlists}
                             fetchingWatchlistCoins={fetchingWatchlistCoins}
                             watchlistCoins={watchlistCoins}
-                            showCoinSearchDialog={showCoinSearchDialog}
-                            setShowCoinSearchDialog={setShowCoinSearchDialog}
-                            activeWatchlist={activeWatchlist}
-                            onCoinSearchDialogClose={onCoinSearchDialogClose}
                             fetchingMarketData={fetchingMarketData}
                             watchlistCoinContextMenuList={watchlistCoinContextMenuList}
                             onContextMenuItemClicked={onContextMenuItemClicked}
@@ -171,6 +167,17 @@ export default function WatchlistDialog(bindings: Bindings) {
                             imageUrl: rightClickedItem.imageUrl,
                         }
                     }
+                />
+            )}
+
+            {showCoinSearchDialog && activeWatchlist && (
+                <CoinSearchDialog
+                    dialogLevel={2}
+                    showDialog={showCoinSearchDialog}
+                    setShowDialog={setShowCoinSearchDialog}
+                    context={"watchlist"}
+                    contextProperties={activeWatchlist}
+                    onDialogClose={onCoinSearchDialogClose}
                 />
             )}
         </>
@@ -391,15 +398,6 @@ function WatchlistCoinList(props: any) {
                         )}
                     </div>
                 )}
-
-                <CoinSearchDialog
-                    dialogLevel={2}
-                    showDialog={showCoinSearchDialog}
-                    setShowDialog={setShowCoinSearchDialog}
-                    context={"watchlist"}
-                    contextProperties={activeWatchlist}
-                    onDialogClose={onCoinSearchDialogClose}
-                />
             </>
         )
     );
@@ -419,12 +417,12 @@ function DeleteDialog(props: any) {
     return (
         <Dialog
             open={showDeleteDialog}
-            onOpenChange={setShowDeleteDialog}
+            onOpenChange={(showDeleteDialog) => {
+                setShowDeleteDialog(showDeleteDialog);
+                if (!showDeleteDialog) onDeleteDialogClose();
+            }}
         >
-            <DialogContent
-                dialogLevel={2}
-                onCloseAutoFocus={onDeleteDialogClose}
-            >
+            <DialogContent dialogLevel={2}>
                 <DialogHeader disableCloseButton={deletingItem}>
                     <DialogTitle>
                         {deleteDialogType.current === "watchlist" && "Delete Watchlist"}
@@ -472,11 +470,9 @@ function WatchlistDetailsDialog(props: any) {
         <Dialog
             open={showWatchlistDetailsDialog}
             onOpenChange={setShowWatchlistDetailsDialog}
+            closeOnOutsideClick={true}
         >
-            <DialogContent
-                dialogLevel={2}
-                closeOnOutsideClick={true}
-            >
+            <DialogContent dialogLevel={2}>
                 <DialogHeader>
                     <DialogTitle>
                         Details

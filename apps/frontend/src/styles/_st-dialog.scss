@@ -1,17 +1,19 @@
-[data-slot="dialog-content"] {
-    --dialog-body-height: 80vh;
+[data-slot="dialog-portal"] {
+    [data-slot="dialog-content"] {
+        --dialog-body-height: 80vh;
 
-    [data-slot="dialog-header"] {
-        .sub-title {
-            font-size: 11px;
-            color: var(--grey-color-3);
+        [data-slot="dialog-header"] {
+            .sub-title {
+                font-size: 11px;
+                color: var(--grey-color-3);
+            }
         }
-    }
 
-    .dialog-body {
-        max-height: calc(var(--dialog-body-height) - 101px);
-        padding: 12px;
-        font-size: 14px;
-        overflow-y: auto;
+        .dialog-body {
+            max-height: calc(var(--dialog-body-height) - 101px);
+            padding: 12px;
+            font-size: 14px;
+            overflow-y: auto;
+        }
     }
 }
