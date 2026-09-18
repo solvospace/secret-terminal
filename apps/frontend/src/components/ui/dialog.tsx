@@ -89,7 +89,9 @@ function DialogContent({
             <DialogPrimitive.Popup
                 data-slot="dialog-content"
                 className={cn(
-                    `data-[nested-dialog-open]:blur-[2px] transition-all duration-200
+                    `absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2
+                    data-[nested-dialog-open]:scale-[calc(1_-_0.1_*_var(--nested-dialogs))]
+                    data-[nested-dialog-open]:blur-[1px] transition-[scale,filter] duration-100  ease-out
                     data-[open]:animate-[var(--animate-zoom-in)] border-1 border-[var(--grey-color-1)]
                     data-[closed]:animate-[var(--animate-zoom-out)] fixed top-[50%] left-[50%]
                     z-[200] grid w-[calc(100%-2rem)] max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%]
