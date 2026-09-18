@@ -129,7 +129,11 @@ function useCoinList() {
         }
     }
 
-    function onContextMenuItemClicked(row: Row<StCoin>, contextMenu: Record<string, string>, event: Event) {
+    function onContextMenuItemClicked(
+        row: Row<StCoin>,
+        contextMenu: Record<string, string>,
+        event: React.MouseEvent<HTMLDivElement>,
+    ) {
         if (contextMenu.name === "Analyze Coin") {
             const route = getUiRoute("coinAnalysis", row.original);
 

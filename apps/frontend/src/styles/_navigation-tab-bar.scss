@@ -11,7 +11,7 @@
             border: unset;
             box-shadow: unset;
 
-            [data-state="active"] {
+            [data-active] {
                 background-color: var(--tab-active-bg-color);
                 color: var(--tab-active-text-color);
             }
@@ -70,7 +70,7 @@
     }
 }
 
-@media (width < 720) {
+@media (width < 720px) {
     .navigation-tab-bar {
         [data-slot="tabs"] {
             box-shadow: var(--box-shadow);

@@ -18,15 +18,14 @@ import { Dispatch, SetStateAction } from "react";
 import { formatValueIntoCommaSeparated, roundOffNumber } from "@secret-terminal/services/utils.service";
 import { Skeleton } from "@/components/ui/skeleton";
 import { FaCaretUp, FaCaretDown } from "react-icons/fa";
+import { DialogProps } from "@/interfaces/global.interface";
 
 type Bindings = {
-    showDialog: boolean;
-    setShowDialog: Dispatch<SetStateAction<boolean>>;
     context?: string;
     contextProperties?: Record<string, string>;
     onDialogClose?: () => void;
     dialogLevel?: number;
-};
+} & DialogProps;
 
 function CoinSearchDialog(bindings: Bindings) {
     let { showDialog, setShowDialog, context, contextProperties, onDialogClose, dialogLevel } = bindings;
@@ -45,13 +44,15 @@ function CoinSearchDialog(bindings: Bindings) {
         <div>
             <Dialog
                 open={showDialog}
-                onOpenChange={setShowDialog}
+                onOpenChange={(showDialog) => {
+                    setShowDialog(showDialog);
+                    if (!showDialog && onDialogClose) {
+                        onDialogClose();
+                    }
+                }}
+                closeOnOutsideClick={true}
             >
-                <DialogContent
-                    closeOnOutsideClick={true}
-                    onCloseAutoFocus={onDialogClose}
-                    dialogLevel={dialogLevel}
-                >
+                <DialogContent dialogLevel={dialogLevel}>
                     <DialogHeader
                         showCloseButton={false}
                         className="p-[12px]"
@@ -88,6 +89,7 @@ function CoinSearchDialog(bindings: Bindings) {
                                 <div className={`ml-[8px] cursor-pointer text-[12px] text-[var(--grey-color-3)]`}>
                                     <a
                                         onClick={() => {
+                                            if (onDialogClose) onDialogClose();
                                             setShowDialog(false);
                                         }}
                                     >

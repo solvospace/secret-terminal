@@ -93,10 +93,6 @@ export default function WatchlistDialog(bindings: Bindings) {
                             watchlists={watchlists}
                             fetchingWatchlistCoins={fetchingWatchlistCoins}
                             watchlistCoins={watchlistCoins}
-                            showCoinSearchDialog={showCoinSearchDialog}
-                            setShowCoinSearchDialog={setShowCoinSearchDialog}
-                            activeWatchlist={activeWatchlist}
-                            onCoinSearchDialogClose={onCoinSearchDialogClose}
                             fetchingMarketData={fetchingMarketData}
                             watchlistCoinContextMenuList={watchlistCoinContextMenuList}
                             onContextMenuItemClicked={onContextMenuItemClicked}
@@ -171,6 +167,17 @@ export default function WatchlistDialog(bindings: Bindings) {
                             imageUrl: rightClickedItem.imageUrl,
                         }
                     }
+                />
+            )}
+
+            {showCoinSearchDialog && activeWatchlist && (
+                <CoinSearchDialog
+                    dialogLevel={2}
+                    showDialog={showCoinSearchDialog}
+                    setShowDialog={setShowCoinSearchDialog}
+                    context={"watchlist"}
+                    contextProperties={activeWatchlist}
+                    onDialogClose={onCoinSearchDialogClose}
                 />
             )}
         </>
@@ -289,75 +296,80 @@ function WatchlistCoinList(props: any) {
                                     {watchlistCoins.map((watchlistCoin: WatchlistCoin, index: number) => {
                                         return (
                                             <ContextMenu key={watchlistCoin.id}>
-                                                <ContextMenuTrigger asChild>
-                                                    <tr>
-                                                        <td className="!w-[30px] text-center !pl-[unset]">{index + 1}</td>
+                                                <ContextMenuTrigger
+                                                    render={
+                                                        <tr>
+                                                            <td className="!w-[30px] text-center !pl-[unset]">
+                                                                {index + 1}
+                                                            </td>
 
-                                                        <td>
-                                                            <div className="flex items-center">
-                                                                <div className="coin-image-wrapper">
-                                                                    {watchlistCoin.imageUrl ? (
-                                                                        <Image
-                                                                            className="object-cover"
-                                                                            width={coinSymbolImageSize.width}
-                                                                            height={coinSymbolImageSize.height}
-                                                                            alt={`Image of ${watchlistCoin.name}`}
-                                                                            src={String(watchlistCoin.imageUrl)}
-                                                                        />
-                                                                    ) : (
-                                                                        <div className="coin-letter-mark cursor-pointer">
-                                                                            {String(watchlistCoin.symbol)[0]}
-                                                                        </div>
-                                                                    )}
-                                                                </div>
-
-                                                                <div className="break-all">{watchlistCoin.name}</div>
-                                                            </div>
-                                                        </td>
-
-                                                        <td className="text-right">
-                                                            {fetchingMarketData === true ? (
-                                                                <Skeleton className="h-[21px] w-[60px] float-right" />
-                                                            ) : (
-                                                                watchlistCoin.marketData && (
-                                                                    <div className="mr-[2px]">
-                                                                        {formatValueIntoCommaSeparated(
-                                                                            watchlistCoin.marketData.currentPrice,
-                                                                            5,
-                                                                            true,
+                                                            <td>
+                                                                <div className="flex items-center">
+                                                                    <div className="coin-image-wrapper">
+                                                                        {watchlistCoin.imageUrl ? (
+                                                                            <Image
+                                                                                className="object-cover"
+                                                                                width={coinSymbolImageSize.width}
+                                                                                height={coinSymbolImageSize.height}
+                                                                                alt={`Image of ${watchlistCoin.name}`}
+                                                                                src={String(watchlistCoin.imageUrl)}
+                                                                            />
+                                                                        ) : (
+                                                                            <div className="coin-letter-mark cursor-pointer">
+                                                                                {String(watchlistCoin.symbol)[0]}
+                                                                            </div>
                                                                         )}
                                                                     </div>
-                                                                )
-                                                            )}
-                                                        </td>
 
-                                                        <td className="text-right">
-                                                            {fetchingMarketData === true ? (
-                                                                <Skeleton className="h-[21px] w-[60px] float-right" />
-                                                            ) : (
-                                                                watchlistCoin?.marketData?.priceChangePercent["1hr"] && (
-                                                                    <span
-                                                                        className={`flex items-center justify-end ${watchlistCoin.marketData.priceChangePercent["1hr"] > 0 ? "success-text" : "danger-text"}`}
-                                                                    >
-                                                                        {watchlistCoin.marketData.priceChangePercent[
-                                                                            "1hr"
-                                                                        ] > 0 ? (
-                                                                            <FaCaretUp />
-                                                                        ) : (
-                                                                            <FaCaretDown />
-                                                                        )}
-                                                                        {roundOffNumber(
-                                                                            watchlistCoin.marketData.priceChangePercent[
+                                                                    <div className="break-all">{watchlistCoin.name}</div>
+                                                                </div>
+                                                            </td>
+
+                                                            <td className="text-right">
+                                                                {fetchingMarketData === true ? (
+                                                                    <Skeleton className="h-[21px] w-[60px] float-right" />
+                                                                ) : (
+                                                                    watchlistCoin.marketData && (
+                                                                        <div className="mr-[2px]">
+                                                                            {formatValueIntoCommaSeparated(
+                                                                                watchlistCoin.marketData.currentPrice,
+                                                                                5,
+                                                                                true,
+                                                                            )}
+                                                                        </div>
+                                                                    )
+                                                                )}
+                                                            </td>
+
+                                                            <td className="text-right">
+                                                                {fetchingMarketData === true ? (
+                                                                    <Skeleton className="h-[21px] w-[60px] float-right" />
+                                                                ) : (
+                                                                    watchlistCoin?.marketData?.priceChangePercent[
+                                                                        "1hr"
+                                                                    ] && (
+                                                                        <span
+                                                                            className={`flex items-center justify-end ${watchlistCoin.marketData.priceChangePercent["1hr"] > 0 ? "success-text" : "danger-text"}`}
+                                                                        >
+                                                                            {watchlistCoin.marketData.priceChangePercent[
                                                                                 "1hr"
-                                                                            ],
-                                                                            2,
-                                                                        ).toFixed(2) + "%"}
-                                                                    </span>
-                                                                )
-                                                            )}
-                                                        </td>
-                                                    </tr>
-                                                </ContextMenuTrigger>
+                                                                            ] > 0 ? (
+                                                                                <FaCaretUp />
+                                                                            ) : (
+                                                                                <FaCaretDown />
+                                                                            )}
+                                                                            {roundOffNumber(
+                                                                                watchlistCoin.marketData
+                                                                                    .priceChangePercent["1hr"],
+                                                                                2,
+                                                                            ).toFixed(2) + "%"}
+                                                                        </span>
+                                                                    )
+                                                                )}
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                ></ContextMenuTrigger>
 
                                                 <ContextMenuContent className="z-[201]">
                                                     {watchlistCoinContextMenuList.map(
@@ -391,15 +403,6 @@ function WatchlistCoinList(props: any) {
                         )}
                     </div>
                 )}
-
-                <CoinSearchDialog
-                    dialogLevel={2}
-                    showDialog={showCoinSearchDialog}
-                    setShowDialog={setShowCoinSearchDialog}
-                    context={"watchlist"}
-                    contextProperties={activeWatchlist}
-                    onDialogClose={onCoinSearchDialogClose}
-                />
             </>
         )
     );
@@ -419,12 +422,12 @@ function DeleteDialog(props: any) {
     return (
         <Dialog
             open={showDeleteDialog}
-            onOpenChange={setShowDeleteDialog}
+            onOpenChange={(showDeleteDialog) => {
+                setShowDeleteDialog(showDeleteDialog);
+                if (!showDeleteDialog) onDeleteDialogClose();
+            }}
         >
-            <DialogContent
-                dialogLevel={2}
-                onCloseAutoFocus={onDeleteDialogClose}
-            >
+            <DialogContent dialogLevel={2}>
                 <DialogHeader disableCloseButton={deletingItem}>
                     <DialogTitle>
                         {deleteDialogType.current === "watchlist" && "Delete Watchlist"}
@@ -472,11 +475,9 @@ function WatchlistDetailsDialog(props: any) {
         <Dialog
             open={showWatchlistDetailsDialog}
             onOpenChange={setShowWatchlistDetailsDialog}
+            closeOnOutsideClick={true}
         >
-            <DialogContent
-                dialogLevel={2}
-                closeOnOutsideClick={true}
-            >
+            <DialogContent dialogLevel={2}>
                 <DialogHeader>
                     <DialogTitle>
                         Details

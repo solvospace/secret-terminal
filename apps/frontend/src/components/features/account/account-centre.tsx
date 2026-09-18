@@ -7,14 +7,7 @@ import {
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuGroup,
-    DropdownMenuLabel,
-    DropdownMenuShortcut,
-    DropdownMenuSub,
-    DropdownMenuSubTrigger,
-    DropdownMenuPortal,
-    DropdownMenuSeparator,
-    DropdownMenuSubContent,
-} from "@/components/ui/dropdown-menu";
+} from "@/components/ui/menu";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { CircleUserRound } from "lucide-react";
@@ -72,15 +65,17 @@ function ProfileDropdown(bindings: PdBindings) {
         <>
             {user && user.id ? (
                 <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <button
-                            type="button"
-                            className="user-icon"
-                            aria-label="user"
-                        >
-                            {user.name[0]}
-                        </button>
-                    </DropdownMenuTrigger>
+                    <DropdownMenuTrigger
+                        render={
+                            <button
+                                type="button"
+                                className="user-icon"
+                                aria-label="user"
+                            >
+                                {user.name[0]}
+                            </button>
+                        }
+                    ></DropdownMenuTrigger>
 
                     <DropdownMenuContent
                         align="center"

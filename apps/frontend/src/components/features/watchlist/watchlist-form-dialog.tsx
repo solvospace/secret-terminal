@@ -1,4 +1,4 @@
-import { Dialog, DialogHeader, DialogTitle, DialogDescription, DialogBody, DialogContent, DialogFooter } from "@/components/ui/dialog";
+import { Dialog, DialogHeader, DialogTitle, DialogDescription, DialogBody, DialogContent } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { InputGroup, InputGroupInput } from "@/components/ui/input-group";
 import { Spinner } from "@/components/ui/spinner";
@@ -7,32 +7,30 @@ import { DialogProps } from "@/interfaces/global.interface";
 import { Textarea } from "@/components/ui/textarea";
 
 type Bindings = {
-    onDialogClose(): void,
-    dialogLevel?: number,
-    watchlist: Record<string, string> | null
+    onDialogClose(): void;
+    dialogLevel?: number;
+    watchlist: Record<string, string> | null;
 } & DialogProps;
 
 export default function WatchlistFormDialog(bindings: Bindings) {
     const { showDialog, setShowDialog, onDialogClose, dialogLevel, watchlist } = bindings;
-    const { watchlistForm, submittingData, inputWatchlistNameRef } = useWatchlistForm(
-        { showDialog, setShowDialog, watchlist }
-    );
+    const { watchlistForm, submittingData, inputWatchlistNameRef } = useWatchlistForm({
+        showDialog,
+        setShowDialog,
+        watchlist,
+    });
 
     return (
         <Dialog
             open={showDialog}
             onOpenChange={(showDialog) => {
                 setShowDialog(showDialog);
+                if (!showDialog) onDialogClose();
             }}
         >
-            <DialogContent
-                onCloseAutoFocus={onDialogClose}
-                dialogLevel={dialogLevel}
-            >
+            <DialogContent dialogLevel={dialogLevel}>
                 <DialogHeader>
-                    <DialogTitle>
-                        {(watchlist?.id) ? 'Update' : 'Create'} Watchlist
-                    </DialogTitle>
+                    <DialogTitle>{watchlist?.id ? "Update" : "Create"} Watchlist</DialogTitle>
 
                     <DialogDescription className="sr-only"></DialogDescription>
                 </DialogHeader>
@@ -45,12 +43,8 @@ export default function WatchlistFormDialog(bindings: Bindings) {
                             event.stopPropagation();
                             watchlistForm.handleSubmit();
                         }}
-                        onChange={(event) => {
-
-                        }}
-                        onBlur={(event) => {
-
-                        }}
+                        onChange={(event) => {}}
+                        onBlur={(event) => {}}
                     >
                         <div className="form-group">
                             <watchlistForm.Field
@@ -71,12 +65,12 @@ export default function WatchlistFormDialog(bindings: Bindings) {
                                                     value={field.state.value}
                                                     onBlur={field.handleBlur}
                                                     onChange={(e) => field.handleChange(e.target.value)}
-                                                    placeholder={'Watchlist Name'}
+                                                    placeholder={"Watchlist Name"}
                                                     disabled={submittingData}
                                                 />
                                             </InputGroup>
                                         </>
-                                    )
+                                    );
                                 }}
                             />
                         </div>
@@ -87,9 +81,7 @@ export default function WatchlistFormDialog(bindings: Bindings) {
                                 children={(field) => {
                                     return (
                                         <>
-                                            <label htmlFor={field.name}>
-                                                Description
-                                            </label>
+                                            <label htmlFor={field.name}>Description</label>
 
                                             <Textarea
                                                 id={field.name}
@@ -98,27 +90,30 @@ export default function WatchlistFormDialog(bindings: Bindings) {
                                                 value={field.state.value}
                                                 onBlur={field.handleBlur}
                                                 onChange={(e) => field.handleChange(e.target.value)}
-                                                placeholder={'Description'}
+                                                placeholder={"Description"}
                                                 disabled={submittingData}
                                             />
                                         </>
-                                    )
+                                    );
                                 }}
                             />
                         </div>
 
                         <div className="text-center">
-                            <watchlistForm.Subscribe
-                                selector={(state) => [state.canSubmit, state.isSubmitting]}
-                            >
+                            <watchlistForm.Subscribe selector={(state) => [state.canSubmit, state.isSubmitting]}>
                                 {([canSubmit, isSubmitting]) => (
                                     <>
                                         <Button
                                             type="submit"
-                                            disabled={!watchlistForm.state.isValid || !canSubmit || isSubmitting || submittingData}
+                                            disabled={
+                                                !watchlistForm.state.isValid ||
+                                                !canSubmit ||
+                                                isSubmitting ||
+                                                submittingData
+                                            }
                                         >
                                             {submittingData && <Spinner className="size-4" />}
-                                            {(watchlist?.id) ? 'Update' : 'Create'}
+                                            {watchlist?.id ? "Update" : "Create"}
                                         </Button>
                                     </>
                                 )}
@@ -127,6 +122,6 @@ export default function WatchlistFormDialog(bindings: Bindings) {
                     </form>
                 </DialogBody>
             </DialogContent>
-        </Dialog >
-    )
+        </Dialog>
+    );
 }

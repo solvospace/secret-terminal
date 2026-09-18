@@ -84,7 +84,7 @@ function CoinList() {
                         <Select
                             defaultValue={String(getRowsPerPageDefaultValue())}
                             onValueChange={(value) => {
-                                onRowsPerPageChange(value);
+                                onRowsPerPageChange(value as string);
                             }}
                             disabled={fetchingCoinList}
                         >
