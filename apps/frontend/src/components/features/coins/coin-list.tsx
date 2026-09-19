@@ -36,51 +36,8 @@ function CoinList() {
     return (
         <>
             <div className="coins-sst-container">
-                <div className="search-bar place-items-end">
-                    <InputGroup className="max-w-xs search-input-group">
-                        <InputGroupInput
-                            className="!text-[13px]"
-                            placeholder="Search Coin Name"
-                            value={searchValue}
-                            onChange={(event) => {
-                                onSearchInputChange(event);
-                            }}
-                        />
-
-                        <InputGroupAddon>
-                            <Search className="size-4" />
-                        </InputGroupAddon>
-
-                        <InputGroupAddon
-                            className={`clear-btn ${searchValue && searchValue.length > 0 ? "block" : "hidden"}`}
-                            align="inline-end"
-                            onClick={() => {
-                                setSearchValue("");
-                            }}
-                        >
-                            <X />
-                        </InputGroupAddon>
-                    </InputGroup>
-                </div>
-
-                <DataTable<StCoin>
-                    list={coinList}
-                    columns={columns}
-                    contextMenuList={coinsTableContextMenuList}
-                    listEmptyMessage={"No coins found."}
-                    fetchingList={fetchingCoinList}
-                    currentPageNumber={currentPageNumber}
-                    rowsPerPage={rowsPerPage}
-                    currentSortingValue={sortingValue}
-                    sendSortingValueToParent={setSortingValueFromDt}
-                    onRowClicked={onRowClicked}
-                    onContextMenuItemClicked={onContextMenuItemClicked}
-                />
-
-                <div className="bottom-bar">
-                    <div className="rows-per-page-dropdown">
-                        <p className="text-sm">Rows per page</p>
-
+                <div className="search-and-filters-wrapper">
+                    <div className="st-select-group">
                         <Select
                             defaultValue={String(getRowsPerPageDefaultValue())}
                             onValueChange={(value) => {
@@ -109,6 +66,49 @@ function CoinList() {
                         </Select>
                     </div>
 
+                    <div className="search-group">
+                        <InputGroup className="input-group">
+                            <InputGroupInput
+                                className="!text-[13px]"
+                                placeholder="Search Coin Name"
+                                value={searchValue}
+                                onChange={(event) => {
+                                    onSearchInputChange(event);
+                                }}
+                            />
+
+                            <InputGroupAddon>
+                                <Search className="size-4" />
+                            </InputGroupAddon>
+
+                            <InputGroupAddon
+                                className={`clear-btn ${searchValue && searchValue.length > 0 ? "block" : "hidden"}`}
+                                align="inline-end"
+                                onClick={() => {
+                                    setSearchValue("");
+                                }}
+                            >
+                                <X />
+                            </InputGroupAddon>
+                        </InputGroup>
+                    </div>
+                </div>
+
+                <DataTable<StCoin>
+                    list={coinList}
+                    columns={columns}
+                    contextMenuList={coinsTableContextMenuList}
+                    listEmptyMessage={"No coins found."}
+                    fetchingList={fetchingCoinList}
+                    currentPageNumber={currentPageNumber}
+                    rowsPerPage={rowsPerPage}
+                    currentSortingValue={sortingValue}
+                    sendSortingValueToParent={setSortingValueFromDt}
+                    onRowClicked={onRowClicked}
+                    onContextMenuItemClicked={onContextMenuItemClicked}
+                />
+
+                <div className="bottom-bar">
                     <div className="pagination-btn-group">
                         <Button
                             variant="outline"

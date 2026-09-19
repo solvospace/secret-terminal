@@ -3,17 +3,27 @@
     border-radius: var(--border-radius);
     border: 1px solid var(--border-color);
 
-    .search-bar {
-        margin: 12px 12px 16px 12px;
+    .search-and-filters-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        overflow-x: scroll;
+        scrollbar-width: none;
+        margin: 12px;
+        gap: 12px;
 
-        .search-input-group {
-            height: 35px;
+        .search-group {
+            min-width: 280px;
 
-            .clear-btn {
-                margin-right: 6px;
-                padding: 1px;
-                border-radius: 4px;
-                cursor: pointer;
+            .input-group {
+                height: 30px;
+
+                .clear-btn {
+                    margin-right: 6px;
+                    padding: 1px;
+                    border-radius: 4px;
+                    cursor: pointer;
+                }
             }
         }
     }
@@ -95,16 +105,8 @@
     .bottom-bar {
         display: flex;
         margin-top: 16px;
-        justify-content: space-between;
+        justify-content: flex-end;
         flex-wrap: wrap;
-
-        .rows-per-page-dropdown {
-            display: flex;
-            place-items: center;
-            gap: 8px;
-            flex-wrap: wrap;
-            margin: 0px 12px 12px 12px;
-        }
 
         .pagination-btn-group {
             gap: 8px;
