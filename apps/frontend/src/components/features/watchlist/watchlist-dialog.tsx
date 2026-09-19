@@ -218,14 +218,14 @@ function Watchlists(props: any) {
                                     </TabsTrigger>
                                 </ContextMenuTrigger>
 
-                                <ContextMenuContent className="z-[201]">
+                                <ContextMenuContent>
                                     <ContextMenuGroup>
                                         {watchlistContextMenuList.map((contextMenuItem: Record<string, string>) => {
                                             return (
                                                 <ContextMenuItem
                                                     variant={`${contextMenuItem.name === "Delete" ? "destructive" : "default"}`}
                                                     key={contextMenuItem.id}
-                                                    onSelect={(event) =>
+                                                    onClick={(event) =>
                                                         onContextMenuItemClicked(
                                                             watchlist,
                                                             contextMenuItem,
@@ -371,14 +371,14 @@ function WatchlistCoinList(props: any) {
                                                     }
                                                 ></ContextMenuTrigger>
 
-                                                <ContextMenuContent className="z-[201]">
+                                                <ContextMenuContent>
                                                     {watchlistCoinContextMenuList.map(
                                                         (contextMenuItem: Record<string, string>) => {
                                                             return (
                                                                 <ContextMenuItem
                                                                     variant={`${contextMenuItem.name === "Delete" ? "destructive" : "default"}`}
                                                                     key={contextMenuItem.id}
-                                                                    onSelect={(event) => {
+                                                                    onClick={(event) => {
                                                                         onContextMenuItemClicked(
                                                                             watchlistCoin,
                                                                             contextMenuItem,

@@ -131,7 +131,7 @@ function ContextMenuSubContent({ className, ...props }: React.ComponentProps<typ
 function ContextMenuContent({ className, children, ...props }: React.ComponentProps<typeof ContextMenuPrimitive.Popup>) {
     return (
         <ContextMenuPrimitive.Portal>
-            <ContextMenuPrimitive.Positioner className="z-50">
+            <ContextMenuPrimitive.Positioner className="z-400">
                 <ContextMenuPrimitive.Popup
                     data-slot="context-menu-content"
                     className={cn(
