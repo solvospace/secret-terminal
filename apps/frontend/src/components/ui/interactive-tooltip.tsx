@@ -1,9 +1,7 @@
 "use client";
 
 import * as React from "react";
-
 import { useTouchDetector } from "@/contexts/touch-detector.context";
-
 import {
     Tooltip,
     TooltipTrigger,

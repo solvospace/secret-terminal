@@ -4,7 +4,7 @@ import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/in
 import { Search, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { columns } from "@/components/features/coins/columns";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { getRowsPerPageDefaultValue } from "@secret-terminal/services/utils.service";
 import { coinsTableContextMenuList } from "@/constants/app.constants";
 import useCoinList from "@/hooks/use-coin-list";
@@ -36,31 +36,62 @@ function CoinList() {
     return (
         <>
             <div className="coins-sst-container">
-                <div className="search-bar place-items-end">
-                    <InputGroup className="max-w-xs search-input-group">
-                        <InputGroupInput
-                            className="!text-[13px]"
-                            placeholder="Search Coin Name"
-                            value={searchValue}
-                            onChange={(event) => {
-                                onSearchInputChange(event);
+                <div className="search-and-filters-wrapper">
+                    <div className="st-select-group">
+                        <Select
+                            defaultValue={String(getRowsPerPageDefaultValue())}
+                            onValueChange={(value) => {
+                                onRowsPerPageChange(value as string);
                             }}
-                        />
-
-                        <InputGroupAddon>
-                            <Search className="size-4" />
-                        </InputGroupAddon>
-
-                        <InputGroupAddon
-                            className={`clear-btn ${searchValue && searchValue.length > 0 ? "block" : "hidden"}`}
-                            align="inline-end"
-                            onClick={() => {
-                                setSearchValue("");
-                            }}
+                            disabled={fetchingCoinList}
                         >
-                            <X />
-                        </InputGroupAddon>
-                    </InputGroup>
+                            <SelectTrigger aria-label="Rows per page">
+                                <SelectValue />
+                            </SelectTrigger>
+
+                            <SelectContent>
+                                <SelectGroup>
+                                    {rowsPerPageListRef.current.map((rowsPerPage) => {
+                                        return (
+                                            <SelectItem
+                                                key={rowsPerPage + "-rows"}
+                                                value={String(rowsPerPage)}
+                                            >
+                                                {rowsPerPage}
+                                            </SelectItem>
+                                        );
+                                    })}
+                                </SelectGroup>
+                            </SelectContent>
+                        </Select>
+                    </div>
+
+                    <div className="search-group">
+                        <InputGroup className="input-group">
+                            <InputGroupInput
+                                className="!text-[13px]"
+                                placeholder="Search Coin Name"
+                                value={searchValue}
+                                onChange={(event) => {
+                                    onSearchInputChange(event);
+                                }}
+                            />
+
+                            <InputGroupAddon>
+                                <Search className="size-4" />
+                            </InputGroupAddon>
+
+                            <InputGroupAddon
+                                className={`clear-btn ${searchValue && searchValue.length > 0 ? "block" : "hidden"}`}
+                                align="inline-end"
+                                onClick={() => {
+                                    setSearchValue("");
+                                }}
+                            >
+                                <X />
+                            </InputGroupAddon>
+                        </InputGroup>
+                    </div>
                 </div>
 
                 <DataTable<StCoin>
@@ -78,35 +109,6 @@ function CoinList() {
                 />
 
                 <div className="bottom-bar">
-                    <div className="rows-per-page-dropdown">
-                        <p className="text-sm">Rows per page</p>
-
-                        <Select
-                            defaultValue={String(getRowsPerPageDefaultValue())}
-                            onValueChange={(value) => {
-                                onRowsPerPageChange(value as string);
-                            }}
-                            disabled={fetchingCoinList}
-                        >
-                            <SelectTrigger aria-label="Rows per page">
-                                <SelectValue />
-                            </SelectTrigger>
-
-                            <SelectContent>
-                                {rowsPerPageListRef.current.map((rowsPerPage) => {
-                                    return (
-                                        <SelectItem
-                                            key={rowsPerPage + "-rows"}
-                                            value={String(rowsPerPage)}
-                                        >
-                                            {rowsPerPage}
-                                        </SelectItem>
-                                    );
-                                })}
-                            </SelectContent>
-                        </Select>
-                    </div>
-
                     <div className="pagination-btn-group">
                         <Button
                             variant="outline"
