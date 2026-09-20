@@ -10,6 +10,7 @@
 </div>
 
 ## Features
+
 - Market overview of major coins
 - Coin table displaying price, 24-hour price change, trading volume, and market capitalization
 - Price, volume, and market cap graphs for various time periods.
@@ -17,6 +18,7 @@
 - Watchlist and news
 
 ## Preview
+
 <p align="center">
     <img 
         alt="overview and coins table" 
@@ -49,6 +51,8 @@
     >
 </p>
 
-
 ## License
-Secret Terminal is [MIT licensed](./LICENSE).
+
+Secret Terminal is licensed under the GNU Affero General Public License v3.0.
+
+See the [LICENSE](./LICENSE) file for details.
