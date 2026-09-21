@@ -11,7 +11,7 @@ import { FiGithub } from "react-icons/fi";
 import { ThemeToggle } from "../ui/theme-toggle";
 
 export default function Header() {
-    const { scrolled, showTabBar, showSearchDialog, setShowSearchDialog } = useHeader();
+    const { scrolled, showSearchDialog, setShowSearchDialog } = useHeader();
 
     return (
         <>
@@ -23,8 +23,6 @@ export default function Header() {
                     >
                         secret <Terminal strokeWidth={3} />
                     </Link>
-
-                    {showTabBar === true && <NavigationTabBar />}
 
                     <div className="header-right-side-container">
                         <Search

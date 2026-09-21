@@ -6,6 +6,7 @@
     overflow-y: hidden;
     font-size: 12px;
     border-top: 1px solid var(--border-color);
+    margin-left: -12px;
 
     &.remove-shadow {
         box-shadow: unset;
@@ -15,8 +16,8 @@
     .inner-wrapper {
         display: flex;
         align-items: center;
-        width: max-content;
-        margin: auto;
+        width: 100%;
+        justify-content: center;
 
         .pair-container {
             display: flex;
