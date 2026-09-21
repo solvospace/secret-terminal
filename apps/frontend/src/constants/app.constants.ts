@@ -94,5 +94,14 @@ const coinSymbolImageSize = {
 
 const userScreenWidth = 720;
 const iconSize = 18;
+const sidebarWidth = "220px";
 
-export { coinKeyList, coinsTableContextMenuList, navigationBarTabList, coinSymbolImageSize, userScreenWidth, iconSize };
+export {
+    coinKeyList,
+    coinsTableContextMenuList,
+    navigationBarTabList,
+    coinSymbolImageSize,
+    userScreenWidth,
+    iconSize,
+    sidebarWidth,
+};

@@ -17,13 +17,13 @@ import {
 } from "@/components/ui/sidebar";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { iconSize } from "@/constants/app.constants";
-import useSidebar from "@/hooks/use-sidebar";
+import useSidebar from "@/hooks/use-st-sidebar";
 import WatchlistDialog from "../features/watchlist/watchlist-dialog";
 import NewsDialog from "../features/news/news-dialog";
 import { DialogProps } from "@/interfaces/global.interface";
 import CoinSearchDialog from "../features/coin-search/coin-search-dialog";
 
-export function AppSidebar() {
+export function StSidebar() {
     const { scrollEnded, activeTab, onMenuItemClick, dialogType, showDialog, setShowDialog, tabList } = useSidebar();
 
     return (

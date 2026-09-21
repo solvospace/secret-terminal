@@ -5,7 +5,8 @@ import { UserContextProvider } from "@/contexts/user.context";
 import { LoadingContextProvider } from "@/contexts/loading.context";
 import { TouchDetectorContextProvider } from "@/contexts/touch-detector.context";
 import { SidebarProvider } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/layout/app-sidebar";
+import { StSidebar } from "@/components/layout/st-sidebar";
+import { sidebarWidth } from "@/constants/app.constants";
 
 export default function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
     return (
@@ -19,12 +20,12 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
                             <SidebarProvider
                                 style={
                                     {
-                                        "--sidebar-width": "220px",
-                                        "--sidebar-width-mobile": "220px",
+                                        "--sidebar-width": sidebarWidth,
+                                        "--sidebar-width-mobile": sidebarWidth,
                                     } as React.CSSProperties
                                 }
                             >
-                                <AppSidebar />
+                                <StSidebar />
 
                                 <main className="main-content">
                                     <div className="container">{children}</div>

@@ -261,7 +261,7 @@ function SidebarTrigger({ className, onClick, ...props }: React.ComponentProps<t
             {...props}
         >
             <PanelLeftIcon />
-            {open && <span>{name}</span>}
+            <span className={`${!open && "invisible"}`}>{name}</span>
             <span className="sr-only">Toggle Sidebar</span>
         </Button>
     );
@@ -456,13 +456,21 @@ function SidebarMenuItem({ className, ...props }: React.ComponentProps<"li">) {
 }
 
 const sidebarMenuButtonVariants = cva(
-    "peer/menu-button group/menu-button flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left text-sm ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-open:hover:bg-sidebar-accent data-open:hover:text-sidebar-accent-foreground data-active:bg-sidebar-accent data-active:font-medium data-active:text-sidebar-accent-foreground [&_svg]:size-4 [&_svg]:shrink-0 [&>span:last-child]:truncate",
+    `cursor-pointer peer/menu-button group/menu-button flex w-full items-center gap-2 overflow-hidden rounded-[var(--border-radius)] p-2 text-left
+    text-sm ring-sidebar-ring outline-hidden transition-[width,height,padding] text-[var(--st-muted-color)]
+    group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8!
+    group-data-[collapsible=icon]:p-2! hover:bg-[var(--hover-bg-color)] hover:text-[var(--text-color)]
+    focus-visible:ring-2 active:bg-[var(--hover-bg-color)] active:text-[var(--text-color)]
+    disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none
+    aria-disabled:opacity-50 data-open:hover:bg-sidebar-accent data-open:hover:text-sidebar-accent-foreground
+    data-active:bg-[var(--hover-bg-color)] data-active:font-medium data-active:text-[var(--text-color)] [&_svg]:size-4
+    [&_svg]:shrink-0 [&>span:last-child]:truncate`,
     {
         variants: {
             variant: {
-                default: "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
-                outline:
-                    "bg-background shadow-[0_0_0_1px_var(--sidebar-border)] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground hover:shadow-[0_0_0_1px_var(--sidebar-accent)]",
+                default: "hover:bg-[var(--hover-bg-color)] hover:text-[var(--text-color)]",
+                outline: `bg-background shadow-[0_0_0_1px_var(--sidebar-border)] hover:bg-sidebar-accent
+                    hover:text-sidebar-accent-foreground hover:shadow-[0_0_0_1px_var(--sidebar-accent)]`,
             },
             size: {
                 default: "h-8 text-sm",
@@ -495,7 +503,7 @@ function SidebarMenuButton({
         defaultTagName: "button",
         props: mergeProps<"button">(
             {
-                className: cn(sidebarMenuButtonVariants({ variant, size }), "cursor-pointer", className),
+                className: cn(sidebarMenuButtonVariants({ variant, size }), className),
             },
             props,
         ),

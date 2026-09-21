@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import NavigationTabBar from "@/components/layout/navigation-tab-bar";
 import useHeader from "@/hooks/use-header";
 import AccountCentre from "@/components/features/account/account-centre";
 import CoinSearchDialog from "@/components/features/coin-search/coin-search-dialog";
