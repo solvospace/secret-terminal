@@ -37,35 +37,6 @@ function CoinList() {
         <>
             <div className="coins-sst-container">
                 <div className="search-and-filters-wrapper">
-                    <div className="st-select-group">
-                        <Select
-                            defaultValue={String(getRowsPerPageDefaultValue())}
-                            onValueChange={(value) => {
-                                onRowsPerPageChange(value as string);
-                            }}
-                            disabled={fetchingCoinList}
-                        >
-                            <SelectTrigger aria-label="Rows per page">
-                                <SelectValue />
-                            </SelectTrigger>
-
-                            <SelectContent>
-                                <SelectGroup>
-                                    {rowsPerPageListRef.current.map((rowsPerPage) => {
-                                        return (
-                                            <SelectItem
-                                                key={rowsPerPage + "-rows"}
-                                                value={String(rowsPerPage)}
-                                            >
-                                                {rowsPerPage}
-                                            </SelectItem>
-                                        );
-                                    })}
-                                </SelectGroup>
-                            </SelectContent>
-                        </Select>
-                    </div>
-
                     <div className="search-group">
                         <InputGroup className="input-group">
                             <InputGroupInput
@@ -109,6 +80,35 @@ function CoinList() {
                 />
 
                 <div className="bottom-bar">
+                    <div className="st-select-group">
+                        <Select
+                            defaultValue={String(getRowsPerPageDefaultValue())}
+                            onValueChange={(value) => {
+                                onRowsPerPageChange(value as string);
+                            }}
+                            disabled={fetchingCoinList}
+                        >
+                            <SelectTrigger aria-label="Rows per page">
+                                <SelectValue />
+                            </SelectTrigger>
+
+                            <SelectContent>
+                                <SelectGroup>
+                                    {rowsPerPageListRef.current.map((rowsPerPage) => {
+                                        return (
+                                            <SelectItem
+                                                key={rowsPerPage + "-rows"}
+                                                value={String(rowsPerPage)}
+                                            >
+                                                {rowsPerPage}
+                                            </SelectItem>
+                                        );
+                                    })}
+                                </SelectGroup>
+                            </SelectContent>
+                        </Select>
+                    </div>
+
                     <div className="pagination-btn-group">
                         <Button
                             variant="outline"
