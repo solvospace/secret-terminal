@@ -55,7 +55,7 @@ export function StSidebar() {
                 </SidebarContent>
 
                 <SidebarFooter>
-                    <SidebarTrigger name={"Collapse menu"} />
+                    <SidebarTrigger name={"Close sidebar"} />
                 </SidebarFooter>
             </Sidebar>
 

@@ -253,7 +253,7 @@ function SidebarTrigger({ className, onClick, ...props }: React.ComponentProps<t
             data-slot="sidebar-trigger"
             variant="ghost"
             size="icon-sm"
-            className={cn(`w-full flex justify-start p-[8px] items-center`, className)}
+            className={cn(`w-full flex justify-start p-[8px] items-center text-[var(--text-color)]`, className)}
             onClick={(event) => {
                 onClick?.(event);
                 toggleSidebar();
