@@ -13,7 +13,7 @@ export default function Home() {
                 className="go-to-terminal-btn"
                 onClick={(event) => {
                     event?.preventDefault();
-                    window.open(appSettings.links.website);
+                    window.open(appSettings.links.appUrl);
                 }}
             >
                 Go to Terminal

@@ -7,7 +7,7 @@ import { useUser } from "@/contexts/user.context";
 import { NavigationBarTab } from "@/interfaces/global.interface";
 import { Route } from "next";
 
-export default function useSidebar() {
+export default function useStSidebar() {
     const router = useRouter();
     const pathName = usePathname();
     const [activeTab, setActiveTab] = useState<string>("home");

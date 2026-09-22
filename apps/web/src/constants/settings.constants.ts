@@ -4,6 +4,7 @@ const appSettings = {
     links: {
         website: new URL("https://secretterminal.com"),
         github: new URL("https://github.com/solvospace/secret-terminal"),
+        appUrl: new URL("https://app.secretterminal.com"),
     },
 };
 
