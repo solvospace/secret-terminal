@@ -78,19 +78,18 @@ body {
     }
 }
 
-.body-wrapper {
+.st-layout {
     position: relative;
     min-height: 100dvh;
     background-color: var(--main-bg-color);
 
-    .main-content {
-        max-width: 100%;
+    .st-main-content {
         width: 100%;
         overflow-x: hidden;
         display: flex;
         height: 100%;
 
-        .container {
+        .content-container {
             position: relative;
             width: 100%;
             overflow: hidden auto;
