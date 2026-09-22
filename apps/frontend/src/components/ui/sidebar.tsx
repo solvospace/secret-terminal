@@ -23,6 +23,11 @@ const SIDEBAR_WIDTH_MOBILE = "18rem";
 const SIDEBAR_WIDTH_ICON = "3rem";
 const SIDEBAR_KEYBOARD_SHORTCUT = "b";
 
+type SidebarTriggerBindings = {
+    label?: string;
+    showMenuIcon?: boolean;
+};
+
 type SidebarContextProps = {
     state: "expanded" | "collapsed";
     open: boolean;
@@ -247,11 +252,11 @@ function Sidebar({
 function SidebarTrigger({
     className,
     onClick,
-    showMenuIcon,
+    bindings,
     ...props
-}: React.ComponentProps<typeof Button> & { showMenuIcon?: boolean; label?: string }) {
+}: React.ComponentProps<typeof Button> & { bindings: SidebarTriggerBindings }) {
     const { toggleSidebar, open } = useSidebar();
-    const { label } = { ...props };
+    const { label, showMenuIcon } = bindings ?? {};
 
     return (
         <Button

@@ -23,7 +23,9 @@ export default function Header() {
                         {isMobile && (
                             <SidebarTrigger
                                 className={`!pl-[unset]`}
-                                showMenuIcon={true}
+                                bindings={{
+                                    showMenuIcon: true,
+                                }}
                             />
                         )}
                         <Link
