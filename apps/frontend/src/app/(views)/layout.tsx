@@ -28,7 +28,7 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
                                 <main className="main-content">
                                     <StSidebar />
 
-                                    <div className="w-full overflow-hidden">
+                                    <div className="container">
                                         {children}
                                         <Footer />
                                     </div>
