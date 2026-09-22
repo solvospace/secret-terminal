@@ -1,4 +1,5 @@
-[data-slot="sidebar-wrapper"] {
+[data-slot="sidebar-wrapper"],
+[data-slot="sheet-portal"] {
     flex-wrap: wrap;
     flex-wrap: balance;
 
