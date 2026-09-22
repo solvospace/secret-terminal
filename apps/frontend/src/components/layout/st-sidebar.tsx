@@ -34,6 +34,7 @@ export function StSidebar() {
                                 <SidebarMenu key={tab.id}>
                                     <SidebarMenuItem>
                                         <SidebarMenuButton
+                                            disabled={tab.disabled}
                                             isActive={activeTab === tab.value}
                                             onClick={(event) => {
                                                 onMenuItemClick(event, tab.value);
