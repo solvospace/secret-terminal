@@ -249,9 +249,9 @@ function SidebarTrigger({
     onClick,
     showMenuIcon,
     ...props
-}: React.ComponentProps<typeof Button> & { showMenuIcon: boolean }) {
-    const { toggleSidebar, open, isMobile } = useSidebar();
-    const { name } = { ...props };
+}: React.ComponentProps<typeof Button> & { showMenuIcon?: boolean; label?: string }) {
+    const { toggleSidebar, open } = useSidebar();
+    const { label } = { ...props };
 
     return (
         <Button
@@ -267,8 +267,8 @@ function SidebarTrigger({
             {...props}
         >
             {showMenuIcon ? <RiMenu2Line /> : <PanelLeftClose />}
-            <span className={`${!open && "hidden"}`}>{name}</span>
-            <span className="sr-only">Toggle Sidebar</span>
+            <span className={`${!open && "hidden"}`}>{label}</span>
+            <span className="sr-only">{label ?? "Toggle Sidebar"}</span>
         </Button>
     );
 }

@@ -20,7 +20,12 @@ export default function Header() {
             <div className={`header-container`}>
                 <div className="navbar">
                     <div className="left-side-container">
-                        {isMobile && <SidebarTrigger showMenuIcon={true} />}
+                        {isMobile && (
+                            <SidebarTrigger
+                                className={`!pl-[unset]`}
+                                showMenuIcon={true}
+                            />
+                        )}
                         <Link
                             href="/"
                             className={`${isMobile && "ml-[-8px]"} logo`}
