@@ -78,22 +78,24 @@ body {
     }
 }
 
-.body-wrapper {
+.st-layout {
     position: relative;
     min-height: 100dvh;
     background-color: var(--main-bg-color);
 
-    .main-content {
-        max-width: 100%;
+    .st-main-content {
         width: 100%;
-        position: relative;
         overflow-x: hidden;
         display: flex;
+        height: 100%;
 
-        .container {
+        .content-container {
+            position: relative;
             width: 100%;
-            overflow: hidden;
-            padding: 12px calc(12px + env(safe-area-inset-right)) calc(48px + env(safe-area-inset-bottom)) 12px;
+            overflow: hidden auto;
+            padding: 12px calc(12px + env(safe-area-inset-right)) calc(48px + env(safe-area-inset-bottom))
+                calc(12px + env(safe-area-inset-left));
+            height: calc(100vh - var(--header-height));
         }
     }
 

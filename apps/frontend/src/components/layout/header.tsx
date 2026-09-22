@@ -22,7 +22,7 @@ export default function Header() {
                     <div className="left-side-container">
                         {isMobile && (
                             <SidebarTrigger
-                                className={`!pl-[unset]`}
+                                className={`!pl-[unset] !pr-[unset]`}
                                 bindings={{
                                     showMenuIcon: true,
                                 }}
@@ -30,7 +30,7 @@ export default function Header() {
                         )}
                         <Link
                             href="/"
-                            className={`${isMobile && "ml-[-8px]"} logo`}
+                            className={`logo`}
                         >
                             secret<span className="text-[var(--main-color)] text-[25px]">_</span>terminal
                         </Link>

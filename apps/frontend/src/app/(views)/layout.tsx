@@ -10,7 +10,7 @@ import { sidebarWidth } from "@/constants/app.constants";
 
 export default function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
     return (
-        <div className="body-wrapper">
+        <div className="st-layout">
             <LoadingContextProvider>
                 <LoadingBar>
                     <UserContextProvider>
@@ -25,10 +25,10 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
                             >
                                 <Header />
 
-                                <main className="main-content">
+                                <main className="st-main-content">
                                     <StSidebar />
 
-                                    <div className="container">
+                                    <div className="content-container">
                                         {children}
                                         <Footer />
                                     </div>

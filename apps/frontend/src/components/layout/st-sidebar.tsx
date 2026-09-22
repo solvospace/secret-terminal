@@ -5,26 +5,22 @@ import {
     SidebarContent,
     SidebarFooter,
     SidebarGroup,
-    SidebarGroupAction,
-    SidebarGroupContent,
-    SidebarGroupLabel,
-    SidebarHeader,
     SidebarMenu,
-    SidebarMenuAction,
-    SidebarMenuBadge,
     SidebarMenuButton,
     SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { iconSize } from "@/constants/app.constants";
-import useSidebar from "@/hooks/use-st-sidebar";
+import useStSidebar from "@/hooks/use-st-sidebar";
 import WatchlistDialog from "../features/watchlist/watchlist-dialog";
 import NewsDialog from "../features/news/news-dialog";
 import { DialogProps } from "@/interfaces/global.interface";
 import CoinSearchDialog from "../features/coin-search/coin-search-dialog";
+import { useSidebar } from "@/components/ui/sidebar";
 
 export function StSidebar() {
-    const { scrollEnded, activeTab, onMenuItemClick, dialogType, showDialog, setShowDialog, tabList } = useSidebar();
+    const { activeTab, onMenuItemClick, dialogType, showDialog, setShowDialog, tabList } = useStSidebar();
+    const { isMobile, toggleSidebar } = useSidebar();
 
     return (
         <>
@@ -39,7 +35,10 @@ export function StSidebar() {
                                     <SidebarMenuItem>
                                         <SidebarMenuButton
                                             isActive={activeTab === tab.value}
-                                            onClick={(event) => onMenuItemClick(event, tab.value)}
+                                            onClick={(event) => {
+                                                onMenuItemClick(event, tab.value);
+                                                if (isMobile) toggleSidebar();
+                                            }}
                                         >
                                             <Icon
                                                 className="size-[20px]"
