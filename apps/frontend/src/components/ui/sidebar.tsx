@@ -13,7 +13,8 @@ import { Separator } from "@/components/ui/separator";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { PanelLeftIcon } from "lucide-react";
+import { PanelLeftClose } from "lucide-react";
+import { RiMenu2Line } from "react-icons/ri";
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state";
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
@@ -175,7 +176,7 @@ function Sidebar({
                     data-sidebar="sidebar"
                     data-slot="sidebar"
                     data-mobile="true"
-                    className="w-(--sidebar-width) bg-sidebar p-0 text-sidebar-foreground [&>button]:hidden"
+                    className="w-(--sidebar-width) bg-sidebar p-0 text-sidebar-foreground [&>button]:hidden st-sidebar"
                     style={
                         {
                             "--sidebar-width": SIDEBAR_WIDTH_MOBILE,
@@ -195,7 +196,7 @@ function Sidebar({
 
     return (
         <div
-            className="group peer hidden text-sidebar-foreground md:block"
+            className="group peer hidden text-sidebar-foreground md:block st-sidebar"
             data-state={state}
             data-collapsible={state === "collapsed" ? collapsible : ""}
             data-variant={variant}
@@ -218,7 +219,7 @@ function Sidebar({
                 data-slot="sidebar-container"
                 data-side={side}
                 className={cn(
-                    `h-[calc(100vh_-_45px)] mt-[45px] border-[var(--border-color)] fixed inset-y-0 z-20 hidden w-(--sidebar-width)
+                    `mt-[var(--header-height)] border-[var(--border-color)] fixed inset-y-0 z-20 hidden w-(--sidebar-width)
                      transition-[left,right,width] duration-200
                     ease-linear data-[side=left]:left-0 data-[side=left]:group-data-[collapsible=offcanvas]:left-[calc(var(--sidebar-width)*-1)]
                     data-[side=right]:right-0 data-[side=right]:group-data-[collapsible=offcanvas]:right-[calc(var(--sidebar-width)*-1)] md:flex`,
@@ -243,8 +244,13 @@ function Sidebar({
     );
 }
 
-function SidebarTrigger({ className, onClick, ...props }: React.ComponentProps<typeof Button>) {
-    const { toggleSidebar, open } = useSidebar();
+function SidebarTrigger({
+    className,
+    onClick,
+    showMenuIcon,
+    ...props
+}: React.ComponentProps<typeof Button> & { showMenuIcon: boolean }) {
+    const { toggleSidebar, open, isMobile } = useSidebar();
     const { name } = { ...props };
 
     return (
@@ -252,16 +258,16 @@ function SidebarTrigger({ className, onClick, ...props }: React.ComponentProps<t
             data-sidebar="trigger"
             data-slot="sidebar-trigger"
             variant="ghost"
-            size="icon-sm"
-            className={cn(`w-full flex justify-start p-[8px] items-center text-[var(--text-color)]`, className)}
+            size="icon-lg"
+            className={cn(`w-full flex justify-start p-[8px] items-center text-[var(--text-color)] w-fit`, className)}
             onClick={(event) => {
                 onClick?.(event);
                 toggleSidebar();
             }}
             {...props}
         >
-            <PanelLeftIcon />
-            <span className={`${!open && "invisible"}`}>{name}</span>
+            {showMenuIcon ? <RiMenu2Line /> : <PanelLeftClose />}
+            <span className={`${!open && "hidden"}`}>{name}</span>
             <span className="sr-only">Toggle Sidebar</span>
         </Button>
     );

@@ -15,8 +15,6 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
                 <LoadingBar>
                     <UserContextProvider>
                         <TouchDetectorContextProvider>
-                            <Header />
-
                             <SidebarProvider
                                 style={
                                     {
@@ -25,12 +23,15 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
                                     } as React.CSSProperties
                                 }
                             >
-                                <StSidebar />
+                                <Header />
 
                                 <main className="main-content">
-                                    {children}
+                                    <StSidebar />
 
-                                    <Footer />
+                                    <div className="w-full overflow-hidden">
+                                        {children}
+                                        <Footer />
+                                    </div>
                                 </main>
                             </SidebarProvider>
                         </TouchDetectorContextProvider>

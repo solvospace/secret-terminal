@@ -9,7 +9,7 @@ import { sidebarWidth } from "@/constants/app.constants";
 
 function GlobalMarketStats() {
     const { globalMarketStats, fetchingGlobalMarketStats, scrollReachedBottom } = useGlobalMarketStats();
-    const { open } = useSidebar();
+    const { open, isMobile } = useSidebar();
 
     return (
         <div
@@ -19,7 +19,7 @@ function GlobalMarketStats() {
                 } as React.CSSProperties
             }
             className={`global-market-stats-bottom-bar ${scrollReachedBottom === true && "remove-shadow"}
-                        ${open && "!w-[calc(100vw_-_var(--sidebar-width))]"}
+                        ${open && !isMobile && "!w-[calc(100vw_-_var(--sidebar-width))]"}
                     `}
         >
             {fetchingGlobalMarketStats ? (

@@ -16,28 +16,26 @@
         display: none;
     }
 
-    &.with-shadow {
-        box-shadow: var(--bottom-box-shadow);
-        border-bottom: unset;
-    }
-
     .navbar {
         display: flex;
         justify-content: space-between;
         align-items: center;
         position: relative;
         margin-inline: auto;
-        // max-width: calc(var(--container-width) - 20px);
 
-        .logo {
+        .left-side-container {
             display: flex;
             align-items: center;
-            gap: 6px;
-            color: var(--text-color);
-            font-size: 20px;
-            font-weight: 600;
-            margin-right: 12px;
-            min-width: var(--both-sides-header-width);
+
+            .logo {
+                display: flex;
+                align-items: center;
+                color: var(--text-color);
+                font-size: 18px;
+                font-weight: 700;
+                margin-right: 12px;
+                min-width: var(--both-sides-header-width);
+            }
         }
 
         .header-right-side-container {
