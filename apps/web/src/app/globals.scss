@@ -1,0 +1,24 @@
+@use "tailwindcss";
+@use "@/styles/main";
+
+:root {
+    --background: #ffffff;
+    --foreground: #333;
+}
+
+@theme inline {
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+    --font-sans: var(--font-geist-sans);
+    --font-mono: var(--font-geist-mono);
+
+    --border-color: #eee;
+    --main-color: #05c997;
+    --text-color: #26332e;
+}
+
+.dark {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+    --border-color: #262626;
+}
