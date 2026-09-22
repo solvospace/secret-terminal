@@ -9,7 +9,7 @@
     background-color: var(--main-bg-color);
     width: 100%;
     z-index: 60;
-    height: 45px;
+    height: var(--header-height);
     align-content: center;
 
     &::-webkit-scrollbar {

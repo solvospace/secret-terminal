@@ -4,8 +4,6 @@
     flex-wrap: balance;
 
     .st-sidebar {
-        --header-height: 45px;
-
         height: calc(100vh - var(--header-height));
         z-index: 100;
         margin-top: var(--header-height);
