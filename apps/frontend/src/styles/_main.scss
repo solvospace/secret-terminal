@@ -84,6 +84,7 @@ body {
     background-color: var(--main-bg-color);
 
     [data-slot="sidebar-wrapper"] {
+        flex-wrap: wrap;
         flex-wrap: balance;
     }
 
