@@ -93,7 +93,8 @@ body {
         .container {
             width: 100%;
             overflow: hidden;
-            padding: 12px 12px calc(48px + env(safe-area-inset-bottom)) 12px;
+            padding: 12px calc(12px + env(safe-area-inset-right)) calc(48px + env(safe-area-inset-bottom))
+                calc(12px + env(safe-area-inset-left));
         }
     }
 
