@@ -18,6 +18,7 @@ app.use(
         origin: [
             "http://localhost:3000",
             "https://www.secretterminal.com",
+            "https://app.secretterminal.com",
             "https://www.app.secretterminal.com",
             "https://secret-terminal-dev.vercel.app",
             vercelRegex,
