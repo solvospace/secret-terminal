@@ -1,6 +1,5 @@
 {
-    "name": "web",
-    "version": "0.1.0",
+    "name": "website",
     "private": true,
     "scripts": {
         "dev": "next dev -p 4000 --inspect=9224",

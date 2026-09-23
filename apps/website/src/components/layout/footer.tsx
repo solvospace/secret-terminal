@@ -24,7 +24,7 @@ export function Footer() {
                 >
                     {ownerSettings.name}
                 </Link>
-                . All rights reserved.
+                .
             </p>
         </footer>
     );
