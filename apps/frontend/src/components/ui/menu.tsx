@@ -52,27 +52,13 @@ function DropdownMenuContent({
                 <DropdownMenuPrimitive.Popup
                     data-slot="dropdown-menu-content"
                     className={cn(
-                        `max-h-[var(--available-height)]
-                        min-w-[8rem]
-                        origin-[var(--transform-origin)]
-                        overflow-x-hidden
-                        overflow-y-auto
-                        rounded-md
-                        border
-                        bg-popover
-                        p-1
-                        text-popover-foreground
-                        shadow-md
-                        data-[side=bottom]:slide-in-from-top-2
-                        data-[side=left]:slide-in-from-right-2
-                        data-[side=right]:slide-in-from-left-2
-                        data-[side=top]:slide-in-from-bottom-2
-                        data-[ending-style]:animate-out
-                        data-[ending-style]:fade-out-0
-                        data-[ending-style]:zoom-out-95
-                        data-[starting-style]:animate-in
-                        data-[starting-style]:fade-in-0
-                        data-[starting-style]:zoom-in-95`,
+                        `max-h-[var(--available-height)] min-w-[8rem] origin-[var(--transform-origin)]
+                        overflow-x-hidden overflow-y-auto  rounded-[var(--border-radius)] border border-[var(--border-color)]
+                         bg-[var(--main-bg-color)] p-1 text-[var(--text-color)] shadow-md data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2
+                        data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2
+                        data-[ending-style]:animate-out data-[ending-style]:fade-out-0
+                        data-[ending-style]:zoom-out-95 data-[starting-style]:animate-in
+                        data-[starting-style]:fade-in-0 data-[starting-style]:zoom-in-95`,
                         className,
                     )}
                     {...props}

@@ -73,8 +73,8 @@ function ContextMenuSubTrigger({
             data-slot="context-menu-sub-trigger"
             data-inset={inset}
             className={cn(
-                `focus:bg-accent focus:text-accent-foreground
-                data-[popup-open]:bg-accent
+                `focus:bg-[var(--hover-bg-color)] focus:text-accent-foreground
+                data-[popup-open]:bg-[var(--hover-bg-color)]
                 data-[popup-open]:text-accent-foreground
                 [&_svg:not([class*='text-'])]:text-muted-foreground
                 flex cursor-default items-center rounded-[var(--border-radius)]
@@ -135,7 +135,7 @@ function ContextMenuContent({ className, children, ...props }: React.ComponentPr
                 <ContextMenuPrimitive.Popup
                     data-slot="context-menu-content"
                     className={cn(
-                        `bg-popover text-popover-foreground
+                        `bg-[var(--main-bg-color)] text-[var(--text-color)]
                         data-[starting-style]:animate-in
                         data-[ending-style]:animate-out
                         data-[ending-style]:fade-out-0
@@ -151,7 +151,7 @@ function ContextMenuContent({ className, children, ...props }: React.ComponentPr
                         overflow-x-hidden
                         overflow-y-auto
                         rounded-[var(--border-radius)]
-                        border
+                        border border-[var(--border-color)]
                         p-1
                         shadow-md`,
                         className,
@@ -181,7 +181,7 @@ function ContextMenuItem({
             data-variant={variant}
             className={cn(
                 `!h-[28px] !text-[13px]
-                focus:bg-accent
+                focus:bg-[var(--hover-bg-color)]
                 focus:text-accent-foreground
                 hover:cursor-pointer
                 data-[variant=destructive]:text-destructive
@@ -217,7 +217,7 @@ function ContextMenuCheckboxItem({
         <ContextMenuPrimitive.CheckboxItem
             data-slot="context-menu-checkbox-item"
             className={cn(
-                `focus:bg-accent
+                `focus:bg-[var(--hover-bg-color)]
                 focus:text-accent-foreground
                 relative flex cursor-default items-center gap-2
                 rounded-[var(--border-radius)]
@@ -253,7 +253,7 @@ function ContextMenuRadioItem({
         <ContextMenuPrimitive.RadioItem
             data-slot="context-menu-radio-item"
             className={cn(
-                `focus:bg-accent
+                `focus:bg-[var(--hover-bg-color)]
                 focus:text-accent-foreground
                 relative flex cursor-default items-center gap-2
                 rounded-[var(--border-radius)]
