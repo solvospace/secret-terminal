@@ -1,0 +1,34 @@
+.st-toast {
+    --color: #fafafa;
+
+    [data-slot="toast-icon"] {
+        svg {
+            color: var(--color) !important;
+        }
+    }
+
+    [data-slot="toast-content"] {
+        border-radius: var(--border-radius);
+        color: var(--color) !important;
+    }
+
+    .warning {
+        background-color: #bb8725 !important;
+        border-color: #bb8725 !important;
+    }
+
+    .info {
+        background-color: #172a3a !important;
+        border-color: #172a3a !important;
+    }
+
+    .success {
+        background-color: var(--color-green-800) !important;
+        border-color: var(--color-green-800) !important;
+    }
+
+    .error {
+        background-color: var(--color-red-800) !important;
+        border-color: var(--color-red-800) !important;
+    }
+}
