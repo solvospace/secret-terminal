@@ -15,6 +15,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { PanelLeftClose } from "lucide-react";
 import { RiMenu2Line } from "react-icons/ri";
+import { sidebarIconSize } from "@/constants/app.constants";
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state";
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
@@ -260,7 +261,6 @@ function SidebarTrigger({
             data-sidebar="trigger"
             data-slot="sidebar-trigger"
             variant="ghost"
-            size="icon-lg"
             className={cn(`w-full flex justify-start p-[8px] items-center text-[var(--text-color)] w-fit`, className)}
             onClick={(event) => {
                 onClick?.(event);
@@ -268,7 +268,20 @@ function SidebarTrigger({
             }}
             {...props}
         >
-            {showMenuIcon ? <RiMenu2Line /> : <PanelLeftClose />}
+            <span>
+                {showMenuIcon ? (
+                    <RiMenu2Line />
+                ) : (
+                    <PanelLeftClose
+                        style={
+                            {
+                                "--sidebar-icon-size": sidebarIconSize,
+                            } as React.CSSProperties
+                        }
+                        className="!size-[var(--sidebar-icon-size)]"
+                    />
+                )}
+            </span>
             <span className={`${!open && "hidden"}`}>{label}</span>
             <span className="sr-only">{label ?? "Toggle Sidebar"}</span>
         </Button>
@@ -376,7 +389,7 @@ function SidebarGroup({ className, ...props }: React.ComponentProps<"div">) {
         <div
             data-slot="sidebar-group"
             data-sidebar="group"
-            className={cn("relative flex w-full min-w-0 flex-col p-2", className)}
+            className={cn("relative flex w-full min-w-0 flex-col p-2 gap-[2px]", className)}
             {...props}
         />
     );

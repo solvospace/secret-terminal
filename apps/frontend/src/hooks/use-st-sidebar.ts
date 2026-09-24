@@ -96,8 +96,8 @@ export default function useStSidebar() {
                 setDialogType("coin-analysis");
                 setShowDialog(true);
                 break;
-            case "trending":
-                route = "/trending";
+            case "coins":
+                route = "/coins";
                 break;
             default:
                 route = "/";

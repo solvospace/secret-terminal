@@ -1,5 +1,5 @@
 import { NavigationBarTab } from "@/interfaces/global.interface";
-import { Home, TrendingUp, Newspaper, BookmarkPlus, ChartNoAxesColumn, LucideIcon } from "lucide-react";
+import { Home, Newspaper, BookmarkPlus, ChartNoAxesColumn, LucideIcon, Coins } from "lucide-react";
 
 const coinKeyList = [
     {
@@ -54,10 +54,10 @@ const coinsTableContextMenuList: Record<string, string>[] = ["View Details", "An
 
 const navigationBarTabList: NavigationBarTab[] = [
     { name: "Home", value: "home" },
-    { name: "Trending", value: "trending" },
-    { name: "News", value: "news" },
+    { name: "Coins", value: "coins" },
     { name: "Watchlist", value: "watchlist" },
     { name: "Analysis", value: "coin-analysis" },
+    { name: "News", value: "news" },
 ].map((tab) => {
     return {
         id: crypto.randomUUID(),
@@ -72,8 +72,8 @@ function getIcon(value: string): LucideIcon {
     switch (value) {
         case "home":
             return Home;
-        case "trending":
-            return TrendingUp;
+        case "coins":
+            return Coins;
         case "news":
             return Newspaper;
         case "watchlist":
@@ -95,6 +95,7 @@ const coinSymbolImageSize = {
 const userScreenWidth = 720;
 const iconSize = 18;
 const sidebarWidth = "220px";
+const sidebarIconSize = "18px";
 
 export {
     coinKeyList,
@@ -104,4 +105,5 @@ export {
     userScreenWidth,
     iconSize,
     sidebarWidth,
+    sidebarIconSize,
 };

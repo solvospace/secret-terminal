@@ -10,7 +10,7 @@ import {
     SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { iconSize } from "@/constants/app.constants";
+import { iconSize, sidebarIconSize } from "@/constants/app.constants";
 import useStSidebar from "@/hooks/use-st-sidebar";
 import WatchlistDialog from "../features/watchlist/watchlist-dialog";
 import NewsDialog from "../features/news/news-dialog";
@@ -40,9 +40,14 @@ export function StSidebar() {
                                                 onMenuItemClick(event, tab.value);
                                                 if (isMobile) toggleSidebar();
                                             }}
+                                            style={
+                                                {
+                                                    "--sidebar-icon-size": sidebarIconSize,
+                                                } as React.CSSProperties
+                                            }
                                         >
                                             <Icon
-                                                className="size-[20px]"
+                                                className="!size-[var(--sidebar-icon-size)]"
                                                 size={iconSize}
                                             />
                                             {tab.name}
