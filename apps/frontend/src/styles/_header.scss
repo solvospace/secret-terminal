@@ -55,10 +55,11 @@
                     align-items: center;
                     background-color: var(--profile-bg-color);
                     color: var(--text-color);
-                    padding: 3px 10px;
+                    width: 26px;
+                    height: 26px;
                     border-radius: 50%;
+                    font-size: 13px;
                     border: 1px solid hsla(120, 39%, 90%, 1);
-                    font-size: 14px;
 
                     .dark & {
                         background-color: var(--top-bg-color);

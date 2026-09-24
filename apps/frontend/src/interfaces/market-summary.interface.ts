@@ -1,14 +1,15 @@
-import type { CryptoCurrency } from '@/interfaces/coin.interface';
+import type { CryptoCurrency } from "@/interfaces/coin.interface";
 
 interface MarketSummary {
-    key: string,
-    marketSummaryItem: MarketSummaryItem,
+    key: string;
+    marketSummaryItem: MarketSummaryItem;
 }
 
 interface MarketSummaryItem {
-    id: string,
-    title: string,
-    coins: CryptoCurrency[]
+    id: string;
+    title: string;
+    coins: CryptoCurrency[];
+    show?: boolean;
 }
 
-export type { MarketSummary, MarketSummaryItem }
+export type { MarketSummary, MarketSummaryItem };

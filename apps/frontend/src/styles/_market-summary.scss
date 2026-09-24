@@ -3,10 +3,10 @@
     flex-wrap: wrap;
     justify-content: space-between;
     gap: 12px;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
 
     .item {
-        min-width: 270px;
+        width: 100%;
         flex: 1;
         padding: 12px;
 

@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
 import useMarketSummary from "@/hooks/use-market-summary";
-import { Skeleton } from '@/components/ui/skeleton';
+import { Skeleton } from "@/components/ui/skeleton";
 import MarketSummaryCard from "@/components/features/market-summary/market-summary-card";
 
 function MarketSummary() {
@@ -9,32 +9,33 @@ function MarketSummary() {
 
     return (
         <>
-            <div className="text-[20px] font-medium mb-[12px]">
-                Overview
-            </div>
+            <div className="text-[20px] font-medium mb-[12px]">Overview</div>
 
             <div className="market-summary-body">
-                {
-                    fetchingMarketSummary ?
-                        [...Array(4)].map((_, index) => {
-                            return (
-                                <Skeleton key={'indicator' + index} className="w-full item h-[162px]" />
-                            )
-                        })
-                        :
-                        marketSummary.length > 0 && marketSummary.map((marketSummaryItem) => {
-                            return (
-                                <MarketSummaryCard
-                                    key={marketSummaryItem.id}
-                                    marketSummary={marketSummary}
-                                    marketSummaryItem={marketSummaryItem}
-                                />
-                            )
-                        })
-                }
+                {fetchingMarketSummary
+                    ? [...Array(3)].map((_, index) => {
+                          return (
+                              <Skeleton
+                                  key={"indicator" + index}
+                                  className="w-full item h-[248px]"
+                              />
+                          );
+                      })
+                    : marketSummary.length > 0 &&
+                      marketSummary.map((marketSummaryItem) => {
+                          return (
+                              marketSummaryItem.show && (
+                                  <MarketSummaryCard
+                                      key={marketSummaryItem.id}
+                                      marketSummary={marketSummary}
+                                      marketSummaryItem={marketSummaryItem}
+                                  />
+                              )
+                          );
+                      })}
             </div>
         </>
-    )
+    );
 }
 
 export default MarketSummary;

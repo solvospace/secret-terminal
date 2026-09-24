@@ -14,10 +14,8 @@ function TrendingCoinsCategoriesAndNftsTable(bindings: Bindings) {
     return (
         <div className="trending-table-wrapper">
             <table className={`cnv-borderless-table table`}>
-                <thead>
+                <thead className="hidden">
                     <tr>
-                        <th className="text-center">#</th>
-
                         <th className="text-left w-[25%]">Name</th>
 
                         {type === "categories" && <th className="text-left">Top Gainers</th>}
@@ -34,8 +32,6 @@ function TrendingCoinsCategoriesAndNftsTable(bindings: Bindings) {
                     {list.map((coinCategoryOrNft, index) => {
                         return (
                             <tr key={coinCategoryOrNft.id}>
-                                <td className="text-center w-[30px]">{index + 1}</td>
-
                                 <td>
                                     <div className="flex items-center">
                                         {["coins", "nfts"].includes(type) && (

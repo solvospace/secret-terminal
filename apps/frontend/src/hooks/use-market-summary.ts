@@ -151,10 +151,10 @@ function useMarketSummary() {
 
     function createMarketSummary() {
         const localMarketSummary = [
-            { id: "topGainer", title: "Top Gainers", coins: marketSummaryRef.gainers },
-            { id: "topLoser", title: "Top Losers", coins: marketSummaryRef.losers },
+            { id: "topGainer", title: "Top Gainers", coins: marketSummaryRef.gainers, show: true },
+            { id: "topLoser", title: "Top Losers", coins: marketSummaryRef.losers, show: true },
             { id: "trending", title: "Trending", coins: marketSummaryRef.trendingCoins },
-            { id: "topVolume", title: "Top Volume", coins: marketSummaryRef.volumes },
+            { id: "topVolume", title: "Top Volume", coins: marketSummaryRef.volumes, show: true },
         ];
 
         setMarketSummary(localMarketSummary);

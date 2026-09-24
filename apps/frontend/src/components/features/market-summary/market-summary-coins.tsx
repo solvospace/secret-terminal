@@ -40,7 +40,7 @@ export default function MarketSummaryCoins(bindings: Bindings) {
 
                                     <td className={`${!inDialog && "w-[40%]"}`}>
                                         <div
-                                            className={`flex items-center ${inDialog ? "max-w-[inherit]" : "max-w-[115px] md:max-w-[100px]"}`}
+                                            className={`flex items-center ${inDialog ? "max-w-[inherit]" : "max-w-[150px] md:max-w-[130px]"}`}
                                         >
                                             <div className="coin-image-wrapper">
                                                 {coin.imageUrl ? (
