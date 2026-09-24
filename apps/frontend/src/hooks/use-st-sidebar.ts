@@ -43,8 +43,10 @@ export default function useStSidebar() {
     }, [navigationBarTabList, user]);
 
     useEffect(() => {
-        router.prefetch("/trending");
-        router.prefetch("/");
+        for (const path of ["/", "/coins"]) {
+            router.prefetch(path as Route);
+        }
+
         const rootScope = globalThis ?? window ?? null;
 
         function handleScroll() {
