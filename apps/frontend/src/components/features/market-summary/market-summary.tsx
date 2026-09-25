@@ -8,10 +8,10 @@ function MarketSummary() {
     const { marketSummary, fetchingMarketSummary } = useMarketSummary();
 
     return (
-        <>
-            <div className="text-[20px] font-medium mb-[12px]">Overview</div>
+        <section className="market-summary-container">
+            <h2 className="ms-heading">Overview</h2>
 
-            <div className="market-summary-body">
+            <div className="ms-body">
                 {fetchingMarketSummary
                     ? [...Array(3)].map((_, index) => {
                           return (
@@ -34,7 +34,7 @@ function MarketSummary() {
                           );
                       })}
             </div>
-        </>
+        </section>
     );
 }
 

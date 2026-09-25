@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import MarketSummaryCoins from "@/components/features/market-summary/market-summary-coins";
-import { Item, ItemContent, ItemTitle } from "@/components/ui/item";
 import { MarketSummaryItem } from "@/interfaces/market-summary.interface";
 import { ChevronRight } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogBody, DialogDescription } from "@/components/ui/dialog";
@@ -18,34 +17,30 @@ function MarketSummaryCard(bindings: Bindings) {
 
     return (
         <>
-            <Item
+            <div
                 key={marketSummaryItem.id}
-                className={`item border-[var(--border-color)]
-                            ${marketSummary.length === 1 && "max-w-[300px]"} `}
-                variant="outline"
+                className="group"
             >
-                <ItemContent>
-                    <ItemTitle className="mb-[8px] text-[12px]">
-                        <div>{marketSummaryItem.title}</div>
+                <div className="header">
+                    <h6>{marketSummaryItem.title}</h6>
 
-                        <div
-                            onClick={() => {
-                                setShowMarketSummaryItemCardDialog(true);
-                            }}
-                            className="more-link"
-                        >
-                            More <ChevronRight />
-                        </div>
-                    </ItemTitle>
+                    <div
+                        onClick={() => {
+                            setShowMarketSummaryItemCardDialog(true);
+                        }}
+                        className="more-link"
+                    >
+                        More <ChevronRight />
+                    </div>
+                </div>
 
-                    <MarketSummaryCoins
-                        noOfCoins={5}
-                        inDialog={false}
-                        key={marketSummaryItem.id}
-                        marketSummaryItem={marketSummaryItem}
-                    />
-                </ItemContent>
-            </Item>
+                <MarketSummaryCoins
+                    noOfCoins={5}
+                    inDialog={false}
+                    key={marketSummaryItem.id}
+                    marketSummaryItem={marketSummaryItem}
+                />
+            </div>
 
             <Dialog
                 open={showMarketSummaryItemCardDialog}

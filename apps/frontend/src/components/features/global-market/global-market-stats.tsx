@@ -1,50 +1,39 @@
 "use client";
 
+import { Skeleton } from "@/components/ui/skeleton";
+import { Spinner } from "@/components/ui/spinner";
 import useGlobalMarketStats from "@/hooks/use-global-market-stats";
 import { formatValueInUsdCompact, roundOffNumber } from "@secret-terminal/services/utils.service";
 import { FaCaretUp, FaCaretDown } from "react-icons/fa";
-import { Spinner } from "@/components/ui/spinner";
-import { useSidebar } from "@/components/ui/sidebar";
-import { sidebarWidth } from "@/constants/app.constants";
 
 function GlobalMarketStats() {
     const { globalMarketStats, fetchingGlobalMarketStats, scrollReachedBottom } = useGlobalMarketStats();
-    const { open, isMobile } = useSidebar();
 
     return (
-        <div
-            style={
-                {
-                    "--sidebar-width": sidebarWidth,
-                } as React.CSSProperties
-            }
-            className={`global-market-stats-bottom-bar ${scrollReachedBottom === true && "remove-shadow"}
-                        ${open && !isMobile && "!w-[calc(100vw_-_var(--sidebar-width))]"}
-                    `}
-        >
-            {fetchingGlobalMarketStats ? (
-                <Spinner className="m-[auto] size-5" />
-            ) : (
-                <div className="inner-wrapper">
-                    {globalMarketStats.totalCoins && (
-                        <div className="pair-container">
-                            <div className="name">Total Coins:</div>
+        <section className="global-market-stats-container">
+            <h2 className="gm-heading">Global Market</h2>
 
+            {fetchingGlobalMarketStats ? (
+                <Skeleton className="w-full h-[73px]" />
+            ) : (
+                <div className="gm-body">
+                    {globalMarketStats.totalCoins && (
+                        <div className="group">
+                            <div className="label">Total Coins</div>
                             <div className="value">{globalMarketStats.totalCoins}</div>
                         </div>
                     )}
 
                     {globalMarketStats.exchanges && (
-                        <div className="pair-container">
-                            <div className="name">Exchanges:</div>
-
+                        <div className="group">
+                            <div className="label">Exchanges</div>
                             <div className="value">{globalMarketStats.exchanges}</div>
                         </div>
                     )}
 
                     {globalMarketStats.totalMarketCapital && (
-                        <div className="pair-container">
-                            <div className="name">Market Cap:</div>
+                        <div className="group">
+                            <div className="label">Market Capital</div>
 
                             <div className="value flex items-center">
                                 {formatValueInUsdCompact(globalMarketStats.totalMarketCapital.value, 3)}
@@ -68,8 +57,8 @@ function GlobalMarketStats() {
                     )}
 
                     {globalMarketStats.totalVolume && (
-                        <div className="pair-container">
-                            <div className="name">24h Vol:</div>
+                        <div className="group">
+                            <div className="label">24h Volume</div>
 
                             <div className="value flex items-center">
                                 {formatValueInUsdCompact(globalMarketStats.totalVolume, 3)}
@@ -93,8 +82,8 @@ function GlobalMarketStats() {
                     )}
 
                     {globalMarketStats.totalMarketCapital && (
-                        <div className="pair-container">
-                            <div className="name">Dominance:</div>
+                        <div className="group">
+                            <div className="label">Dominance</div>
 
                             <div className="value">
                                 {globalMarketStats.totalMarketCapital.marketCapShareList
@@ -115,7 +104,7 @@ function GlobalMarketStats() {
                     )}
                 </div>
             )}
-        </div>
+        </section>
     );
 }
 

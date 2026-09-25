@@ -10,16 +10,16 @@ function TrendingCoinsCategoriesAndNftsContainer() {
         useTrendingCoinsCategoriesAndNfts();
 
     return (
-        <>
-            <div className="text-[20px] font-medium mb-[12px]">Trending</div>
+        <section className="trending-container">
+            <h2 className="t-heading">Trending</h2>
 
-            <div className="trending-coins-categories-and-nfts-container">
+            <div className="t-body">
                 {fetchingTrendingCoinsCategoriesAndNfts
                     ? [...Array(3)].map((_, index) => {
                           return (
                               <Skeleton
                                   key={"indicator" + index}
-                                  className="min-w-[200px] item h-[262px]"
+                                  className="min-w-[200px] item h-[242px]"
                               />
                           );
                       })
@@ -27,9 +27,9 @@ function TrendingCoinsCategoriesAndNftsContainer() {
                           return (
                               <div
                                   key={trendingItem.id}
-                                  className="item relative"
+                                  className="group"
                               >
-                                  <h6 className="text-[12px] mb-[12px]">{trendingItem.header}</h6>
+                                  <h6 className="header">{trendingItem.header}</h6>
 
                                   {trendingItem.list.length > 0 ? (
                                       <TrendingCoinsCategoriesAndNftsTable
@@ -45,7 +45,7 @@ function TrendingCoinsCategoriesAndNftsContainer() {
                           );
                       })}
             </div>
-        </>
+        </section>
     );
 }
 

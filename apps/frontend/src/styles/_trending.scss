@@ -1,24 +1,38 @@
-.trending-coins-categories-and-nfts-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin: 12px 0px;
+@use "@/styles/shared";
 
-    .item {
-        width: 100%;
-        flex: 1;
-        border: 1px solid var(--border-color);
-        border-radius: var(--border-radius);
-        padding: 12px;
+.trending-container {
+    margin-bottom: 12px;
 
-        .trending-table-wrapper {
-            overflow-x: auto;
+    .t-heading {
+        @extend .st-heading;
+    }
+
+    .t-body {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+
+        .group {
             width: 100%;
+            flex: 1;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 12px;
 
-            .table {
-                th,
-                td {
-                    white-space: nowrap;
+            .header {
+                font-size: 12px;
+                margin-bottom: 12px;
+            }
+
+            .trending-table-wrapper {
+                overflow-x: auto;
+                width: 100%;
+
+                .table {
+                    th,
+                    td {
+                        white-space: nowrap;
+                    }
                 }
             }
         }
