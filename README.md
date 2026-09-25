@@ -21,32 +21,16 @@
 
 <p align="center">
     <img 
-        alt="overview and coins table" 
-        src="./docs/preview/main.png" 
+        alt="website" 
+        src="./docs/preview/website.png" 
         width="900"
     >
 </p>
 
 <p align="center">
     <img 
-        alt="top gainers dialog" 
-        src="./docs/preview/top-gainers-dialog.png" 
-        width="900"
-    >
-</p>
-
-<p align="center">
-    <img 
-        alt="coin details dialog" 
-        src="./docs/preview/coin-details-dialog.png" 
-        width="900"
-    >
-</p>
-
-<p align="center">
-    <img 
-        alt="watchlist dialog" 
-        src="./docs/preview/watchlist-dialog.png" 
+        alt="app" 
+        src="./docs/preview/app.png" 
         width="900"
     >
 </p>
