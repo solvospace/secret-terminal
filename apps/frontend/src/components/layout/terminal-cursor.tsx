@@ -7,7 +7,7 @@ type TerminalCursorProps = {
     className?: string;
 };
 
-export default function TerminalCursor({ size = 24, className, }: TerminalCursorProps) {
+export default function TerminalCursor({ size = 24, className }: TerminalCursorProps) {
     const [visible, setVisible] = useState(true);
 
     useEffect(() => {
@@ -28,19 +28,13 @@ export default function TerminalCursor({ size = 24, className, }: TerminalCursor
             className={className}
             aria-hidden="true"
         >
-            <path
-                d="M4 17L10 11L4 5"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-            />
-
-            <path
-                d="M12 19H20"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                strokeLinecap="round"
+            <rect
+                x="12"
+                y="17.75"
+                width="8"
+                height="2.5"
+                rx="0.5"
+                fill="var(--main-color)"
                 style={{
                     opacity: visible ? 1 : 0,
                     transition: "opacity 300ms ease-in-out",
