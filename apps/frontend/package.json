@@ -1,7 +1,6 @@
 {
     "name": "frontend",
     "private": true,
-    "license": "MIT",
     "scripts": {
         "dev": "next dev --inspect=9229",
         "build": "next build",
