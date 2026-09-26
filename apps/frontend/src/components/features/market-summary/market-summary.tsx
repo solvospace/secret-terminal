@@ -17,7 +17,7 @@ function MarketSummary() {
                           return (
                               <Skeleton
                                   key={"indicator" + index}
-                                  className="min-w-[200px] item h-[262px]"
+                                  className="group h-[262px]"
                               />
                           );
                       })

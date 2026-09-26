@@ -19,7 +19,7 @@ function TrendingCoinsCategoriesAndNftsContainer() {
                           return (
                               <Skeleton
                                   key={"indicator" + index}
-                                  className="min-w-[200px] item h-[242px]"
+                                  className="group h-[242px]"
                               />
                           );
                       })
