@@ -13,7 +13,7 @@ import { Separator } from "@/components/ui/separator";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { PanelLeftClose } from "lucide-react";
+import { PanelLeftClose, PanelLeftOpen } from "lucide-react";
 import { RiMenu2Line } from "react-icons/ri";
 import { sidebarIconSize } from "@/constants/app.constants";
 
@@ -255,13 +255,18 @@ function SidebarTrigger({
 }: React.ComponentProps<typeof Button> & { bindings: SidebarTriggerBindings }) {
     const { toggleSidebar, open } = useSidebar();
     const { label, showMenuIcon } = bindings ?? {};
+    const Icon = open ? PanelLeftClose : PanelLeftOpen;
 
     return (
         <Button
             data-sidebar="trigger"
             data-slot="sidebar-trigger"
             variant="ghost"
-            className={cn(`w-full flex justify-start p-[8px] items-center text-[var(--text-color)] w-fit`, className)}
+            className={cn(
+                `w-full flex justify-start p-[8px] items-center text-[var(--text-color)]
+                ${open ? "hover:cursor-[w-resize]" : "hover:cursor-[e-resize]"}`,
+                className,
+            )}
             onClick={(event) => {
                 onClick?.(event);
                 toggleSidebar();
@@ -272,7 +277,7 @@ function SidebarTrigger({
                 {showMenuIcon ? (
                     <RiMenu2Line />
                 ) : (
-                    <PanelLeftClose
+                    <Icon
                         style={
                             {
                                 "--sidebar-icon-size": sidebarIconSize,
