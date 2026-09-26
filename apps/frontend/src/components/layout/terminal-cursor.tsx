@@ -29,8 +29,8 @@ export default function TerminalCursor({ size = 24, className }: TerminalCursorP
             aria-hidden="true"
         >
             <rect
-                x="12"
-                y="17.75"
+                x="8"
+                y="10.75"
                 width="8"
                 height="2.5"
                 rx="0.5"
