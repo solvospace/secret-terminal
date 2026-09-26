@@ -28,6 +28,7 @@ function Tooltip({ ...props }: TooltipPrimitive.Root.Props) {
 function TooltipTrigger({ ...props }: TooltipPrimitive.Trigger.Props) {
     return (
         <TooltipPrimitive.Trigger
+            delay={0}
             data-slot="tooltip-trigger"
             {...props}
         />
@@ -52,13 +53,13 @@ function TooltipContent({
                 collisionAvoidance={{ side: "flip" }}
                 side={side}
                 sideOffset={sideOffset}
-                className="isolate z-50 !top-[-10px] data-[side=bottom]:!top-[8px]"
+                className="isolate z-50"
             >
                 <TooltipPrimitive.Popup
                     data-slot="tooltip-content"
                     className={cn(
                         `tooltip-content z-50 inline-flex w-fit max-w-xs origin-(--transform-origin) items-center
-                         gap-1.5 rounded-md bg-foreground px-3 py-1.5 text-xs text-background
+                         gap-1.5 rounded-[var(--border-radius)] bg-foreground px-3 py-1.5 text-xs text-background
                          has-data-[slot=kbd]:pr-1.5 data-[side=bottom]:slide-in-from-top-2
                          data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2
                          data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2
