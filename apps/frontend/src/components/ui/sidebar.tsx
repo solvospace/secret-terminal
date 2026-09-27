@@ -13,7 +13,7 @@ import { Separator } from "@/components/ui/separator";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { PanelLeftClose, PanelLeftOpen } from "lucide-react";
+import { PanelLeft, PanelLeftClose, PanelLeftOpen } from "lucide-react";
 import { RiMenu2Line } from "react-icons/ri";
 import { sidebarIconSize } from "@/constants/app.constants";
 
@@ -253,7 +253,7 @@ function SidebarTrigger({
     bindings,
     ...props
 }: React.ComponentProps<typeof Button> & { bindings: SidebarTriggerBindings }) {
-    const { toggleSidebar, open } = useSidebar();
+    const { toggleSidebar, open, isMobile, openMobile } = useSidebar();
     const { label, showMenuIcon } = bindings ?? {};
     const Icon = open ? PanelLeftClose : PanelLeftOpen;
 
@@ -263,8 +263,11 @@ function SidebarTrigger({
             data-slot="sidebar-trigger"
             variant="ghost"
             className={cn(
-                `w-full flex justify-start p-[8px] items-center text-[var(--text-color)]
-                ${open ? "hover:cursor-[w-resize]" : "hover:cursor-[e-resize]"}`,
+                `flex justify-start p-[8px] items-center text-[var(--text-color)]
+                ${isMobile ? "w-fit" : "w-full"}
+                ${open ? "hover:cursor-[w-resize]" : "hover:cursor-[e-resize]"}
+                ${openMobile ? "hover:cursor-[e-resize]" : "hover:cursor-[w-resize]"}
+                `,
                 className,
             )}
             onClick={(event) => {
@@ -275,7 +278,7 @@ function SidebarTrigger({
         >
             <span>
                 {showMenuIcon ? (
-                    <RiMenu2Line />
+                    <PanelLeft />
                 ) : (
                     <Icon
                         style={

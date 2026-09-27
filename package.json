@@ -16,7 +16,7 @@
         "typescript": "6.0.3",
         "eslint": "9.39.1"
     },
-    "packageManager": "pnpm@12.4.1",
+    "packageManager": "pnpm@12.6.0",
     "engines": {
         "node": "24.20.0"
     }
