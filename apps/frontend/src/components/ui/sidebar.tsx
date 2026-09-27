@@ -266,7 +266,7 @@ function SidebarTrigger({
                 `flex justify-start p-[8px] items-center text-[var(--text-color)]
                 ${isMobile ? "w-fit" : "w-full"}
                 ${open ? "hover:cursor-[w-resize]" : "hover:cursor-[e-resize]"}
-                ${openMobile ? "hover:cursor-[e-resize]" : "hover:cursor-[w-resize]"}
+                ${isMobile ? (openMobile ? "hover:cursor-[e-resize]" : "hover:cursor-[w-resize]") : ""}
                 `,
                 className,
             )}
