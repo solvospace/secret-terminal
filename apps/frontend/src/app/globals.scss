@@ -1,5 +1,5 @@
-@use "tailwindcss";
-@use "@/styles/main";
+@import "@/styles/main";
+@import "tailwindcss";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -86,16 +86,16 @@
     --sidebar-border: oklch(0.923 0.003 48.717);
     --sidebar-ring: oklch(0.709 0.01 56.259);
 
-    --grey-color-1: #dce5e0;
-    --grey-color-2: #7d8984;
-    --grey-color-3: #64716c;
+    --grey-color-1: #e2e8e5;
+    --grey-color-2: #7a8580;
+    --grey-color-3: #5f6b66;
 
     --main-color: #05c997;
-    --main-bg-color: #f5f5f7;
-    --hover-bg-color: #ebefed;
+    --main-bg-color: #fafbfa;
+    --hover-bg-color: #f1f4f2;
 
     --text-color: #1d1d1f;
-    --st-muted-color: #71857c;
+    --st-muted-color: #68756f;
 
     --border-color: var(--grey-color-1);
     --border-radius: 6px;
@@ -119,7 +119,7 @@
 
     --required-color: #d92d20;
 
-    --shimmer-color: #e4ede8;
+    --shimmer-color: #e8efec;
 
     --tab-text-color: var(--st-muted-color);
     --tab-active-bg-color: var(--main-color);
@@ -128,9 +128,10 @@
     --scrollbar-thumb: #c4cfca;
     --scrollbar-track: #ffffff;
 
-    --profile-bg-color: #dcefdc;
+    --profile-bg-color: #e5f3ef;
 
     --header-height: 45px;
+    --symbol-bg-color: var(--main-bg-color);
 }
 
 .dark {
@@ -180,20 +181,20 @@
 
     --overlay-color: rgba(0, 0, 0, 0.75);
 
-    --border-color: var(--grey-color-1);
+    --border-color: #2d3340;
 
     --row-hover-color: var(--hover-bg-color);
     --th-color: var(--grey-color-3);
     --vrt-th-color: var(--grey-color-3);
 
-    --tab-text-color: #8f96a3;
+    --tab-text-color: #9aa1ad;
     --tab-active-bg-color: var(--main-color);
     --tab-active-text-color: #0f172b;
 
     --danger-color: #ff5c6c;
     --success-color: #35c759;
 
-    --reddit-color: #fafafa;
+    --reddit-color: #ff4500;
     --github-color: #fafafa;
 
     --shimmer-color: #22252d;
@@ -208,6 +209,7 @@
     --scrollbar-track: #111318;
 
     --profile-bg-color: var(--main-bg-color);
+    --symbol-bg-color: #f5f5f7;
 }
 
 @layer base {

@@ -25,11 +25,18 @@
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
+                color: var(--th-color);
 
                 .more-link {
                     cursor: pointer;
                     display: flex;
                     align-items: center;
+                    color: #007aff;
+
+                    &:hover {
+                        text-decoration: underline;
+                        font-weight: 500;
+                    }
 
                     .lucide-chevron-right {
                         width: 13px;

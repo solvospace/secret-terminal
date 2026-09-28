@@ -79,7 +79,7 @@ function ProfileDropdown(bindings: PdBindings) {
 
                     <DropdownMenuContent
                         align="center"
-                        className="m-[10px_5px_30px_10px]"
+                        className="m-[4px_4px_30px_10px]"
                     >
                         <DropdownMenuGroup>
                             <DropdownMenuItem
