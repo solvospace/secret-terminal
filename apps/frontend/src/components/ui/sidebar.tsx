@@ -489,7 +489,7 @@ const sidebarMenuButtonVariants = cva(
     text-sm ring-sidebar-ring outline-hidden transition-[width,height,padding] text-[var(--st-muted-color)]
     group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8!
     group-data-[collapsible=icon]:p-2! hover:bg-[var(--hover-bg-color)] hover:text-[var(--text-color)]
-    focus-visible:ring-2 active:bg-[var(--hover-bg-color)] active:text-[var(--text-color)]
+    focus-visible:ring- active:bg-[var(--hover-bg-color)] active:text-[var(--text-color)]
     disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none
     aria-disabled:opacity-50 data-open:hover:bg-sidebar-accent data-open:hover:text-sidebar-accent-foreground
     data-active:bg-[var(--hover-bg-color)] data-active:font-medium data-active:text-[var(--text-color)] [&_svg]:size-4

@@ -41,8 +41,7 @@ function SelectTrigger({
             data-size={size}
             className={cn(
                 `flex w-fit items-center justify-between gap-1.5 rounded-[var(--border-radius)] border border-input bg-transparent py-2
-               focus:outline-1 focus:outline-ring
-                pr-2 pl-2.5 text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow]
+                 focus:border-[var(--main-color)] focus:outline-[var(--main-color)] focus:outline-0 pr-2 pl-2.5 text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow]
                  disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3
                   aria-invalid:ring-destructive/20 data-placeholder:text-muted-foreground data-[size=default]:h-9
                   data-[size=sm]:h-8 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex

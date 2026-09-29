@@ -53,7 +53,7 @@
 
 :root {
     color-scheme: light;
-    --radius: 0.625rem;
+    --radius: var(--border-radius);
     --background: oklch(1 0 0);
     --foreground: oklch(0.147 0.004 49.25);
     --card: oklch(1 0 0);
@@ -71,7 +71,7 @@
     --destructive: oklch(0.577 0.245 27.325);
     --border: oklch(0.923 0.003 48.717);
     --input: oklch(0.923 0.003 48.717);
-    --ring: #cddbcf;
+    --ring: var(--main-color);
     --chart-1: oklch(0.646 0.222 41.116);
     --chart-2: oklch(0.6 0.118 184.704);
     --chart-3: oklch(0.398 0.07 227.392);
@@ -84,7 +84,7 @@
     --sidebar-accent: oklch(0.97 0.001 106.424);
     --sidebar-accent-foreground: oklch(0.216 0.006 56.043);
     --sidebar-border: oklch(0.923 0.003 48.717);
-    --sidebar-ring: oklch(0.709 0.01 56.259);
+    --sidebar-ring: var(--main-color);
 
     --grey-color-1: #e2e8e5;
     --grey-color-2: #7a8580;
