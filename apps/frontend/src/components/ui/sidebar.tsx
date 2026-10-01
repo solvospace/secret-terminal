@@ -486,11 +486,11 @@ function SidebarMenuItem({ className, ...props }: React.ComponentProps<"li">) {
 
 const sidebarMenuButtonVariants = cva(
     `cursor-pointer peer/menu-button group/menu-button flex w-full items-center gap-2 overflow-hidden rounded-[var(--border-radius)] p-2 text-left
-    text-sm ring-sidebar-ring outline-hidden transition-[width,height,padding] text-[var(--st-muted-color)]
+    text-sm ring-sidebar-ring outline-hidden transition-[width,height,padding] enabled:text-[var(--st-muted-color)]
     group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8!
-    group-data-[collapsible=icon]:p-2! hover:bg-[var(--hover-bg-color)] hover:text-[var(--text-color)]
-    focus-visible:ring- active:bg-[var(--hover-bg-color)] active:text-[var(--text-color)]
-    disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none
+    group-data-[collapsible=icon]:p-2! enabled:hover:bg-[var(--hover-bg-color)] enabled:hover:text-[var(--text-color)]
+    focus-visible:ring-1 active:bg-[var(--hover-bg-color)] active:text-[var(--text-color)]
+    disabled:pointer-event-none disabled:cursor-not-allowed disabled:opacity-35 aria-disabled:pointer-events-none dark:disabled:opacity-35
     aria-disabled:opacity-50 data-open:hover:bg-sidebar-accent data-open:hover:text-sidebar-accent-foreground
     data-active:bg-[var(--hover-bg-color)] data-active:font-medium data-active:text-[var(--text-color)] [&_svg]:size-4
     [&_svg]:shrink-0 [&>span:last-child]:truncate`,
@@ -528,6 +528,7 @@ function SidebarMenuButton({
         tooltip?: string | React.ComponentProps<typeof TooltipContent>;
     } & VariantProps<typeof sidebarMenuButtonVariants>) {
     const { isMobile, state } = useSidebar();
+
     const comp = useRender({
         defaultTagName: "button",
         props: mergeProps<"button">(
@@ -536,7 +537,7 @@ function SidebarMenuButton({
             },
             props,
         ),
-        render: !tooltip ? render : <TooltipTrigger render={render} />,
+        render,
         state: {
             slot: "sidebar-menu-button",
             sidebar: "menu-button",
@@ -557,7 +558,7 @@ function SidebarMenuButton({
 
     return (
         <Tooltip>
-            {comp}
+            <TooltipTrigger render={comp} />
             <TooltipContent
                 side="right"
                 align="center"

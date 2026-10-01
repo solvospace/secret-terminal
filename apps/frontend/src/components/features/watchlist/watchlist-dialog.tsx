@@ -475,7 +475,7 @@ function WatchlistDetailsDialog(props: any) {
         <Dialog
             open={showWatchlistDetailsDialog}
             onOpenChange={setShowWatchlistDetailsDialog}
-            closeOnOutsideClick={true}
+            disableCloseOnOutsideClick={true}
         >
             <DialogContent dialogLevel={2}>
                 <DialogHeader>

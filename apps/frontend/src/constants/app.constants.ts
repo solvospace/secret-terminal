@@ -52,7 +52,7 @@ const coinsTableContextMenuList: Record<string, string>[] = ["View Details", "An
     return { id: crypto.randomUUID(), name };
 });
 
-const navigationBarTabList: NavigationBarTab[] = [
+const sidebarMenuList: NavigationBarTab[] = [
     { name: "Home", value: "home" },
     { name: "Coins", value: "coins" },
     { name: "Watchlist", value: "watchlist" },
@@ -100,7 +100,7 @@ const sidebarIconSize = "18px";
 export {
     coinKeyList,
     coinsTableContextMenuList,
-    navigationBarTabList,
+    sidebarMenuList,
     coinSymbolImageSize,
     userScreenWidth,
     iconSize,

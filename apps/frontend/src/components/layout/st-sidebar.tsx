@@ -19,7 +19,7 @@ import CoinSearchDialog from "../features/coin-search/coin-search-dialog";
 import { useSidebar } from "@/components/ui/sidebar";
 
 export function StSidebar() {
-    const { activeTab, onMenuItemClick, dialogType, showDialog, setShowDialog, tabList } = useStSidebar();
+    const { activeTab, onMenuItemClick, dialogType, showDialog, setShowDialog, menuList } = useStSidebar();
     const { isMobile, toggleSidebar } = useSidebar();
 
     return (
@@ -27,18 +27,18 @@ export function StSidebar() {
             <Sidebar collapsible="icon">
                 <SidebarContent>
                     <SidebarGroup>
-                        {tabList.map((tab) => {
-                            const Icon = tab.icon;
+                        {menuList.map((menu) => {
+                            const Icon = menu.icon;
 
                             return (
-                                <SidebarMenu key={tab.id}>
+                                <SidebarMenu key={menu.id}>
                                     <SidebarMenuItem>
                                         <SidebarMenuButton
-                                            tooltip={tab.name}
-                                            disabled={tab.disabled}
-                                            isActive={activeTab === tab.value}
+                                            tooltip={menu.name}
+                                            disabled={menu.disabled}
+                                            isActive={activeTab === menu.value}
                                             onClick={(event) => {
-                                                onMenuItemClick(event, tab.value);
+                                                onMenuItemClick(event, menu.value);
                                                 if (isMobile) toggleSidebar();
                                             }}
                                             style={
@@ -51,7 +51,7 @@ export function StSidebar() {
                                                 className="!size-[var(--sidebar-icon-size)]"
                                                 size={iconSize}
                                             />
-                                            {tab.name}
+                                            {menu.name}
                                         </SidebarMenuButton>
                                     </SidebarMenuItem>
                                 </SidebarMenu>

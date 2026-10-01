@@ -26,6 +26,7 @@ export default memo(function signIn(bindings: Bindings) {
     return (
         <Dialog
             open={showDialog}
+            disableCloseOnOutsideClick={true}
             onOpenChange={(showDialog) => {
                 setShowDialog(showDialog);
             }}

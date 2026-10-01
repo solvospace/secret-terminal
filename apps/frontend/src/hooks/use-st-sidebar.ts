@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
-import { navigationBarTabList } from "@/constants/app.constants";
+import { sidebarMenuList } from "@/constants/app.constants";
 import { useUser } from "@/contexts/user.context";
 import { NavigationBarTab } from "@/interfaces/global.interface";
 import { Route } from "next";
@@ -14,33 +14,33 @@ export default function useStSidebar() {
     const [scrollEnded, setScrollEnded] = useState<boolean>(false);
     const [dialogType, setDialogType] = useState<string | null>(null);
     const [showDialog, setShowDialog] = useState<boolean>(false);
-    const [tabList, setTabList] = useState<NavigationBarTab[]>([]);
+    const [menuList, setMenuList] = useState<NavigationBarTab[]>([]);
     const { user } = useUser();
 
     useEffect(() => {
-        if (!navigationBarTabList || navigationBarTabList.length === 0) return;
+        if (!sidebarMenuList || sidebarMenuList.length === 0) return;
 
-        for (const tab of navigationBarTabList) {
-            tab.disabled = false;
+        for (const menu of sidebarMenuList) {
+            menu.disabled = false;
 
-            if ((!user || !user.id) && tab.value === "watchlist") {
-                tab.disabled = true;
+            if ((!user || !user.id) && menu.value === "watchlist") {
+                menu.disabled = true;
             }
         }
 
-        setTabList((previousTabList: NavigationBarTab[]) => {
+        setMenuList((previousTabList: NavigationBarTab[]) => {
             return previousTabList.length > 0
                 ? previousTabList.map((previousTab) => {
-                      const foundTab = navigationBarTabList.find((currentTab) => previousTab.id === currentTab.id);
+                      const foundTab = sidebarMenuList.find((currentTab) => previousTab.id === currentTab.id);
 
                       return {
                           ...previousTab,
                           disabled: foundTab?.disabled,
                       };
                   })
-                : navigationBarTabList;
+                : sidebarMenuList;
         });
-    }, [navigationBarTabList, user]);
+    }, [sidebarMenuList, user]);
 
     useEffect(() => {
         for (const path of ["/", "/coins"]) {
@@ -111,5 +111,5 @@ export default function useStSidebar() {
         }
     }
 
-    return { scrollEnded, activeTab, onMenuItemClick, dialogType, showDialog, setShowDialog, tabList };
+    return { scrollEnded, activeTab, onMenuItemClick, dialogType, showDialog, setShowDialog, menuList };
 }

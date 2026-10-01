@@ -8,15 +8,15 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
 function Dialog({
-    closeOnOutsideClick = false,
+    disableCloseOnOutsideClick = false,
     ...props
 }: React.ComponentProps<typeof DialogPrimitive.Root> & {
-    closeOnOutsideClick?: boolean;
+    disableCloseOnOutsideClick?: boolean;
 }) {
     return (
         <DialogPrimitive.Root
             data-slot="dialog"
-            disablePointerDismissal={closeOnOutsideClick}
+            disablePointerDismissal={disableCloseOnOutsideClick}
             {...props}
         />
     );
