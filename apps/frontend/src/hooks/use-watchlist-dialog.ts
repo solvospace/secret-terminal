@@ -136,8 +136,6 @@ export default function useWatchlistDialog(bindings: Bindings) {
     ) {
         setRightClickedItem(item);
 
-        console.log(contextMenuItem);
-
         switch (contextMenuItem.name) {
             case "Edit":
                 {

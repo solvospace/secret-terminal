@@ -5,18 +5,18 @@ import { secretTerminalEndpoints } from "./endpoints";
 export const setupInterceptors = (client: AxiosInstance) => {
     client.interceptors.response.use(
         (response) => {
-            if (
-                [200, 201].includes(response.status) &&
-                response.data.message &&
-                response.config.method &&
-                ["post", "put", "patch", "delete"].includes(response.config.method) &&
-                response.config.url !== secretTerminalEndpoints.auth.refreshToken
-            ) {
-                toast.add({
-                    type: "success",
-                    description: `${response.data.message}`,
-                });
-            }
+            // if (
+            //     [200, 201].includes(response.status) &&
+            //     response.data.message &&
+            //     response.config.method &&
+            //     ["post", "put", "patch", "delete"].includes(response.config.method) &&
+            //     response.config.url !== secretTerminalEndpoints.auth.refreshToken
+            // ) {
+            toast.add({
+                type: "success",
+                description: `${response.data.message}`,
+            });
+            // }
 
             return response;
         },

@@ -105,8 +105,7 @@ async function verifyResetCode(properties: Record<string, string>) {
         throw new Error("Reset code expired!!!");
     }
 
-    const isHashedCodeMatched = HashService.compareHashed(properties.resetCode, resetCodeEntry.code);
-
+    const isHashedCodeMatched = await HashService.compareHashed(properties.resetCode, resetCodeEntry.code);
     if (!isHashedCodeMatched) throw new Error("Invalid reset code!!");
 
     await secretTerminalDb.resetCode.delete({
