@@ -12,18 +12,18 @@ const signUp = async (request: Request, response: Response) => {
 
         if (result?.user?.id) {
             return response.status(statusCode.created).json({
-                message: 'Welcome to Secret Terminal! Your account is ready.'
+                message: "Welcome to Secret Terminal! Your account is ready.",
             });
         }
     } catch (error: unknown) {
-        if ((error instanceof Error) && error.message.toLowerCase().includes('exist')) {
+        if (error instanceof Error && error.message.toLowerCase().includes("exist")) {
             return response.status(statusCode.conflict).json({
-                message: error.message
-            })
+                message: error.message,
+            });
         }
 
         return response.status(statusCode.internalServerError).json({
-            message: "Internal Server Error."
+            message: "Internal Server Error.",
         });
     }
 };
@@ -38,7 +38,7 @@ const signIn = async (request: Request, response: Response) => {
         AuthenticationService.setResponseHeaders(response, result);
 
         return response.status(200).json({
-            message: 'Welcome back! Glad to see you again.'
+            message: "Welcome back! Glad to see you again.",
         });
     } catch (error: unknown) {
         return response.status(400).json({
@@ -56,7 +56,7 @@ const refreshToken = async (request: Request, response: Response) => {
         AuthenticationService.setResponseHeaders(response, result);
 
         return response.status(200).json({
-            message: 'Done!!.'
+            message: "Done!!.",
         });
     } catch (error) {
         return response.status(401).json({
@@ -64,7 +64,7 @@ const refreshToken = async (request: Request, response: Response) => {
             message: "Invalid refresh token",
         });
     }
-}
+};
 
 const forgotPassword = async (request: Request, response: Response) => {
     try {
@@ -72,22 +72,22 @@ const forgotPassword = async (request: Request, response: Response) => {
         const result = await AuthenticationService.forgotPassword(email);
 
         return response.status(200).json({
-            message: 'A reset code has been sent to your email.'
-        })
+            message: "A reset code has been sent to your email.",
+        });
     } catch (error) {
         return response.status(400).json({
             message: error instanceof Error ? error.message : String(error),
         });
     }
-}
+};
 
 const verifyResetCode = async (request: Request, response: Response) => {
     try {
         const { resetCode, email } = request.body;
-        const result = await AuthenticationService.verifyResetCode({ resetCode, email })
+        const result = await AuthenticationService.verifyResetCode({ resetCode, email });
 
         AuthenticationService.clearTokensFromCookies(response);
-        response.cookie('cpt', result.token, {
+        response.cookie("cpt", result.token, {
             httpOnly: true,
             secure: true,
             sameSite: "none",
@@ -95,37 +95,37 @@ const verifyResetCode = async (request: Request, response: Response) => {
         });
 
         return response.status(200).json({
-            message: result.message
-        })
+            message: result.message,
+        });
     } catch (error) {
         return response.status(400).json({
             message: error instanceof Error ? error.message : String(error),
         });
     }
-}
+};
 
 const changePassword = async (request: Request, response: Response) => {
     try {
-        const token = request.cookies.cpt;
+        const userId = request.userId;
         const { password } = request.body;
 
-        const result = await AuthenticationService.changePassword({ token, password })
+        const result = await AuthenticationService.changePassword({ userId, password });
 
-        response.clearCookie('cpt', {
+        response.clearCookie("cpt", {
             httpOnly: true,
             secure: true,
-            sameSite: 'none'
+            sameSite: "none",
         });
 
         return response.status(200).json({
-            message: result
-        })
+            message: result,
+        });
     } catch (error) {
         return response.status(400).json({
             message: error instanceof Error ? error.message : String(error),
         });
     }
-}
+};
 
 const signOut = async (request: Request, response: Response) => {
     try {
@@ -136,16 +136,16 @@ const signOut = async (request: Request, response: Response) => {
 
         if (result?.id) {
             return response.status(statusCode.ok).json({
-                message: 'You have been logged out. Have a great day.'
+                message: "You have been logged out. Have a great day.",
             });
         } else {
             return response.status(statusCode.noContent).json();
         }
     } catch (error) {
-        if ((error instanceof Error) && error.message.toLowerCase().includes('invalid')) {
+        if (error instanceof Error && error.message.toLowerCase().includes("invalid")) {
             return response.status(statusCode.unauthorized).json({
-                message: "Unauthorized"
-            })
+                message: "Unauthorized",
+            });
         }
 
         return response.status(statusCode.internalServerError).json({
@@ -153,6 +153,6 @@ const signOut = async (request: Request, response: Response) => {
             message: "Internal Server Error",
         });
     }
-}
+};
 
 export { signUp, signIn, signOut, refreshToken, forgotPassword, verifyResetCode, changePassword };
