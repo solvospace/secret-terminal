@@ -135,9 +135,7 @@ async function changePassword(properties: Record<string, string>) {
         },
     });
 
-    if (!foundUser) {
-        throw new Error(`User doesn't exist!!!`);
-    }
+    if (!foundUser) throw new Error(`User doesn't exist!!!`);
 
     const hashedPassword = await HashService.generateHash(password);
 

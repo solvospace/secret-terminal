@@ -10,12 +10,11 @@ export default function cpTokenVerification(request: Request, response: Response
         if (!cpt) throw new Error("Your session has expired. Please try again.");
 
         const decodedCpt = TokenService.verifyAccessToken(cpt) as Jwt;
+        if (decodedCpt.error) throw new Error(decodedCpt.error);
 
-        if (decodedCpt.payload.purpose !== "change-password") {
+        if (decodedCpt.payload.purpose !== "change-password" || !decodedCpt.payload.userId) {
             throw new Error("Invalid token!!");
         }
-
-        if (decodedCpt.error) throw new Error(decodedCpt.error);
 
         setNoCacheHeaders(response);
 
