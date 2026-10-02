@@ -146,7 +146,10 @@ export default memo(function signIn(bindings: Bindings) {
                                                             (formType === "signIn" || formType === "forgotPassword") &&
                                                             true
                                                         }
-                                                        disabled={submittingData || formType === "verifyResetCode"}
+                                                        disabled={
+                                                            submittingData ||
+                                                            ["verifyResetCode", "verifyAccount"].includes(formType)
+                                                        }
                                                     />
                                                 </InputGroup>
                                             </>
@@ -281,6 +284,7 @@ export default memo(function signIn(bindings: Bindings) {
                                             {submittingData && <Spinner className="size-4" />}
                                             {formType === "signIn" && "Sign in"}
                                             {formType === "signUp" && "Sign up"}
+                                            {formType === "verifyAccount" && "Verify & Continue"}
                                             {formType === "forgotPassword" && `Send reset code`}
                                             {formType === "verifyResetCode" && `Confirm reset code`}
                                             {formType === "changePassword" && "Save new password"}

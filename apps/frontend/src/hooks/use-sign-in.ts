@@ -75,7 +75,7 @@ export default function useSignIn(bindings: Bindings) {
     useEffect(() => {
         resetForm();
 
-        if (["verifyResetCode"].includes(formType) && emailRef.current) {
+        if (["verifyResetCode", "verifyAccount"].includes(formType) && emailRef.current) {
             signInForm.setFieldValue("email", emailRef.current);
         }
     }, [formType]);
