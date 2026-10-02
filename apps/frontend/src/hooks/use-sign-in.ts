@@ -106,6 +106,7 @@ export default function useSignIn(bindings: Bindings) {
             switch (formType) {
                 case "signIn":
                     {
+                        emailRef.current = userDetails.email;
                         const serverData = {
                             email: userDetails.email,
                             password: userDetails.password,
@@ -221,7 +222,6 @@ export default function useSignIn(bindings: Bindings) {
 
     async function completeAccountVerification(userDetails: UserFormData) {
         try {
-            emailRef.current = userDetails.email;
             const response = await verifyAccount({ email: userDetails.email, code: userDetails.code });
 
             if (response.status === 200) {

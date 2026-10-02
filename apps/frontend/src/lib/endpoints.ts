@@ -7,7 +7,7 @@ const secretTerminalEndpoints = {
         forgotPassword: "v1/auth/forgot-password",
         verifyResetCode: "v1/auth/verify-reset-code",
         changePassword: "v1/auth/change-password",
-        verifyAccount: "v1/verify-account",
+        verifyAccount: "v1/auth/verify-account",
     },
     users: {
         me: "v1/users/me",

@@ -18,7 +18,7 @@ import cpTokenVerification from "../../middlewares/cp-token.middleware.js";
 const authRoutes = Router();
 
 authRoutes.post("/sign-up", captchaVerification, schemaVerification(signUpSchema), signUp);
-authRoutes.post("/sign-in", captchaVerification, schemaVerification(signInSchema), signIn);
+authRoutes.post("/sign-in", schemaVerification(signInSchema), signIn);
 authRoutes.post("/verify-account", accountVerification);
 authRoutes.post("/refresh-token", refreshToken);
 authRoutes.post("/forgot-password", forgotPassword);
