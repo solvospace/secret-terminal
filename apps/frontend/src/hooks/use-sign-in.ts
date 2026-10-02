@@ -133,7 +133,7 @@ export default function useSignIn(bindings: Bindings) {
             }
 
             if ([200, 201].includes(response.status)) {
-                if (response.data.verified) {
+                if (response.data.data.verified) {
                     fetchProfile();
                     setShowDialog(false);
                 } else {
