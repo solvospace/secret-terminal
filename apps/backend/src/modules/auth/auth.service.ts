@@ -261,14 +261,19 @@ async function refreshToken(token: string) {
 }
 
 async function signOut(token: string) {
-    const storedToken = await secretTerminalDb.refreshToken.findUnique({ where: { token: token } });
+    const storedToken = await secretTerminalDb.refreshToken.findUnique({
+        where: { token },
+    });
 
-    if (!storedToken?.id) {
+    if (!storedToken) {
         throw new Error("Invalid token.");
     }
 
-    const deletedToken = await secretTerminalDb.refreshToken.delete({ where: { id: storedToken.id } });
-    return deletedToken;
+    return secretTerminalDb.refreshToken.delete({
+        where: {
+            id: storedToken.id,
+        },
+    });
 }
 
 async function manageTokens(userId: string, token?: string) {
@@ -276,18 +281,35 @@ async function manageTokens(userId: string, token?: string) {
         throw new Error("userId is missing.");
     }
 
-    if (token) {
-        const storedToken = await secretTerminalDb.refreshToken.findUnique({ where: { token: token } });
-        if (storedToken) {
-            await secretTerminalDb.refreshToken.delete({ where: { id: storedToken.id } });
-        }
-    }
+    const tokenPayload = { userId };
 
-    const tokenPayload = { userId: userId };
     const newAccessToken = TokenService.generateAccessToken(tokenPayload);
     const newRefreshToken = TokenService.generateRefreshToken(tokenPayload);
 
-    await secretTerminalDb.refreshToken.create({ data: { userId: userId, token: newRefreshToken } });
+    await secretTerminalDb.$transaction(async (tx) => {
+        if (token) {
+            const storedToken = await tx.refreshToken.findUnique({
+                where: {
+                    token,
+                },
+            });
+
+            if (storedToken) {
+                await tx.refreshToken.delete({
+                    where: {
+                        id: storedToken.id,
+                    },
+                });
+            }
+        }
+
+        await tx.refreshToken.create({
+            data: {
+                userId,
+                token: newRefreshToken,
+            },
+        });
+    });
 
     return {
         accessToken: newAccessToken,
@@ -315,6 +337,7 @@ function setResponseHeaders(response: Response, result: { accessToken: string; r
         secure: true,
         maxAge: 7 * 24 * 60 * 60 * 1000,
         sameSite: "none",
+        path: "/auth",
     });
 }
 

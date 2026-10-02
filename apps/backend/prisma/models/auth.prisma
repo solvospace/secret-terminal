@@ -33,7 +33,6 @@ model RefreshToken {
 model ResetCode {
     id        String   @id @default(dbgenerated("uuidv7()")) @db.Uuid
     code      String   @unique
-    verified  Boolean  @default(false)
     createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(6)
     expiresAt DateTime @default(dbgenerated("(now() + '00:15:00'::interval)")) @map("expires_at") @db.Timestamp(6)
 
