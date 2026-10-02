@@ -7,6 +7,7 @@ import {
     forgotPassword,
     verifyResetCode,
     changePassword,
+    accountVerification,
 } from "./auth.controller.js";
 import { signInSchema, signUpSchema } from "./auth.validation.js";
 import captchaVerification from "../../middlewares/captcha.middleware.js";
@@ -18,6 +19,7 @@ const authRoutes = Router();
 
 authRoutes.post("/sign-up", captchaVerification, schemaVerification(signUpSchema), signUp);
 authRoutes.post("/sign-in", captchaVerification, schemaVerification(signInSchema), signIn);
+authRoutes.post("/verify-account", accountVerification);
 authRoutes.post("/refresh-token", refreshToken);
 authRoutes.post("/forgot-password", forgotPassword);
 authRoutes.post("/verify-reset-code", verifyResetCode);

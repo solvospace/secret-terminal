@@ -11,8 +11,10 @@ async function signUp(properties: SignUpProperties) {
     const existingUser = await secretTerminalDb.user.findUnique({ where: { email: properties.email } });
 
     if (existingUser) {
-        throw new Error("User already exist.");
+        throw new Error("User already exists.");
     }
+
+    const verificationCode = generateCode();
 
     const hashedPassword = await HashService.generateHash(properties.password);
     const user = await secretTerminalDb.user.create({
@@ -20,15 +22,18 @@ async function signUp(properties: SignUpProperties) {
             name: properties.name,
             email: properties.email,
             password: hashedPassword,
+            verificationCode,
         },
     });
 
-    const tokens = await manageTokens(user.id);
-    return { tokens, user };
+    if (user.id) await sendVerificationCodeMail(user.email, verificationCode);
+
+    return { message: "Verify your account. A verification code has been sent to you.", user };
 }
 
 async function signIn(properties: LoginProperties) {
-    if (!properties.email) throw new Error("Email missing!!.");
+    if (!properties.email) throw new Error("Email is required.");
+    if (!properties.password) throw new Error("Password is required.");
 
     const foundUser = await secretTerminalDb.user.findUnique({
         where: {
@@ -36,18 +41,83 @@ async function signIn(properties: LoginProperties) {
         },
     });
 
-    if (!foundUser) {
-        throw new Error("Incorrect username!!");
-    }
-
+    if (!foundUser) throw new Error("Incorrect email or password.");
     const isMatch = await HashService.compareHashed(properties.password, foundUser.password);
 
-    if (!isMatch) {
-        throw new Error("Incorrect password!!");
+    if (!isMatch) throw new Error("Incorrect email or password.");
+
+    if (!foundUser.verified) {
+        const verificationCode = generateCode();
+
+        const verificationCodeExpiresAt = new Date(Date.now() + 10 * 60 * 1000);
+
+        await secretTerminalDb.user.update({
+            where: {
+                id: foundUser.id,
+            },
+            data: {
+                verificationCode,
+                verificationCodeExpiresAt,
+            },
+        });
+
+        await sendVerificationCodeMail(foundUser.email, verificationCode);
+
+        return {
+            tokens: null,
+            verified: false,
+            message: "Your account is not verified. A new verification code has been sent to your email.",
+        };
     }
 
     const tokens = await manageTokens(foundUser.id, properties.cookies.refreshToken);
-    return tokens;
+
+    return {
+        tokens,
+        verified: true,
+    };
+}
+
+async function verifyAccount({ email, code }: Record<string, string>) {
+    if (!email) throw new Error("Email is required.");
+    if (!code) throw new Error("Verification code is required.");
+
+    const foundUser = await secretTerminalDb.user.findUnique({
+        where: { email },
+    });
+
+    if (!foundUser) {
+        throw new Error("User doesn't exist.");
+    }
+
+    if (foundUser.verified) {
+        throw new Error("Account is already verified.");
+    }
+
+    if (foundUser.verificationCode !== code) {
+        throw new Error("Invalid verification code.");
+    }
+
+    if (new Date() > foundUser.verificationCodeExpiresAt) {
+        throw new Error("Verification code has expired.");
+    }
+
+    await secretTerminalDb.user.update({
+        where: {
+            id: foundUser.id,
+        },
+        data: {
+            verified: true,
+            verificationCode: null,
+        },
+    });
+
+    const tokens = await manageTokens(foundUser.id);
+
+    return {
+        tokens,
+        message: "Account verified successfully.",
+    };
 }
 
 async function forgotPassword(email: string) {
@@ -243,6 +313,14 @@ function clearTokensFromCookies(response: Response) {
     });
 }
 
+async function sendVerificationCodeMail(email: string, code: string) {
+    try {
+        await MailService.sendAccountVerificationCode(email, code);
+    } catch (error) {
+        throw new Error("Failed to send verification email.");
+    }
+}
+
 const AuthenticationService = {
     signUp,
     signIn,
@@ -254,6 +332,7 @@ const AuthenticationService = {
     setResponseHeaders,
     clearTokensFromCookies,
     manageTokens,
+    verifyAccount,
 };
 
 export default AuthenticationService;

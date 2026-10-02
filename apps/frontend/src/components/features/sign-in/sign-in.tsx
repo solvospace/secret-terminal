@@ -117,10 +117,9 @@ export default memo(function signIn(bindings: Bindings) {
                             </div>
                         )}
 
-                        {(formType === "signIn" ||
-                            formType === "signUp" ||
-                            formType === "forgotPassword" ||
-                            formType === "verifyResetCode") && (
+                        {["signIn", "signUp", "forgotPassword", "verifyResetCode", "verifyAccount"].includes(
+                            formType,
+                        ) && (
                             <div className="form-group">
                                 <signInForm.Field
                                     name="email"
@@ -156,7 +155,7 @@ export default memo(function signIn(bindings: Bindings) {
                             </div>
                         )}
 
-                        {formType === "verifyResetCode" && (
+                        {["verifyResetCode", "verifyAccount"].includes(formType) && (
                             <div className="form-group">
                                 <signInForm.Field
                                     name="code"
@@ -179,7 +178,7 @@ export default memo(function signIn(bindings: Bindings) {
                                                         }}
                                                         placeholder={"123456"}
                                                         disabled={submittingData}
-                                                        autoFocus={formType === "verifyResetCode" && true}
+                                                        autoFocus={true}
                                                     />
                                                 </InputGroup>
                                             </>
@@ -189,7 +188,7 @@ export default memo(function signIn(bindings: Bindings) {
                             </div>
                         )}
 
-                        {(formType === "signIn" || formType === "signUp" || formType === "changePassword") && (
+                        {["signIn", "signUp", "changePassword"].includes(formType) && (
                             <div className="form-group">
                                 <signInForm.Field
                                     name="password"

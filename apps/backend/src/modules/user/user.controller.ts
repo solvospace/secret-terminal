@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import UserService from "./user.service.js";
 import statusCode from "../../constants/http-status-code.js";
+import { AppError } from "../../classes/error.class.js";
 
 const userDetails = async (request: Request, response: Response) => {
     try {
@@ -9,18 +10,20 @@ const userDetails = async (request: Request, response: Response) => {
 
         if (user && user.id) {
             return response.status(statusCode.ok).json({
-                data: user
+                data: user,
             });
-        } else {
-            return response.status(statusCode.notFound).json({
-                message: "User not found."
-            })
         }
-    } catch (error) {
+    } catch (error: unknown) {
+        if (error instanceof AppError && error.cause) {
+            return response.status(error.cause.status).json({
+                message: error.message,
+            });
+        }
+
         return response.status(statusCode.internalServerError).json({
-            message: 'Internal Server Error',
+            message: "Internal Server Error",
         });
     }
-}
+};
 
 export { userDetails };

@@ -11,16 +11,25 @@
     [data-slot="toast-content"] {
         border-radius: var(--border-radius);
         color: var(--color) !important;
+
+        &.warning {
+            color: #000000 !important;
+
+            svg {
+                color: inherit !important;
+            }
+        }
     }
 
     .warning {
         background-color: #bb8725 !important;
         border-color: #bb8725 !important;
+        color: #000000 !important;
     }
 
     .info {
-        background-color: #172a3a !important;
-        border-color: #172a3a !important;
+        background-color: #23425c !important;
+        border-color: #23425c !important;
     }
 
     .success {

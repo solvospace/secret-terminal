@@ -200,7 +200,7 @@ function ToastList() {
         >
             <ToastContent className={`${toastItem.type}`}>
                 <ToastIcon type={toastItem.type} />
-                <div className="flex min-w-0 flex-1 flex-col gap-1 !text-[#fafafa]">
+                <div className="flex min-w-0 flex-1 flex-col gap-1">
                     <ToastTitle />
                     <ToastDescription />
                 </div>

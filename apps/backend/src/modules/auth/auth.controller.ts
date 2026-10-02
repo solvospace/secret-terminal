@@ -8,11 +8,10 @@ const signUp = async (request: Request, response: Response) => {
         const result = await AuthenticationService.signUp({ name, email, password });
 
         AuthenticationService.clearTokensFromCookies(response);
-        AuthenticationService.setResponseHeaders(response, result.tokens);
 
         if (result?.user?.id) {
             return response.status(statusCode.created).json({
-                message: "Welcome to Secret Terminal! Your account is ready.",
+                message: result.message,
             });
         }
     } catch (error: unknown) {
@@ -35,14 +34,37 @@ const signIn = async (request: Request, response: Response) => {
         const result = await AuthenticationService.signIn({ email, password, cookies });
 
         AuthenticationService.clearTokensFromCookies(response);
-        AuthenticationService.setResponseHeaders(response, result);
+        if (result.tokens) AuthenticationService.setResponseHeaders(response, result.tokens);
 
-        return response.status(200).json({
+        return response.status(statusCode.ok).json({
             message: "Welcome back! Glad to see you again.",
+            data: {
+                verified: result.verified,
+            },
         });
     } catch (error: unknown) {
         return response.status(400).json({
             message: error instanceof Error ? error.message : String(error),
+        });
+    }
+};
+
+const accountVerification = async (request: Request, response: Response) => {
+    try {
+        const { email, code } = request.body;
+
+        const result = await AuthenticationService.verifyAccount({
+            email,
+            code,
+        });
+
+        AuthenticationService.clearTokensFromCookies(response);
+        AuthenticationService.setResponseHeaders(response, result.tokens);
+
+        return response.status(statusCode.ok).json({ message: result.message });
+    } catch (error) {
+        return response.status(400).json({
+            message: error instanceof Error ? error.message : "Account verification failed.",
         });
     }
 };
@@ -155,4 +177,4 @@ const signOut = async (request: Request, response: Response) => {
     }
 };
 
-export { signUp, signIn, signOut, refreshToken, forgotPassword, verifyResetCode, changePassword };
+export { signUp, signIn, signOut, refreshToken, forgotPassword, verifyResetCode, changePassword, accountVerification };

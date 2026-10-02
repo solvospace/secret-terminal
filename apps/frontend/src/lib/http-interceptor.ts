@@ -25,6 +25,7 @@ export const setupInterceptors = (client: AxiosInstance) => {
 
             if (error.response?.data && error.response.data.message) {
                 const message = error.response.data.message.trim().toLowerCase();
+
                 const isAuthError =
                     message.includes("unauthorized") ||
                     message.includes("invalid or expired token") ||
@@ -32,7 +33,7 @@ export const setupInterceptors = (client: AxiosInstance) => {
 
                 if (!isAuthError) {
                     toast.add({
-                        type: "error",
+                        type: error.status ? (error.status >= 500 ? "error" : "warning") : "error",
                         description: error.response.data.message,
                     });
                 } else {
