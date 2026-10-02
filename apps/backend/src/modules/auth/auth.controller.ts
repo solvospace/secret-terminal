@@ -37,7 +37,7 @@ const signIn = async (request: Request, response: Response) => {
         if (result.tokens) AuthenticationService.setResponseHeaders(response, result.tokens);
 
         return response.status(statusCode.ok).json({
-            message: "Welcome back! Glad to see you again.",
+            message: result.message,
             data: {
                 verified: result.verified,
             },

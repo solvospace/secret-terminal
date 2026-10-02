@@ -75,6 +75,7 @@ async function signIn(properties: LoginProperties) {
     return {
         tokens,
         verified: true,
+        message: "Welcome back! Glad to see you again.",
     };
 }
 
