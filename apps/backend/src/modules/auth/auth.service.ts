@@ -128,26 +128,35 @@ async function forgotPassword(email: string) {
         where: { email },
     });
 
-    if (!foundUser) throw new Error(`User doesn't exist!!`);
-
-    await secretTerminalDb.resetCode.deleteMany({
-        where: {
-            userId: foundUser.id,
-        },
-    });
+    if (!foundUser) {
+        return {
+            message: "If the email exists, a reset code has been sent.",
+        };
+    }
 
     const resetCode = generateCode();
     const hashedCode = await HashService.generateHash(resetCode);
 
-    await secretTerminalDb.resetCode.create({
-        data: {
-            userId: foundUser.id,
-            code: hashedCode,
-        },
+    await secretTerminalDb.$transaction(async (tx) => {
+        await tx.resetCode.deleteMany({
+            where: {
+                userId: foundUser.id,
+            },
+        });
+
+        await tx.resetCode.create({
+            data: {
+                userId: foundUser.id,
+                code: hashedCode,
+            },
+        });
     });
 
     await MailService.sendResetCode(email, resetCode);
-    return { message: "Sent!!" };
+
+    return {
+        message: "If the email exists, a reset code has been sent.",
+    };
 }
 
 async function verifyResetCode(properties: Record<string, string>) {
@@ -158,11 +167,13 @@ async function verifyResetCode(properties: Record<string, string>) {
 
     const foundUser = await secretTerminalDb.user.findUnique({
         where: {
-            email: properties.email,
+            email,
         },
     });
 
-    if (!foundUser) throw new Error("No user found which is associated with this email!!");
+    if (!foundUser) {
+        throw new Error("Invalid reset request!!");
+    }
 
     const resetCodeEntry = await secretTerminalDb.resetCode.findFirst({
         where: {
@@ -170,23 +181,30 @@ async function verifyResetCode(properties: Record<string, string>) {
         },
     });
 
-    if (!resetCodeEntry) throw new Error("Invalid reset code!!");
-
-    if (resetCodeEntry.expiresAt < new Date() || resetCodeEntry.verified) {
-        throw new Error("Reset code expired!!!");
+    if (!resetCodeEntry) {
+        throw new Error("Invalid reset code!!");
     }
 
-    const isHashedCodeMatched = await HashService.compareHashed(properties.resetCode, resetCodeEntry.code);
-    if (!isHashedCodeMatched) throw new Error("Invalid reset code!!");
+    if (new Date() >= resetCodeEntry.expiresAt) {
+        throw new Error("Reset code expired!!");
+    }
+
+    const isCodeMatched = await HashService.compareHashed(resetCode, resetCodeEntry.code);
+
+    if (!isCodeMatched) {
+        throw new Error("Invalid reset code!!");
+    }
 
     await secretTerminalDb.resetCode.delete({
         where: {
             id: resetCodeEntry.id,
-            userId: foundUser.id,
         },
     });
 
-    const updatePasswordToken = TokenService.generateAccessToken({ userId: foundUser.id, purpose: "change-password" });
+    const updatePasswordToken = TokenService.generateAccessToken({
+        userId: foundUser.id,
+        purpose: "change-password",
+    });
 
     return {
         message: "Verified!!",

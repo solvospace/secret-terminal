@@ -31,7 +31,7 @@ model RefreshToken {
 }
 
 model ResetCode {
-    id        String   @id @unique @default(dbgenerated("uuidv7()")) @db.Uuid
+    id        String   @id @default(dbgenerated("uuidv7()")) @db.Uuid
     code      String   @unique
     verified  Boolean  @default(false)
     createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(6)
