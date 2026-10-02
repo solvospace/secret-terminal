@@ -1,11 +1,11 @@
-import { secretTerminalClient } from '@/lib/api-client';
-import { secretTerminalEndpoints } from '@/lib/endpoints';
+import { secretTerminalClient } from "@/lib/api-client";
+import { secretTerminalEndpoints } from "@/lib/endpoints";
 
 type SignUpApiBody = {
-    name: string,
-    email: string,
-    password: string
-}
+    name: string;
+    email: string;
+    password: string;
+};
 
 async function signUp(apiBody: SignUpApiBody) {
     try {
@@ -14,16 +14,16 @@ async function signUp(apiBody: SignUpApiBody) {
     } catch (error) {
         throw error;
     }
-};
+}
 
-async function signIn(apiBody: { email: string, password: string }) {
+async function signIn(apiBody: { email: string; password: string }) {
     try {
         const response = await secretTerminalClient.post(secretTerminalEndpoints.auth.signIn, apiBody);
         return response;
     } catch (error) {
         throw error;
     }
-};
+}
 
 async function signOut() {
     try {
@@ -32,7 +32,7 @@ async function signOut() {
     } catch (error) {
         throw error;
     }
-};
+}
 
 async function refreshToken() {
     try {
@@ -41,7 +41,7 @@ async function refreshToken() {
     } catch (error) {
         throw error;
     }
-};
+}
 
 async function forgotPassword(jsonData: object) {
     try {
@@ -70,4 +70,13 @@ async function changePassword(jsonData: object) {
     }
 }
 
-export { signUp, signIn, refreshToken, signOut, forgotPassword, verifyResetCode, changePassword };
+async function verifyAccount(jsonData: object) {
+    try {
+        const response = await secretTerminalClient.post(secretTerminalEndpoints.auth.verifyAccount, jsonData);
+        return response;
+    } catch (error) {
+        throw error;
+    }
+}
+
+export { signUp, signIn, refreshToken, signOut, forgotPassword, verifyResetCode, changePassword, verifyAccount };

@@ -38,6 +38,7 @@ export default memo(function signIn(bindings: Bindings) {
                         {formType === "signIn" && "Sign in your account"}
                         {["forgotPassword", "verifyResetCode"].includes(formType) && "Forgot your password?"}
                         {formType === "changePassword" && "Change your password"}
+                        {formType === "verifyAccount" && "Verify your account"}
 
                         {["forgotPassword", "verifyResetCode"].includes(formType) && (
                             <div className="sub-title">

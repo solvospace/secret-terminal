@@ -4,7 +4,14 @@ import { SetStateAction, Dispatch, useEffect, useState, useRef } from "react";
 import { useUser } from "@/contexts/user.context";
 import { useLoading } from "@/contexts/loading.context";
 import { useForm } from "@tanstack/react-form";
-import { changePassword, forgotPassword, signIn, verifyResetCode, signUp } from "@/services/authentication.service";
+import {
+    changePassword,
+    forgotPassword,
+    signIn,
+    verifyResetCode,
+    signUp,
+    verifyAccount,
+} from "@/services/authentication.service";
 import { retrieveProfile } from "@/services/user.service";
 import type { UserFormData, FormType } from "@/interfaces/account-centre.interface";
 import authenticationFormSchemaMap from "@/schemas/authentication-form.schema";
@@ -164,6 +171,9 @@ export default function useSignIn(bindings: Bindings) {
             case "verifyResetCode":
                 resetCodeVerification(userDetails);
                 break;
+            case "verifyAccount":
+                completeAccountVerification(userDetails);
+                break;
             case "changePassword":
                 updatePassword(userDetails);
                 break;
@@ -203,6 +213,20 @@ export default function useSignIn(bindings: Bindings) {
         try {
             const response = await changePassword({ password: userDetails.password });
             setFormType("signIn");
+        } catch (error) {
+        } finally {
+            setSubmittingData(false);
+        }
+    }
+
+    async function completeAccountVerification(userDetails: UserFormData) {
+        try {
+            const response = await verifyAccount({ email: userDetails.email, code: userDetails.code });
+
+            if (response.status === 200) {
+                fetchProfile();
+                setShowDialog(false);
+            }
         } catch (error) {
         } finally {
             setSubmittingData(false);

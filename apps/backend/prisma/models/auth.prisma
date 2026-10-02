@@ -12,7 +12,7 @@ model User {
 
     verified                  Boolean  @default(false)
     verificationCode          String?  @unique
-    verificationCodeExpiresAt DateTime @default(dbgenerated("(now() + '00:15:00'::interval)")) @map("expires_at") @db.Timestamp(6)
+    verificationCodeExpiresAt DateTime @default(dbgenerated("(now() + '00:10:00'::interval)")) @map("verification_code_expires_at") @db.Timestamp(6)
 
     @@map("users")
     @@schema("auth")
