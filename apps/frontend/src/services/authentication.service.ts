@@ -79,4 +79,26 @@ async function verifyAccount(jsonData: object) {
     }
 }
 
-export { signUp, signIn, refreshToken, signOut, forgotPassword, verifyResetCode, changePassword, verifyAccount };
+async function getAccountVerificationCode(jsonData: object) {
+    try {
+        const response = await secretTerminalClient.post(
+            secretTerminalEndpoints.auth.getAccountVerificationCode,
+            jsonData,
+        );
+        return response;
+    } catch (error) {
+        throw error;
+    }
+}
+
+export {
+    signUp,
+    signIn,
+    refreshToken,
+    signOut,
+    forgotPassword,
+    verifyResetCode,
+    changePassword,
+    verifyAccount,
+    getAccountVerificationCode,
+};

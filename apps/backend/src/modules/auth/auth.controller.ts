@@ -49,6 +49,22 @@ const signIn = async (request: Request, response: Response) => {
     }
 };
 
+const accountVerificationCode = async (request: Request, response: Response) => {
+    try {
+        const { email } = request.body;
+
+        const result = await AuthenticationService.sendVerificationCode(email);
+
+        AuthenticationService.clearTokensFromCookies(response);
+
+        return response.status(statusCode.ok).json({ message: result.message });
+    } catch (error) {
+        return response.status(400).json({
+            message: error instanceof Error ? error.message : "Account verification failed.",
+        });
+    }
+};
+
 const accountVerification = async (request: Request, response: Response) => {
     try {
         const { email, code } = request.body;
@@ -177,4 +193,14 @@ const signOut = async (request: Request, response: Response) => {
     }
 };
 
-export { signUp, signIn, signOut, refreshToken, forgotPassword, verifyResetCode, changePassword, accountVerification };
+export {
+    signUp,
+    signIn,
+    signOut,
+    refreshToken,
+    forgotPassword,
+    verifyResetCode,
+    changePassword,
+    accountVerification,
+    accountVerificationCode,
+};

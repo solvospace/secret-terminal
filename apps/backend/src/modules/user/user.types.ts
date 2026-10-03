@@ -1,12 +1,13 @@
-type SignUpUserDetails = {
+type User = {
+    id: string;
     name: string;
     email: string;
     password: string;
-}
+    createdAt: Date;
+    updatedAt: Date;
+    verified: boolean;
+    verificationCode: string | null;
+    verificationCodeExpiresAt: Date;
+};
 
-type LoginUserDetails = {
-    email: string;
-    password: string;
-}
-
-export type { SignUpUserDetails, LoginUserDetails }
+export type { User };

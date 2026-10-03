@@ -20,8 +20,24 @@ export default memo(function signIn(bindings: Bindings) {
     const { showDialog, setShowDialog } = bindings;
     const [showEyeIcon, setShowEyeIcon] = useState<boolean>(true);
     const [formType, setFormType] = useState<FormType>(defaultFormType);
-    const { signInForm, passwordCriteriaList, submittingData, setSubmittingData, resetForm, captchaRef, verifyCaptcha } =
-        useSignIn({ defaultFormType, formType, setFormType, setShowDialog, showDialog });
+    const {
+        signInForm,
+        passwordCriteriaList,
+        submittingData,
+        setSubmittingData,
+        resetForm,
+        captchaRef,
+        verifyCaptcha,
+        resendCode,
+        resendCodeTimer,
+        sendingCode,
+    } = useSignIn({
+        defaultFormType,
+        formType,
+        setFormType,
+        setShowDialog,
+        showDialog,
+    });
 
     return (
         <Dialog
@@ -169,9 +185,10 @@ export default memo(function signIn(bindings: Bindings) {
                                                 <label htmlFor={field.name}>
                                                     Code<span className="required">*</span>
                                                 </label>
+
                                                 <InputGroup>
                                                     <InputGroupInput
-                                                        type="string"
+                                                        type="text"
                                                         id={field.name}
                                                         required={true}
                                                         name={field.name}
@@ -180,11 +197,32 @@ export default memo(function signIn(bindings: Bindings) {
                                                         onChange={(e) => {
                                                             field.handleChange(e.target.value);
                                                         }}
-                                                        placeholder={"123456"}
+                                                        placeholder="123456"
                                                         disabled={submittingData}
                                                         autoFocus={true}
                                                     />
                                                 </InputGroup>
+
+                                                <div className="mt-2 text-right text-[12px]">
+                                                    {resendCodeTimer > 0 ? (
+                                                        <span className="text-[var(--grey-color-3)]">
+                                                            Resend code in{" "}
+                                                            <span className="font-medium">
+                                                                {Math.floor(resendCodeTimer / 60)}:
+                                                                {String(resendCodeTimer % 60).padStart(2, "0")}
+                                                            </span>
+                                                        </span>
+                                                    ) : (
+                                                        <button
+                                                            type="button"
+                                                            onClick={resendCode}
+                                                            disabled={submittingData}
+                                                            className="underline cursor-pointer disabled:cursor-not-allowed disabled:no-underline"
+                                                        >
+                                                            Resend code
+                                                        </button>
+                                                    )}
+                                                </div>
                                             </>
                                         );
                                     }}
@@ -281,7 +319,7 @@ export default memo(function signIn(bindings: Bindings) {
                                                 !signInForm.state.isValid || !canSubmit || isSubmitting || submittingData
                                             }
                                         >
-                                            {submittingData && <Spinner className="size-4" />}
+                                            {submittingData && !sendingCode && <Spinner className="size-4" />}
                                             {formType === "signIn" && "Sign in"}
                                             {formType === "signUp" && "Sign up"}
                                             {formType === "verifyAccount" && "Verify & Continue"}

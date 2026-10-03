@@ -26,7 +26,7 @@ async function signUp(properties: SignUpProperties) {
         },
     });
 
-    if (user.id) await sendVerificationCodeMail(user.email, verificationCode);
+    if (user.id) await mailVerificationCode(user.email, verificationCode);
 
     return { message: "Verify your account. A verification code has been sent to you.", user };
 }
@@ -47,35 +47,57 @@ async function signIn(properties: LoginProperties) {
     if (!isMatch) throw new Error("Incorrect email or password.");
 
     if (!foundUser.verified) {
-        const verificationCode = generateCode();
-
-        const verificationCodeExpiresAt = new Date(Date.now() + 10 * 60 * 1000);
-
-        await secretTerminalDb.user.update({
-            where: {
-                id: foundUser.id,
-            },
-            data: {
-                verificationCode,
-                verificationCodeExpiresAt,
-            },
-        });
-
-        await sendVerificationCodeMail(foundUser.email, verificationCode);
-
-        return {
-            tokens: null,
-            verified: false,
-            message: "Your account is not verified. A new verification code has been sent to your email.",
-        };
+        return await sendVerificationCode(foundUser.email, foundUser.id);
     }
 
     const tokens = await manageTokens(foundUser.id, properties.cookies.refreshToken);
-
     return {
         tokens,
-        verified: true,
+        verified: foundUser.verified,
         message: "Welcome back! Glad to see you again.",
+    };
+}
+
+async function sendVerificationCode(email: string, userId?: string) {
+    let localUserId = userId;
+
+    if (!localUserId) {
+        const foundUser = await secretTerminalDb.user.findUnique({
+            where: {
+                email,
+            },
+            select: {
+                id: true,
+            },
+        });
+
+        if (!foundUser) {
+            throw new Error("Incorrect email.");
+        }
+
+        localUserId = foundUser.id;
+    }
+
+    const verificationCode = generateCode();
+
+    const verificationCodeExpiresAt = new Date(Date.now() + 10 * 60 * 1000);
+
+    await secretTerminalDb.user.update({
+        where: {
+            id: localUserId,
+        },
+        data: {
+            verificationCode,
+            verificationCodeExpiresAt,
+        },
+    });
+
+    await mailVerificationCode(email, verificationCode);
+
+    return {
+        tokens: null,
+        verified: false,
+        message: "A verification code has been sent to your email.",
     };
 }
 
@@ -355,7 +377,7 @@ function clearTokensFromCookies(response: Response) {
     });
 }
 
-async function sendVerificationCodeMail(email: string, code: string) {
+async function mailVerificationCode(email: string, code: string) {
     try {
         await MailService.sendAccountVerificationCode(email, code);
     } catch (error) {
@@ -375,6 +397,7 @@ const AuthenticationService = {
     clearTokensFromCookies,
     manageTokens,
     verifyAccount,
+    sendVerificationCode,
 };
 
 export default AuthenticationService;

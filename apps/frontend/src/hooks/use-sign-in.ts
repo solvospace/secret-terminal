@@ -11,6 +11,7 @@ import {
     verifyResetCode,
     signUp,
     verifyAccount,
+    getAccountVerificationCode,
 } from "@/services/authentication.service";
 import { retrieveProfile } from "@/services/user.service";
 import type { UserFormData, FormType } from "@/interfaces/account-centre.interface";
@@ -27,14 +28,19 @@ type Bindings = {
 
 export default function useSignIn(bindings: Bindings) {
     const { formType, setShowDialog, showDialog, setFormType, defaultFormType } = bindings;
+
     const [submittingData, setSubmittingData] = useState<boolean>(false);
+    const [sendingCode, setSendingCode] = useState<boolean>(false);
     const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+    const [resendCodeTimer, setResendCodeTimer] = useState<number>(0);
+
     const { setUser } = useUser();
     const { setIsLoading } = useLoading();
+
     const formData = useRef<UserFormData | null>(null);
     const captchaRef = useRef<HCaptcha | null>(null);
-    let emailRef = useRef<string>(null);
-    let passwordCriteriaList = useRef<{ name: string; criteria: RegExp }[]>([]);
+    const emailRef = useRef<string | null>(null);
+    const passwordCriteriaList = useRef<{ name: string; criteria: RegExp }[]>([]);
 
     const signInForm = useForm({
         defaultValues: {
@@ -56,20 +62,33 @@ export default function useSignIn(bindings: Bindings) {
             if (["signIn", "signUp"].includes(formType)) {
                 captchaRef.current?.execute();
             } else {
-                onFormSubmit(formData?.current);
+                onFormSubmit(value);
             }
         },
     });
+
+    useEffect(() => {
+        if (resendCodeTimer <= 0) return;
+
+        const timer = setInterval(() => {
+            setResendCodeTimer((previous) => previous - 1);
+        }, 1000);
+
+        return () => clearInterval(timer);
+    }, [resendCodeTimer]);
 
     useEffect(() => {
         if (!showDialog) return;
 
         resetForm();
         setFormType(defaultFormType);
+        setResendCodeTimer(0);
     }, [showDialog]);
 
     useEffect(() => {
-        if (captchaToken && formData.current) onFormSubmit(formData.current);
+        if (captchaToken && formData.current) {
+            onFormSubmit(formData.current);
+        }
     }, [captchaToken]);
 
     useEffect(() => {
@@ -89,13 +108,51 @@ export default function useSignIn(bindings: Bindings) {
         signInForm.mount();
     }
 
+    function startResendCodeTimer() {
+        setResendCodeTimer(120);
+    }
+
+    async function resendCode() {
+        if (resendCodeTimer > 0 || !emailRef.current) return;
+
+        try {
+            setSubmittingData(true);
+            setSendingCode(true);
+
+            if (formType === "verifyAccount") {
+                await getAccountVerificationCode({
+                    email: emailRef.current,
+                });
+            }
+
+            if (formType === "verifyResetCode") {
+                await forgotPassword({
+                    email: emailRef.current,
+                });
+            }
+
+            startResendCodeTimer();
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setSubmittingData(false);
+            setSendingCode(false);
+        }
+    }
+
     useEffect(() => {
         passwordCriteriaList.current = [
             { name: "Uppercase letter", criteria: /[A-Z]/ },
             { name: "Lowercase letter", criteria: /[a-z]/ },
             { name: "Number", criteria: /[0-9]/ },
-            { name: "Special character (e.g. !?&lt;&gt;@#$%)", criteria: /[!?<>@#$%]/ },
-            { name: "8 characters or more", criteria: /^\S{9,}$/ },
+            {
+                name: "Special character (e.g. !?<>@#$%)",
+                criteria: /[!?<>@#$%]/,
+            },
+            {
+                name: "8 characters or more",
+                criteria: /^\S{9,}$/,
+            },
         ];
     }, []);
 
@@ -104,29 +161,30 @@ export default function useSignIn(bindings: Bindings) {
             let response;
 
             switch (formType) {
-                case "signIn":
-                    {
-                        emailRef.current = userDetails.email;
-                        const serverData = {
-                            email: userDetails.email,
-                            password: userDetails.password,
-                            captchaToken: captchaToken,
-                        };
-                        response = await signIn(serverData);
-                    }
-                    break;
+                case "signIn": {
+                    emailRef.current = userDetails.email;
 
-                case "signUp":
-                    {
-                        const serverData = {
-                            name: userDetails.name,
-                            email: userDetails.email,
-                            password: userDetails.password,
-                            captchaToken: captchaToken,
-                        };
-                        response = await signUp(serverData);
-                    }
+                    const serverData = {
+                        email: userDetails.email,
+                        password: userDetails.password,
+                        captchaToken,
+                    };
+
+                    response = await signIn(serverData);
                     break;
+                }
+
+                case "signUp": {
+                    const serverData = {
+                        name: userDetails.name,
+                        email: userDetails.email,
+                        password: userDetails.password,
+                        captchaToken,
+                    };
+
+                    response = await signUp(serverData);
+                    break;
+                }
 
                 default:
                     throw new Error("Invalid form type");
@@ -138,6 +196,8 @@ export default function useSignIn(bindings: Bindings) {
                     setShowDialog(false);
                 } else {
                     setFormType("verifyAccount");
+
+                    startResendCodeTimer();
                 }
             }
         } catch (error: unknown) {
@@ -150,8 +210,12 @@ export default function useSignIn(bindings: Bindings) {
     async function fetchProfile() {
         try {
             setIsLoading(true);
+
             const response = await retrieveProfile();
-            if (response.data.data.id) setUser(response.data.data);
+
+            if (response.data.data.id) {
+                setUser(response.data.data);
+            }
         } catch (error) {
         } finally {
             setIsLoading(false);
@@ -161,23 +225,26 @@ export default function useSignIn(bindings: Bindings) {
     function onFormSubmit(userDetails: UserFormData) {
         switch (formType) {
             case "signIn":
-                authenticateUser(userDetails);
-                break;
             case "signUp":
                 authenticateUser(userDetails);
                 break;
+
             case "forgotPassword":
                 getResetCode(userDetails);
                 break;
+
             case "verifyResetCode":
                 resetCodeVerification(userDetails);
                 break;
+
             case "verifyAccount":
                 completeAccountVerification(userDetails);
                 break;
+
             case "changePassword":
                 updatePassword(userDetails);
                 break;
+
             default:
                 return;
         }
@@ -187,9 +254,15 @@ export default function useSignIn(bindings: Bindings) {
         emailRef.current = userDetails.email;
 
         try {
-            const response = await forgotPassword({ email: userDetails.email });
+            await forgotPassword({
+                email: userDetails.email,
+            });
+
             setFormType("verifyResetCode");
+
+            startResendCodeTimer();
         } catch (error) {
+            console.error(error);
         } finally {
             setSubmittingData(false);
         }
@@ -202,9 +275,11 @@ export default function useSignIn(bindings: Bindings) {
                 resetCode: userDetails.code,
             };
 
-            const response = await verifyResetCode(serverData);
+            await verifyResetCode(serverData);
+
             setFormType("changePassword");
         } catch (error) {
+            console.error(error);
         } finally {
             setSubmittingData(false);
         }
@@ -212,9 +287,13 @@ export default function useSignIn(bindings: Bindings) {
 
     async function updatePassword(userDetails: UserFormData) {
         try {
-            const response = await changePassword({ password: userDetails.password });
+            await changePassword({
+                password: userDetails.password,
+            });
+
             setFormType("signIn");
         } catch (error) {
+            console.error(error);
         } finally {
             setSubmittingData(false);
         }
@@ -222,13 +301,17 @@ export default function useSignIn(bindings: Bindings) {
 
     async function completeAccountVerification(userDetails: UserFormData) {
         try {
-            const response = await verifyAccount({ email: userDetails.email, code: userDetails.code });
+            const response = await verifyAccount({
+                email: userDetails.email,
+                code: userDetails.code,
+            });
 
             if (response.status === 200) {
                 fetchProfile();
                 setShowDialog(false);
             }
         } catch (error) {
+            console.error(error);
         } finally {
             setSubmittingData(false);
         }
@@ -242,5 +325,10 @@ export default function useSignIn(bindings: Bindings) {
         resetForm,
         captchaRef,
         verifyCaptcha,
+
+        resendCode,
+        resendCodeTimer,
+        isResendCodeDisabled: resendCodeTimer > 0,
+        sendingCode,
     };
 }
