@@ -359,7 +359,6 @@ function setResponseHeaders(response: Response, result: { accessToken: string; r
         secure: true,
         maxAge: 7 * 24 * 60 * 60 * 1000,
         sameSite: "none",
-        path: "/auth",
     });
 }
 
