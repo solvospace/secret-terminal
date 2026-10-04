@@ -3,7 +3,7 @@
     "license": "AGPL-3.0-or-later",
     "private": true,
     "scripts": {
-        "dev": "turbo run dev --concurrency=10",
+        "dev": "concurrently \"turbo run dev --concurrency=10\" \"wait-on http://localhost:3000 && open http://localhost:3000\"",
         "clean": "turbo run clean && rm -rf .turbo && rm -rf .next && rm -rf node_modules && rm -rf dist",
         "build": "turbo build",
         "start": "turbo start",
