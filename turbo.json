@@ -1,6 +1,9 @@
 {
     "$schema": "./node_modules/turbo/schema.json",
     "tasks": {
+        "clean": {
+            "cache": false
+        },
         "dev": {
             "cache": false,
             "persistent": true
