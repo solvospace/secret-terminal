@@ -4,6 +4,7 @@
     "private": true,
     "scripts": {
         "dev": "concurrently \"turbo dev\" \"sleep 2 && open http://localhost:3000\"",
+        "clean": "turbo run clean && rm -rf .turbo && rm -rf .next && rm -rf node_modules && rm -rf dist",
         "build": "turbo build",
         "start": "turbo start",
         "lint": "turbo lint"
