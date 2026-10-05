@@ -32,7 +32,10 @@ async function retrieveUserDetails(userId: string) {
         });
     }
 
-    return foundUser;
+    return {
+        status: appHttpStatus.ok,
+        data: foundUser,
+    };
 }
 
 const UserService = {
