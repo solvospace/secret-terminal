@@ -14,7 +14,7 @@ type Bindings = {
     setShowDialog: Dispatch<SetStateAction<boolean>>;
 };
 
-const defaultFormType = "signIn";
+const defaultFormType = "verifyAccount";
 
 export default memo(function signIn(bindings: Bindings) {
     const { showDialog, setShowDialog } = bindings;
@@ -312,22 +312,20 @@ export default memo(function signIn(bindings: Bindings) {
                         <div className="text-center">
                             <signInForm.Subscribe selector={(state) => [state.canSubmit, state.isSubmitting]}>
                                 {([canSubmit, isSubmitting]) => (
-                                    <>
-                                        <Button
-                                            type="submit"
-                                            disabled={
-                                                !signInForm.state.isValid || !canSubmit || isSubmitting || submittingData
-                                            }
-                                        >
-                                            {submittingData && !sendingCode && <Spinner className="size-4" />}
-                                            {formType === "signIn" && "Sign in"}
-                                            {formType === "signUp" && "Sign up"}
-                                            {formType === "verifyAccount" && "Verify & Continue"}
-                                            {formType === "forgotPassword" && `Send reset code`}
-                                            {formType === "verifyResetCode" && `Confirm reset code`}
-                                            {formType === "changePassword" && "Save new password"}
-                                        </Button>
-                                    </>
+                                    <Button
+                                        type="submit"
+                                        disabled={
+                                            !signInForm.state.isValid || !canSubmit || isSubmitting || submittingData
+                                        }
+                                    >
+                                        {submittingData && !sendingCode && <Spinner className="size-4" />}
+                                        {formType === "signIn" && "Sign in"}
+                                        {formType === "signUp" && "Sign up"}
+                                        {formType === "verifyAccount" && "Verify & Continue"}
+                                        {formType === "forgotPassword" && `Send reset code`}
+                                        {formType === "verifyResetCode" && `Confirm reset code`}
+                                        {formType === "changePassword" && "Save new password"}
+                                    </Button>
                                 )}
                             </signInForm.Subscribe>
                         </div>
