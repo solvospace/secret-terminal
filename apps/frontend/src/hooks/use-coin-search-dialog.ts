@@ -75,7 +75,15 @@ export default function useCoinSearchDialog(bindings: Bindings) {
         if (context) {
             event.preventDefault();
             event.stopPropagation();
-            window.open(route as Route, "_blank", "noopener,noreferrer");
+
+            const externalLink = document.createElement("a");
+            Object.assign(externalLink, {
+                href: route,
+                target: "_blank",
+                rel: "noopener noreferrer",
+            }).click();
+
+            externalLink.remove();
         } else {
             setShowDialog(false);
             router.push(route as Route);
