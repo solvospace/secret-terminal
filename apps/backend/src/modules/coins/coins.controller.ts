@@ -1,29 +1,24 @@
 import { Request, Response } from "express";
-import { createErrorResponse } from "../../services/handle-error.service.js";
+import { handleFailure, handleSuccess } from "../../services/handle-response.service.js";
 import CoinService from "../coins/coins.service.js";
+import { Result } from "../../classes/result.class.js";
 
 const getCoinList = async (request: Request, response: Response) => {
     try {
         const queryParams = request.query;
-        const coins = await CoinService.retrieveCoinList(queryParams);
-
-        return response.status(200).json({
-            data: coins,
-        });
+        const result = await CoinService.retrieveCoinList(queryParams);
+        handleSuccess(response, new Result(result));
     } catch (error) {
-        createErrorResponse(error, response);
+        handleFailure(response, error);
     }
 };
 
 const getCoinById = async (request: Request, response: Response) => {
     try {
-        const coinProperties = await CoinService.retrieveCoinById(request.params.id.toString());
-
-        return response.status(200).json({
-            data: coinProperties,
-        });
+        const result = await CoinService.retrieveCoinById(request.params.id.toString());
+        handleSuccess(response, new Result(result));
     } catch (error) {
-        createErrorResponse(error, response);
+        handleFailure(response, error);
     }
 };
 

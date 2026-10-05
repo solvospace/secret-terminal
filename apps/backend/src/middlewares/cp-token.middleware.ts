@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import TokenService from "../services/token.service.js";
 import { Jwt } from "../types/jwt.types.js";
-import statusCode from "../constants/http-status-code.js";
+import appHttpStatus from "../constants/http-status-code.js";
 
 export default function cpTokenVerification(request: Request, response: Response, next: NextFunction) {
     try {
@@ -23,7 +23,7 @@ export default function cpTokenVerification(request: Request, response: Response
         next();
     } catch (error) {
         if (error instanceof Error) {
-            return response.status(statusCode.unauthorized).json({
+            return response.status(appHttpStatus.unauthorized).json({
                 success: false,
                 message: error.message,
             });

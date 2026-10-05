@@ -3,8 +3,8 @@ import { coinGeckoClient } from "../../lib/api-client.js";
 import { coinGeckoEndpoints } from "../../lib/endpoints.js";
 import { getRowsPerPageDefaultValue } from "@secret-terminal/services/utils.service";
 import { CoinDetailsServerResponse } from "@secret-terminal/types/coin-details.types";
-import { isAxiosError } from "axios";
 import { cleanResponse } from "../../services/clean-response.service.js";
+import appHttpStatus from "../../constants/http-status-code.js";
 
 async function retrieveCoinList(params: CoinListApiParams) {
     const queryParams: CoinListApiParams = {
@@ -25,18 +25,24 @@ async function retrieveCoinList(params: CoinListApiParams) {
         });
 
         const coinList = cleanResponse(createCoinList(response.data));
-        return coinList;
+        return {
+            status: appHttpStatus.ok,
+            data: coinList,
+        };
     } catch (error) {
-        handleError(error);
+        throw error;
     }
 }
 
 async function retrieveCoinById(id: string) {
     try {
         const response = await coinGeckoClient.get(`${coinGeckoEndpoints.coins.coinDataById}/${id}`);
-        return createCoinProperties(response.data);
+        return {
+            status: appHttpStatus.ok,
+            data: createCoinProperties(response.data),
+        };
     } catch (error) {
-        handleError(error);
+        throw error;
     }
 }
 
@@ -82,18 +88,6 @@ function createCoinList(serverCoins: CoingeckoCoin[]) {
             },
         };
     });
-}
-
-function handleError(error: unknown) {
-    if (isAxiosError(error)) {
-        throw new Error(error?.response?.data.message ?? error.message);
-    }
-
-    if (error instanceof Error) {
-        throw new Error(error.message);
-    }
-
-    throw new Error("An unknown error occurred");
 }
 
 const CoinService = {

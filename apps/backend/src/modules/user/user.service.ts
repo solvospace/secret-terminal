@@ -1,10 +1,10 @@
 import { secretTerminalDb } from "../../config/db.js";
-import statusCode from "../../constants/http-status-code.js";
+import appHttpStatus from "../../constants/http-status-code.js";
 
 async function retrieveUserDetails(userId: string) {
     if (!userId) {
         throw new Error("User ID is required.", {
-            cause: { status: statusCode.badRequest },
+            cause: { status: appHttpStatus.badRequest },
         });
     }
 
@@ -22,13 +22,13 @@ async function retrieveUserDetails(userId: string) {
 
     if (!foundUser) {
         throw new Error("User not found.", {
-            cause: { status: statusCode.notFound },
+            cause: { status: appHttpStatus.notFound },
         });
     }
 
     if (!foundUser.verified) {
         throw new Error("Account verification is pending.", {
-            cause: { status: statusCode.forbidden },
+            cause: { status: appHttpStatus.forbidden },
         });
     }
 

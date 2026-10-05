@@ -1,5 +1,5 @@
-import { Request, Response } from 'express';
-import WatchListService from './watchlist.service.js';
+import { Request, Response } from "express";
+import WatchListService from "./watchlist.service.js";
 
 async function addWatchlist(request: Request, response: Response) {
     try {
@@ -7,8 +7,8 @@ async function addWatchlist(request: Request, response: Response) {
 
         return response.status(200).json({
             data: watchlist,
-            message: 'Added Successfully!!'
-        })
+            message: "Added Successfully!!",
+        });
     } catch (error: unknown) {
         return handleError(error, response);
     }
@@ -21,8 +21,8 @@ async function updateWatchlist(request: Request, response: Response) {
 
         return response.status(200).json({
             data: watchlist,
-            message: 'Updated Successfully!!'
-        })
+            message: "Updated Successfully!!",
+        });
     } catch (error: unknown) {
         return handleError(error, response);
     }
@@ -35,8 +35,8 @@ async function deleteWatchlist(request: Request, response: Response) {
 
         if (deletedEntry.id) {
             return response.status(200).json({
-                message: "Deleted Successfully!!"
-            })
+                message: "Deleted Successfully!!",
+            });
         }
     } catch (error: unknown) {
         return handleError(error, response);
@@ -47,9 +47,9 @@ async function retrieveWatchlists(request: Request, response: Response) {
     try {
         const watchlists = await WatchListService.retrieveWatchlists(request.userId);
 
-        return response.status(response.statusCode).json({
-            data: watchlists
-        })
+        return response.status(response.appHttpStatus).json({
+            data: watchlists,
+        });
     } catch (error: unknown) {
         return handleError(error, response);
     }
@@ -57,8 +57,8 @@ async function retrieveWatchlists(request: Request, response: Response) {
 
 function handleError(error: unknown, response: Response) {
     return response.status(400).json({
-        message: (error instanceof Error) ? error.message : JSON.stringify(error)
-    })
+        message: error instanceof Error ? error.message : JSON.stringify(error),
+    });
 }
 
-export { addWatchlist, updateWatchlist, deleteWatchlist, retrieveWatchlists }
+export { addWatchlist, updateWatchlist, deleteWatchlist, retrieveWatchlists };

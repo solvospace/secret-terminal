@@ -1,7 +1,7 @@
-import { Request, Response } from 'express';
-import { createErrorResponse } from '../../services/handle-error.service.js';
-import MarketChartService from './market-chart.service.js';
-import statusCode from '../../constants/http-status-code.js';
+import { Request, Response } from "express";
+import { handleSuccess, handleFailure } from "../../services/handle-response.service.js";
+import { Result } from "../../classes/result.class.js";
+import MarketChartService from "./market-chart.service.js";
 
 const getMarketChartData = async (request: Request, response: Response) => {
     try {
@@ -9,12 +9,10 @@ const getMarketChartData = async (request: Request, response: Response) => {
         const queryParams = request.query;
 
         const result = await MarketChartService.retrieveMarketChartData(coinId, queryParams);
-        return response.status(statusCode.ok).json({
-            data: result
-        })
+        handleSuccess(response, new Result(result));
     } catch (error) {
-        createErrorResponse(error, response);
+        handleFailure(response, error);
     }
-}
+};
 
-export { getMarketChartData }
+export { getMarketChartData };

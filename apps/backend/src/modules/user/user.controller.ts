@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import UserService from "./user.service.js";
-import statusCode from "../../constants/http-status-code.js";
+import appHttpStatus from "../../constants/http-status-code.js";
 import { AppError } from "../../classes/error.class.js";
 
 const userDetails = async (request: Request, response: Response) => {
@@ -9,7 +9,7 @@ const userDetails = async (request: Request, response: Response) => {
         const user = await UserService.retrieveUserDetails(userId);
 
         if (user && user.id) {
-            return response.status(statusCode.ok).json({
+            return response.status(appHttpStatus.ok).json({
                 data: user,
             });
         }
@@ -20,7 +20,7 @@ const userDetails = async (request: Request, response: Response) => {
             });
         }
 
-        return response.status(statusCode.internalServerError).json({
+        return response.status(appHttpStatus.internalServerError).json({
             message: "Internal Server Error",
         });
     }

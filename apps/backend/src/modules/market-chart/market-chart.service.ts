@@ -1,27 +1,24 @@
 import { isAxiosError } from "axios";
 import { coinGeckoClient } from "../../lib/api-client.js";
 import { coinGeckoEndpoints } from "../../lib/endpoints.js";
+import appHttpStatus from "../../constants/http-status-code.js";
 
 async function retrieveMarketChartData(coinId: string, queryParams: any) {
     try {
-        const response = await coinGeckoClient.get(`${coinGeckoEndpoints.coins.coinDataById}/${coinId}/market_chart`, { params: queryParams });
-        return response.data;
-
+        const response = await coinGeckoClient.get(`${coinGeckoEndpoints.coins.coinDataById}/${coinId}/market_chart`, {
+            params: queryParams,
+        });
+        return {
+            status: appHttpStatus.ok,
+            data: response.data,
+        };
     } catch (error: unknown) {
-        if (isAxiosError(error)) {
-            throw new Error(error?.response?.data.message ?? error.message);
-        }
-
-        if (error instanceof Error) {
-            throw new Error(error.message);
-        }
-
-        throw new Error("An unknown error occurred");
+        throw error;
     }
 }
 
 const MarketChartService = {
-    retrieveMarketChartData
+    retrieveMarketChartData,
 };
 
 export default MarketChartService;

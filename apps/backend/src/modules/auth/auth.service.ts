@@ -6,12 +6,17 @@ import TokenService from "../../services/token.service.js";
 import MailService from "../../services/mail.service.js";
 import type { SignUpProperties, LoginProperties } from "./auth.types.js";
 import type { Jwt } from "../../types/jwt.types.js";
+import appHttpStatus from "../../constants/http-status-code.js";
 
 async function signUp(properties: SignUpProperties) {
     const existingUser = await secretTerminalDb.user.findUnique({ where: { email: properties.email } });
 
     if (existingUser) {
-        throw new Error("User already exists.");
+        throw new Error("User already exists.", {
+            cause: {
+                status: appHttpStatus.conflict,
+            },
+        });
     }
 
     const verificationCode = generateCode();
@@ -28,12 +33,29 @@ async function signUp(properties: SignUpProperties) {
 
     if (user.id) await mailVerificationCode(user.email, verificationCode);
 
-    return { message: "Verify your account. A verification code has been sent to you.", user };
+    return {
+        user,
+        message: "Verify your account. A verification code has been sent to you.",
+        status: appHttpStatus.created,
+    };
 }
 
 async function signIn(properties: LoginProperties) {
-    if (!properties.email) throw new Error("Email is required.");
-    if (!properties.password) throw new Error("Password is required.");
+    if (!properties.email) {
+        throw new Error("Email is required.", {
+            cause: {
+                status: appHttpStatus.unProcessableContent,
+            },
+        });
+    }
+
+    if (!properties.password) {
+        throw new Error("Password is required.", {
+            cause: {
+                status: appHttpStatus.unProcessableContent,
+            },
+        });
+    }
 
     const foundUser = await secretTerminalDb.user.findUnique({
         where: {
@@ -41,10 +63,23 @@ async function signIn(properties: LoginProperties) {
         },
     });
 
-    if (!foundUser) throw new Error("Incorrect email or password.");
+    if (!foundUser) {
+        throw new Error("Incorrect email or password.", {
+            cause: {
+                status: appHttpStatus.unProcessableContent,
+            },
+        });
+    }
+
     const isMatch = await HashService.compareHashed(properties.password, foundUser.password);
 
-    if (!isMatch) throw new Error("Incorrect email or password.");
+    if (!isMatch) {
+        throw new Error("Incorrect password.", {
+            cause: {
+                status: appHttpStatus.unProcessableContent,
+            },
+        });
+    }
 
     if (!foundUser.verified) {
         return await sendVerificationCode(foundUser.email, foundUser.id);
@@ -55,6 +90,7 @@ async function signIn(properties: LoginProperties) {
         tokens,
         verified: foundUser.verified,
         message: "Welcome back! Glad to see you again.",
+        status: appHttpStatus.ok,
     };
 }
 
@@ -72,7 +108,11 @@ async function sendVerificationCode(email: string, userId?: string) {
         });
 
         if (!foundUser) {
-            throw new Error("Incorrect email.");
+            throw new Error("Incorrect email.", {
+                cause: {
+                    status: appHttpStatus.unProcessableContent,
+                },
+            });
         }
 
         localUserId = foundUser.id;
@@ -98,31 +138,59 @@ async function sendVerificationCode(email: string, userId?: string) {
         tokens: null,
         verified: false,
         message: "A verification code has been sent to your email.",
+        status: appHttpStatus.ok,
     };
 }
 
 async function verifyAccount({ email, code }: Record<string, string>) {
-    if (!email) throw new Error("Email is required.");
-    if (!code) throw new Error("Verification code is required.");
+    if (!email)
+        throw new Error("Email is required.", {
+            cause: {
+                status: appHttpStatus.unProcessableContent,
+            },
+        });
+
+    if (!code)
+        throw new Error("Verification code is required.", {
+            cause: {
+                status: appHttpStatus.unProcessableContent,
+            },
+        });
 
     const foundUser = await secretTerminalDb.user.findUnique({
         where: { email },
     });
 
     if (!foundUser) {
-        throw new Error("User doesn't exist.");
+        throw new Error("User doesn't exist.", {
+            cause: {
+                status: appHttpStatus.notFound,
+            },
+        });
     }
 
     if (foundUser.verified) {
-        throw new Error("Account is already verified.");
+        throw new Error("Account is already verified.", {
+            cause: {
+                status: appHttpStatus.conflict,
+            },
+        });
     }
 
     if (foundUser.verificationCode !== code) {
-        throw new Error("Invalid verification code.");
+        throw new Error("Invalid verification code.", {
+            cause: {
+                status: appHttpStatus.unProcessableContent,
+            },
+        });
     }
 
     if (new Date() > foundUser.verificationCodeExpiresAt) {
-        throw new Error("Verification code has expired.");
+        throw new Error("Verification code has expired.", {
+            cause: {
+                status: appHttpStatus.unauthorized,
+            },
+        });
     }
 
     await secretTerminalDb.user.update({
@@ -139,12 +207,18 @@ async function verifyAccount({ email, code }: Record<string, string>) {
 
     return {
         tokens,
+        status: appHttpStatus.ok,
         message: "Account verified successfully.",
     };
 }
 
 async function forgotPassword(email: string) {
-    if (!email) throw new Error("Email missing!!");
+    if (!email)
+        throw new Error("Email missing!!", {
+            cause: {
+                status: appHttpStatus.unProcessableContent,
+            },
+        });
 
     const foundUser = await secretTerminalDb.user.findUnique({
         where: { email },
@@ -153,6 +227,7 @@ async function forgotPassword(email: string) {
     if (!foundUser) {
         return {
             message: "If the email exists, a reset code has been sent.",
+            status: appHttpStatus.notFound,
         };
     }
 
@@ -178,14 +253,26 @@ async function forgotPassword(email: string) {
 
     return {
         message: "If the email exists, a reset code has been sent.",
+        status: appHttpStatus.ok,
     };
 }
 
 async function verifyResetCode(properties: Record<string, string>) {
     const { resetCode, email } = properties;
 
-    if (!resetCode) throw new Error("Reset code missing!!");
-    if (!email) throw new Error("Email is missing!!");
+    if (!resetCode)
+        throw new Error("Reset code missing!!", {
+            cause: {
+                status: appHttpStatus.unProcessableContent,
+            },
+        });
+
+    if (!email)
+        throw new Error("Email is missing!!", {
+            cause: {
+                status: appHttpStatus.unProcessableContent,
+            },
+        });
 
     const foundUser = await secretTerminalDb.user.findUnique({
         where: {
@@ -194,7 +281,11 @@ async function verifyResetCode(properties: Record<string, string>) {
     });
 
     if (!foundUser) {
-        throw new Error("Invalid reset request!!");
+        throw new Error("Invalid reset request!!", {
+            cause: {
+                status: appHttpStatus.notFound,
+            },
+        });
     }
 
     const resetCodeEntry = await secretTerminalDb.resetCode.findFirst({
@@ -204,17 +295,29 @@ async function verifyResetCode(properties: Record<string, string>) {
     });
 
     if (!resetCodeEntry) {
-        throw new Error("Invalid reset code!!");
+        throw new Error("Invalid reset code!!", {
+            cause: {
+                status: appHttpStatus.unProcessableContent,
+            },
+        });
     }
 
     if (new Date() >= resetCodeEntry.expiresAt) {
-        throw new Error("Reset code expired!!");
+        throw new Error("Reset code expired!!", {
+            cause: {
+                status: appHttpStatus.unauthorized,
+            },
+        });
     }
 
     const isCodeMatched = await HashService.compareHashed(resetCode, resetCodeEntry.code);
 
     if (!isCodeMatched) {
-        throw new Error("Invalid reset code!!");
+        throw new Error("Invalid reset code!!", {
+            cause: {
+                status: appHttpStatus.unauthorized,
+            },
+        });
     }
 
     await secretTerminalDb.resetCode.delete({
@@ -231,13 +334,19 @@ async function verifyResetCode(properties: Record<string, string>) {
     return {
         message: "Verified!!",
         token: updatePasswordToken,
+        status: appHttpStatus.ok,
     };
 }
 
 async function changePassword(properties: Record<string, string>) {
     const { userId, password } = properties;
 
-    if (!password) throw new Error("Password is required!!");
+    if (!password)
+        throw new Error("Password is required!!", {
+            cause: {
+                status: appHttpStatus.unProcessableContent,
+            },
+        });
 
     const foundUser = await secretTerminalDb.user.findUnique({
         where: {
@@ -245,7 +354,12 @@ async function changePassword(properties: Record<string, string>) {
         },
     });
 
-    if (!foundUser) throw new Error(`User doesn't exist!!!`);
+    if (!foundUser)
+        throw new Error(`User doesn't exist!!!`, {
+            cause: {
+                status: appHttpStatus.notFound,
+            },
+        });
 
     const hashedPassword = await HashService.generateHash(password);
 
@@ -259,12 +373,19 @@ async function changePassword(properties: Record<string, string>) {
         },
     });
 
-    return "Password updated successfully!!";
+    return {
+        message: "Password updated successfully!!",
+        status: appHttpStatus.ok,
+    };
 }
 
 async function refreshToken(token: string) {
     if (!token) {
-        throw new Error("Refresh token is missing!");
+        throw new Error("Refresh token is missing!", {
+            cause: {
+                status: appHttpStatus.unauthorized,
+            },
+        });
     }
 
     const decoded = (TokenService.verifyRefreshToken(token) as Jwt).payload;
@@ -275,11 +396,20 @@ async function refreshToken(token: string) {
     });
 
     if (!user) {
-        throw new Error("User not found");
+        throw new Error("User not found", {
+            cause: {
+                status: appHttpStatus.notFound,
+            },
+        });
     }
 
     const tokens = await manageTokens(user.id, token);
-    return tokens;
+
+    return {
+        tokens,
+        message: "Done!!",
+        status: appHttpStatus.ok,
+    };
 }
 
 async function signOut(token: string) {
@@ -288,19 +418,33 @@ async function signOut(token: string) {
     });
 
     if (!storedToken) {
-        throw new Error("Invalid token.");
+        throw new Error("Already signed out.", {
+            cause: {
+                status: appHttpStatus.unauthorized,
+            },
+        });
     }
 
-    return secretTerminalDb.refreshToken.delete({
+    const deletedToken = secretTerminalDb.refreshToken.delete({
         where: {
             id: storedToken.id,
         },
     });
+
+    return {
+        deletedToken,
+        message: "You have been logged out. Have a great day.",
+        status: appHttpStatus.ok,
+    };
 }
 
 async function manageTokens(userId: string, token?: string) {
     if (!userId) {
-        throw new Error("userId is missing.");
+        throw new Error("userId is missing.", {
+            cause: {
+                status: appHttpStatus.badRequest,
+            },
+        });
     }
 
     const tokenPayload = { userId };

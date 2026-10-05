@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { Jwt } from "../types/jwt.types.js";
 import TokenService from "../services/token.service.js";
-import statusCode from "../constants/http-status-code.js";
+import appHttpStatus from "../constants/http-status-code.js";
 
 export default async function tokenVerification(request: Request, response: Response, next: NextFunction) {
     try {
@@ -16,7 +16,7 @@ export default async function tokenVerification(request: Request, response: Resp
         next();
     } catch (error) {
         if (error instanceof Error) {
-            return response.status(statusCode.unauthorized).json({
+            return response.status(appHttpStatus.unauthorized).json({
                 success: false,
                 message: error.message,
             });

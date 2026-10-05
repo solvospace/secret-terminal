@@ -1,21 +1,15 @@
-import { Request, Response } from 'express';
-import NewsService from '../news/news.service.js';
+import { Request, Response } from "express";
+import { handleFailure, handleSuccess } from "../../services/handle-response.service.js";
+import { Result } from "../../classes/result.class.js";
+import NewsService from "../news/news.service.js";
 
 const retrieveLatestNews = async (request: Request, response: Response) => {
     try {
         const results = await NewsService.retrieveLatestNews();
-
-        return response.status(200).json({
-            data: results?.articles,
-            nextPage: results?.nextPage
-        })
+        handleSuccess(response, new Result(results));
     } catch (error) {
-        if (error instanceof Error) {
-            return response.status(401).json({
-                message: error.message
-            })
-        }
+        handleFailure(response, error);
     }
-}
+};
 
-export { retrieveLatestNews }
+export { retrieveLatestNews };

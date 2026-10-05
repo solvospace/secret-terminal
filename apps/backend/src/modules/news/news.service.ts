@@ -1,33 +1,38 @@
-import { checkImageUrl } from '@secret-terminal/services/image.service';
+import { checkImageUrl } from "@secret-terminal/services/image.service";
+import appHttpStatus from "../../constants/http-status-code.js";
 
 async function retrieveLatestNews() {
     try {
         if (!process.env.NEWS_API_KEY) {
-            throw new Error('Unauthorized');
+            throw new Error("Unauthorized");
         }
 
         const params: Record<string, string> = {
             apikey: process.env.NEWS_API_KEY!,
             language: "en",
-            domainurl: "coindesk.com,theblock.co"
-        }
+            domainurl: "coindesk.com,theblock.co",
+        };
 
         const paramsString = new URLSearchParams(params).toString();
 
         const response = await fetch(`https://newsdata.io/api/1/crypto?${paramsString}`);
         const jsonData = await response.json();
 
-        if (jsonData.status === 'error') {
+        if (jsonData.status === "error") {
             throw new Error(jsonData.results.message ? jsonData.results.message : jsonData.results[0].message);
         }
 
         const articles = await createResponseData(jsonData.results);
 
-        return { articles, nextPage: jsonData.nextPage };
+        return {
+            status: appHttpStatus.ok,
+            data: {
+                data: articles,
+                nextPage: jsonData.nextPage,
+            },
+        };
     } catch (error: unknown) {
-        if (error instanceof Error) {
-            throw new Error(error.message);
-        }
+        throw error;
     }
 }
 
@@ -53,13 +58,13 @@ async function createResponseData(serverArticles: Record<string, string>[]) {
             url: article.link,
             publishedAt: article.pubDate,
             imageUrl: article.image_url,
-            author: (article.creator && article.creator.length > 0) && article.creator[0],
+            author: article.creator && article.creator.length > 0 && article.creator[0],
             source: {
                 id: article.source_id,
                 name: article.source_name,
-                icon: await checkSourceImageIcon(article.source_icon)
-            }
-        })
+                icon: await checkSourceImageIcon(article.source_icon),
+            },
+        });
     }
 
     return articles;
@@ -75,7 +80,7 @@ async function checkSourceImageIcon(url: string) {
 }
 
 const NewsService = {
-    retrieveLatestNews
+    retrieveLatestNews,
 };
 
 export default NewsService;

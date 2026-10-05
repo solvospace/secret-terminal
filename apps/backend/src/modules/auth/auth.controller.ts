@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import AuthenticationService from "./auth.service.js";
-import statusCode from "../../constants/http-status-code.js";
+import appHttpStatus from "../../constants/http-status-code.js";
+import { handleSuccess, handleFailure } from "../../services/handle-response.service.js";
 
 const signUp = async (request: Request, response: Response) => {
     try {
@@ -10,20 +11,10 @@ const signUp = async (request: Request, response: Response) => {
         AuthenticationService.clearTokensFromCookies(response);
 
         if (result?.user?.id) {
-            return response.status(statusCode.created).json({
-                message: result.message,
-            });
+            handleSuccess(response, result);
         }
     } catch (error: unknown) {
-        if (error instanceof Error && error.message.toLowerCase().includes("exist")) {
-            return response.status(statusCode.conflict).json({
-                message: error.message,
-            });
-        }
-
-        return response.status(statusCode.internalServerError).json({
-            message: "Internal Server Error.",
-        });
+        handleFailure(response, error);
     }
 };
 
@@ -36,16 +27,9 @@ const signIn = async (request: Request, response: Response) => {
         AuthenticationService.clearTokensFromCookies(response);
         if (result.tokens) AuthenticationService.setResponseHeaders(response, result.tokens);
 
-        return response.status(statusCode.ok).json({
-            message: result.message,
-            data: {
-                verified: result.verified,
-            },
-        });
+        handleSuccess(response, result);
     } catch (error: unknown) {
-        return response.status(400).json({
-            message: error instanceof Error ? error.message : String(error),
-        });
+        handleFailure(response, error);
     }
 };
 
@@ -57,11 +41,9 @@ const accountVerificationCode = async (request: Request, response: Response) => 
 
         AuthenticationService.clearTokensFromCookies(response);
 
-        return response.status(statusCode.ok).json({ message: result.message });
+        handleSuccess(response, result);
     } catch (error) {
-        return response.status(400).json({
-            message: error instanceof Error ? error.message : "Account verification failed.",
-        });
+        handleFailure(response, error);
     }
 };
 
@@ -77,11 +59,9 @@ const accountVerification = async (request: Request, response: Response) => {
         AuthenticationService.clearTokensFromCookies(response);
         AuthenticationService.setResponseHeaders(response, result.tokens);
 
-        return response.status(statusCode.ok).json({ message: result.message });
+        handleSuccess(response, result);
     } catch (error) {
-        return response.status(400).json({
-            message: error instanceof Error ? error.message : "Account verification failed.",
-        });
+        handleFailure(response, error);
     }
 };
 
@@ -91,16 +71,11 @@ const refreshToken = async (request: Request, response: Response) => {
         const result = await AuthenticationService.refreshToken(refreshToken);
 
         AuthenticationService.clearTokensFromCookies(response);
-        AuthenticationService.setResponseHeaders(response, result);
+        AuthenticationService.setResponseHeaders(response, result.tokens);
 
-        return response.status(200).json({
-            message: "Done!!.",
-        });
+        handleSuccess(response, result);
     } catch (error) {
-        return response.status(401).json({
-            success: false,
-            message: "Invalid refresh token",
-        });
+        handleFailure(response, error);
     }
 };
 
@@ -109,13 +84,9 @@ const forgotPassword = async (request: Request, response: Response) => {
         const { email } = request.body;
         const result = await AuthenticationService.forgotPassword(email);
 
-        return response.status(200).json({
-            message: "A reset code has been sent to your email.",
-        });
+        handleSuccess(response, result);
     } catch (error) {
-        return response.status(400).json({
-            message: error instanceof Error ? error.message : String(error),
-        });
+        handleFailure(response, error);
     }
 };
 
@@ -132,13 +103,9 @@ const verifyResetCode = async (request: Request, response: Response) => {
             maxAge: 5 * 60 * 1000,
         });
 
-        return response.status(200).json({
-            message: result.message,
-        });
+        handleSuccess(response, result);
     } catch (error) {
-        return response.status(400).json({
-            message: error instanceof Error ? error.message : String(error),
-        });
+        handleFailure(response, error);
     }
 };
 
@@ -155,13 +122,9 @@ const changePassword = async (request: Request, response: Response) => {
             sameSite: "none",
         });
 
-        return response.status(200).json({
-            message: result,
-        });
+        handleSuccess(response, result);
     } catch (error) {
-        return response.status(400).json({
-            message: error instanceof Error ? error.message : String(error),
-        });
+        handleFailure(response, error);
     }
 };
 
@@ -172,24 +135,9 @@ const signOut = async (request: Request, response: Response) => {
 
         AuthenticationService.clearTokensFromCookies(response);
 
-        if (result?.id) {
-            return response.status(statusCode.ok).json({
-                message: "You have been logged out. Have a great day.",
-            });
-        } else {
-            return response.status(statusCode.noContent).json();
-        }
+        handleSuccess(response, result);
     } catch (error) {
-        if (error instanceof Error && error.message.toLowerCase().includes("invalid")) {
-            return response.status(statusCode.unauthorized).json({
-                message: "Unauthorized",
-            });
-        }
-
-        return response.status(statusCode.internalServerError).json({
-            success: false,
-            message: "Internal Server Error",
-        });
+        handleFailure(response, error);
     }
 };
 

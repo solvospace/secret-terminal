@@ -10,6 +10,6 @@ const retrieveLatestNews = async () => {
         if (error instanceof Error) throw new Error(error.message);
         if (isAxiosError(error)) throw new Error(error.response?.data.message);
     }
-}
+};
 
 export { retrieveLatestNews };

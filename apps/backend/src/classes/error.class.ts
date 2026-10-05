@@ -6,7 +6,7 @@ type Cause = {
 class AppError extends Error {
     cause?: Cause;
 
-    constructor(cause: Cause, message: string) {
+    constructor({ cause, message }: { cause: Cause; message: string }) {
         super(message, { cause });
     }
 }

@@ -3,8 +3,8 @@ import { retrieveLatestNews } from "@/services/news.service";
 import type { NewsArticle } from "@/interfaces/news.interface";
 
 type Bindings = {
-    showDialog: boolean
-}
+    showDialog: boolean;
+};
 
 export default function useNews({ showDialog }: Bindings) {
     const [articles, setArticles] = useState<NewsArticle[] | null>(null);
@@ -20,15 +20,15 @@ export default function useNews({ showDialog }: Bindings) {
         try {
             setFetchingLatestNews(true);
             const response = await retrieveLatestNews();
-            setArticles(response?.data.data);
+            setArticles(response?.data.data.data);
         } catch (error) {
-
         } finally {
             setFetchingLatestNews(false);
         }
     }
 
     return {
-        fetchingLatestNews, articles
-    }
+        fetchingLatestNews,
+        articles,
+    };
 }
