@@ -59,6 +59,8 @@ export default function useCoinSearchDialog(bindings: Bindings) {
             const response = await search({ query: searchValue });
             const serverCoins = response.data.data.coins;
             for (const coin of serverCoins) {
+                const route = getUiRoute("coinAnalysis", coin);
+                if (route) router.prefetch(route as Route);
                 if (!coin.large.startsWith("https")) coin.large = null;
             }
 
