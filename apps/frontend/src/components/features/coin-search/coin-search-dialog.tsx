@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import useCoinSearchDialog from "@/hooks/use-coin-search-dialog";
 import { coinSymbolImageSize } from "@/constants/app.constants";

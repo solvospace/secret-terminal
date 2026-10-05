@@ -6,6 +6,8 @@ import { getUiRoute } from "@/services/utils.service";
 import { SearchApiCoin } from "@/interfaces/coin.interface";
 import { StCoin } from "@secret-terminal/types/coin-list.types";
 import { addWatchlistCoin } from "@/services/watchlist-coin.service";
+import { Route } from "next";
+import { useRouter } from "next/navigation";
 
 type Bindings = {
     showDialog: boolean;
@@ -20,6 +22,7 @@ export default function useCoinSearchDialog(bindings: Bindings) {
     const [searchingCoins, setSearchingCoins] = useState<boolean>(false);
     const [coins, setCoins] = useState<SearchApiCoin[]>([]);
     const [fetchingCoinsMarketData, setCoinsFetchingMarketData] = useState<boolean>(false);
+    const router = useRouter();
 
     useEffect(() => {
         if (!showDialog) return;
@@ -67,21 +70,9 @@ export default function useCoinSearchDialog(bindings: Bindings) {
     }
 
     function onCoinClick(event: React.SyntheticEvent, coin: SearchApiCoin) {
-        event.preventDefault();
-        event.stopPropagation();
-
+        setShowDialog(false);
         const route = getUiRoute("coinAnalysis", coin);
-
-        if (route) {
-            const externalLink = document.createElement("a");
-            Object.assign(externalLink, {
-                href: route,
-                target: "_blank",
-                rel: "noopener noreferrer",
-            }).click();
-
-            externalLink.remove();
-        }
+        router.push(route as Route);
     }
 
     async function addCoinToActiveWatchlist(coin: SearchApiCoin) {
