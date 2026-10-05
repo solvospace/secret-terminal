@@ -70,9 +70,16 @@ export default function useCoinSearchDialog(bindings: Bindings) {
     }
 
     function onCoinClick(event: React.SyntheticEvent, coin: SearchApiCoin) {
-        setShowDialog(false);
         const route = getUiRoute("coinAnalysis", coin);
-        router.push(route as Route);
+
+        if (context) {
+            event.preventDefault();
+            event.stopPropagation();
+            window.open(route as Route, "_blank", "noopener,noreferrer");
+        } else {
+            setShowDialog(false);
+            router.push(route as Route);
+        }
     }
 
     async function addCoinToActiveWatchlist(coin: SearchApiCoin) {
