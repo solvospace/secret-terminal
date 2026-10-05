@@ -7,7 +7,7 @@ import { Result } from "../../classes/result.class.js";
 const getTrendingData = async (request: Request, response: Response) => {
     try {
         const result = await TrendingService.retrieveTrendingData();
-        handleSuccess(response, new Result(result));
+        handleSuccess(response, result);
     } catch (error) {
         handleFailure(response, error);
     }

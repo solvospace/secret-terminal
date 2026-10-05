@@ -1,10 +1,10 @@
 import { AppError } from "../classes/error.class.js";
-import { Result } from "../classes/result.class.js";
+import { Result, ResultType } from "../classes/result.class.js";
 import statusCode from "../constants/http-status-code.js";
 import { Response } from "express";
 
-const handleSuccess = (response: Response, result?: unknown) => {
-    if (result instanceof Result) {
+const handleSuccess = (response: Response, result?: ResultType) => {
+    if (result) {
         const message = result.message ?? undefined;
         const data = result.data ?? undefined;
 

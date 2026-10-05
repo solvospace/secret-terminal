@@ -6,7 +6,7 @@ import SearchService from "../search/search.service.js";
 const getSearchData = async (request: Request, response: Response) => {
     try {
         const result = await SearchService.search(request.query);
-        handleSuccess(response, new Result(result));
+        handleSuccess(response, result);
     } catch (error) {
         handleFailure(response, error);
     }

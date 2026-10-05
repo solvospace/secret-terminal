@@ -6,7 +6,7 @@ import { Result } from "../../classes/result.class.js";
 const getGlobalMarketData = async (request: Request, response: Response) => {
     try {
         const result = await GlobalMarketService.retrieveGlobalMarketData();
-        handleSuccess(response, new Result(result));
+        handleSuccess(response, result);
     } catch (error) {
         handleFailure(response, error);
     }

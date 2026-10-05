@@ -1,4 +1,4 @@
-type ResultType = {
+export type ResultType = {
     status: number;
     message?: string;
     data?: any;

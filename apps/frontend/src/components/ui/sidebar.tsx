@@ -14,7 +14,6 @@ import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { PanelLeft, PanelLeftClose, PanelLeftOpen } from "lucide-react";
-import { RiMenu2Line } from "react-icons/ri";
 import { sidebarIconSize } from "@/constants/app.constants";
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state";
@@ -219,7 +218,7 @@ function Sidebar({
                 )}
             />
             <div
-                data-slot="sidebar-container "
+                data-slot="sidebar-container"
                 data-side={side}
                 className={cn(
                     `st-sidebar border-[var(--border-color)] fixed inset-y-0 z-20 hidden w-(--sidebar-width)

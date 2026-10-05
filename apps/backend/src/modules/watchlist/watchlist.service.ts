@@ -1,78 +1,113 @@
 import { secretTerminalDb } from "../../config/db.js";
+import appHttpStatus from "../../constants/http-status-code.js";
 
 async function addWatchlist(body: Record<string, string>, userId: string) {
     if (!body.name) {
-        throw new Error("Name is required!!");
+        throw new Error("Name is required!!", {
+            cause: {
+                status: appHttpStatus.badRequest,
+            },
+        });
     }
 
     const foundWatchlist = await secretTerminalDb.watchlist.findFirst({
         where: {
             name: body.name,
-            userId: userId
-        }
-    })
+            userId: userId,
+        },
+    });
 
     if (foundWatchlist?.id) {
-        throw new Error(`${body.name} is already exist!!`);
+        throw new Error(`${body.name} is already exist!!`, {
+            cause: {
+                status: appHttpStatus.unProcessableContent,
+            },
+        });
     }
 
     const watchlist = await secretTerminalDb.watchlist.create({
         data: {
             name: body.name,
             description: body.description,
-            userId: userId
-        }
-    })
+            userId: userId,
+        },
+    });
 
-    return watchlist;
+    return {
+        message: "Added Successfully!!",
+        status: appHttpStatus.created,
+        data: watchlist,
+    };
 }
 
 async function updateWatchlist(watchlistId: string, body: Record<string, string>) {
     if (!watchlistId) {
-        throw new Error("watchlistId is required!!");
+        throw new Error("watchlistId is required!!", {
+            cause: {
+                status: appHttpStatus.badRequest,
+            },
+        });
     }
 
     const updatedEntry = await secretTerminalDb.watchlist.update({
         where: {
-            id: watchlistId
+            id: watchlistId,
         },
         data: {
             name: body.name,
-            description: body.description
-        }
-    })
+            description: body.description,
+        },
+    });
 
-    return updatedEntry;
+    return {
+        message: "Updated Successfully!!",
+        status: appHttpStatus.ok,
+        data: updatedEntry,
+    };
 }
 
 async function deleteWatchlist(watchlistId: string) {
     if (!watchlistId) {
-        throw new Error("watchlistId is required!!");
+        throw new Error("watchlistId is required!!", {
+            cause: {
+                status: appHttpStatus.badRequest,
+            },
+        });
     }
 
     const deletedEntry = await secretTerminalDb.watchlist.delete({
         where: {
-            id: watchlistId
-        }
-    })
+            id: watchlistId,
+        },
+    });
 
-    return deletedEntry;
+    return {
+        message: "Deleted Successfully!!",
+        status: appHttpStatus.ok,
+    };
 }
 
 async function retrieveWatchlists(userId: string) {
     const watchlists = await secretTerminalDb.watchlist.findMany({
         where: {
-            userId: userId
-        }, orderBy: {
-            updatedAt: 'desc'
-        }
+            userId: userId,
+        },
+        orderBy: {
+            updatedAt: "desc",
+        },
     });
 
-    return watchlists;
+    return {
+        status: appHttpStatus.ok,
+        data: watchlists,
+    };
 }
 
 const WatchlistService = {
-    addWatchlist, updateWatchlist, deleteWatchlist, retrieveWatchlists
-}
+    addWatchlist,
+    updateWatchlist,
+    deleteWatchlist,
+    retrieveWatchlists,
+};
 
 export default WatchlistService;

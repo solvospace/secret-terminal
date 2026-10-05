@@ -7,7 +7,7 @@ const getCoinList = async (request: Request, response: Response) => {
     try {
         const queryParams = request.query;
         const result = await CoinService.retrieveCoinList(queryParams);
-        handleSuccess(response, new Result(result));
+        handleSuccess(response, result);
     } catch (error) {
         handleFailure(response, error);
     }
@@ -16,7 +16,7 @@ const getCoinList = async (request: Request, response: Response) => {
 const getCoinById = async (request: Request, response: Response) => {
     try {
         const result = await CoinService.retrieveCoinById(request.params.id.toString());
-        handleSuccess(response, new Result(result));
+        handleSuccess(response, result);
     } catch (error) {
         handleFailure(response, error);
     }

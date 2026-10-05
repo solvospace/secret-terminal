@@ -1,64 +1,43 @@
 import { Request, Response } from "express";
 import WatchListService from "./watchlist.service.js";
+import { handleFailure, handleSuccess } from "../../services/handle-response.service.js";
 
 async function addWatchlist(request: Request, response: Response) {
     try {
-        const watchlist = await WatchListService.addWatchlist(request.body, request.userId);
-
-        return response.status(200).json({
-            data: watchlist,
-            message: "Added Successfully!!",
-        });
+        const result = await WatchListService.addWatchlist(request.body, request.userId);
+        handleSuccess(response, result);
     } catch (error: unknown) {
-        return handleError(error, response);
+        handleFailure(response, error);
     }
 }
 
 async function updateWatchlist(request: Request, response: Response) {
     try {
         const watchlistId = request.params.id.toString();
-        const watchlist = await WatchListService.updateWatchlist(watchlistId, request.body);
-
-        return response.status(200).json({
-            data: watchlist,
-            message: "Updated Successfully!!",
-        });
+        const result = await WatchListService.updateWatchlist(watchlistId, request.body);
+        handleSuccess(response, result);
     } catch (error: unknown) {
-        return handleError(error, response);
+        handleFailure(response, error);
     }
 }
 
 async function deleteWatchlist(request: Request, response: Response) {
     try {
         const watchlistId = request.params.id.toString();
-        const deletedEntry = await WatchListService.deleteWatchlist(watchlistId);
-
-        if (deletedEntry.id) {
-            return response.status(200).json({
-                message: "Deleted Successfully!!",
-            });
-        }
+        const result = await WatchListService.deleteWatchlist(watchlistId);
+        handleSuccess(response, result);
     } catch (error: unknown) {
-        return handleError(error, response);
+        handleFailure(response, error);
     }
 }
 
 async function retrieveWatchlists(request: Request, response: Response) {
     try {
-        const watchlists = await WatchListService.retrieveWatchlists(request.userId);
-
-        return response.status(response.appHttpStatus).json({
-            data: watchlists,
-        });
+        const result = await WatchListService.retrieveWatchlists(request.userId);
+        handleSuccess(response, result);
     } catch (error: unknown) {
-        return handleError(error, response);
+        handleFailure(response, error);
     }
-}
-
-function handleError(error: unknown, response: Response) {
-    return response.status(400).json({
-        message: error instanceof Error ? error.message : JSON.stringify(error),
-    });
 }
 
 export { addWatchlist, updateWatchlist, deleteWatchlist, retrieveWatchlists };

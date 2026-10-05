@@ -5,8 +5,8 @@ import NewsService from "../news/news.service.js";
 
 const retrieveLatestNews = async (request: Request, response: Response) => {
     try {
-        const results = await NewsService.retrieveLatestNews();
-        handleSuccess(response, new Result(results));
+        const result = await NewsService.retrieveLatestNews();
+        handleSuccess(response, result);
     } catch (error) {
         handleFailure(response, error);
     }

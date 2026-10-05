@@ -9,7 +9,7 @@ const getMarketChartData = async (request: Request, response: Response) => {
         const queryParams = request.query;
 
         const result = await MarketChartService.retrieveMarketChartData(coinId, queryParams);
-        handleSuccess(response, new Result(result));
+        handleSuccess(response, result);
     } catch (error) {
         handleFailure(response, error);
     }
