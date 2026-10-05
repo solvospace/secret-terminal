@@ -14,7 +14,7 @@ type Bindings = {
     setShowDialog: Dispatch<SetStateAction<boolean>>;
 };
 
-const defaultFormType = "verifyAccount";
+const defaultFormType = "signIn";
 
 export default memo(function signIn(bindings: Bindings) {
     const { showDialog, setShowDialog } = bindings;
