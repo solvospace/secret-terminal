@@ -34,7 +34,7 @@ async function signUp(properties: SignUpProperties) {
     if (user.id) await mailVerificationCode(user.email, verificationCode);
 
     return {
-        user,
+        data: { verified: user.verified },
         message: "Verify your account. A verification code has been sent to you.",
         status: appHttpStatus.created,
     };
@@ -88,9 +88,9 @@ async function signIn(properties: LoginProperties) {
     const tokens = await manageTokens(foundUser.id, properties.cookies.refreshToken);
     return {
         tokens,
-        verified: foundUser.verified,
-        message: "Welcome back! Glad to see you again.",
         status: appHttpStatus.ok,
+        data: { verified: foundUser.verified },
+        message: "Welcome back! Glad to see you again.",
     };
 }
 
@@ -136,7 +136,7 @@ async function sendVerificationCode(email: string, userId?: string) {
 
     return {
         tokens: null,
-        verified: false,
+        data: { verified: false },
         message: "A verification code has been sent to your email.",
         status: appHttpStatus.ok,
     };

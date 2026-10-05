@@ -10,9 +10,7 @@ const signUp = async (request: Request, response: Response) => {
 
         AuthenticationService.clearTokensFromCookies(response);
 
-        if (result?.user?.id) {
-            handleSuccess(response, result);
-        }
+        handleSuccess(response, result);
     } catch (error: unknown) {
         handleFailure(response, error);
     }
