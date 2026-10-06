@@ -1,20 +1,25 @@
 import { AppError } from "../classes/error.class.js";
-import { Result, ResultType } from "../classes/result.class.js";
-import statusCode from "../constants/http-status-code.js";
+import { ResultOptions } from "../classes/result.class.js";
 import { Response } from "express";
+import statusCode from "../constants/http-status-code.js";
+import appHttpStatus from "../constants/http-status-code.js";
 
-const handleSuccess = (response: Response, result?: ResultType) => {
-    if (result) {
-        const message = result.message ?? undefined;
-        const data = result.data ?? undefined;
-
-        return response.status(result.status).json({ message, data });
-    }
+const handleSuccess = (response: Response, result: ResultOptions) => {
+    return response.status(result.status).json({
+        message: result.message,
+        data: result.data,
+    });
 };
 
-const handleFailure = (response: Response, error?: unknown) => {
-    if (error instanceof AppError && error.cause) {
+const handleFailure = (response: Response, error: unknown) => {
+    if (error instanceof AppError) {
         return response.status(error.cause.status).json({
+            message: error.message,
+        });
+    }
+
+    if (error instanceof Error) {
+        return response.status(appHttpStatus.internalServerError).json({
             message: error.message,
         });
     }

@@ -1,14 +1,20 @@
-type Cause = {
+type AppErrorOptions = {
+    message: string;
+    cause: CauseOptions;
+};
+
+type CauseOptions = {
     status: number;
-    code: string;
+    code?: string;
 };
 
 class AppError extends Error {
-    cause?: Cause;
+    cause: CauseOptions;
 
-    constructor({ cause, message }: { cause: Cause; message: string }) {
+    constructor({ cause, message }: AppErrorOptions) {
         super(message, { cause });
+        this.cause = cause;
     }
 }
 
-export { AppError };
+export { AppErrorOptions, AppError, CauseOptions };

@@ -1,3 +1,4 @@
+import { AppError } from "../../classes/error.class.js";
 import { secretTerminalDb } from "../../config/db.js";
 import appHttpStatus from "../../constants/http-status-code.js";
 
@@ -10,7 +11,8 @@ async function addWatchlistCoin(requestBody: Record<string, string>) {
     });
 
     if (foundWatchlistCoin?.id) {
-        throw new Error(`${requestBody.name} already added in watchlist!!`, {
+        throw new AppError({
+            message: `${requestBody.name} already added in watchlist!!`,
             cause: { status: appHttpStatus.unProcessableContent },
         });
     }
@@ -34,9 +36,7 @@ async function addWatchlistCoin(requestBody: Record<string, string>) {
 
 async function deleteWatchListCoin(watchlistCoinId: string) {
     if (!watchlistCoinId) {
-        throw new Error("watchlistCoinId is required!!", {
-            cause: { status: appHttpStatus.badRequest },
-        });
+        throw new AppError({ message: "watchlistCoinId is required!!", cause: { status: appHttpStatus.badRequest } });
     }
 
     const deletedWatchlistCoin = await secretTerminalDb.watchlistCoin.delete({

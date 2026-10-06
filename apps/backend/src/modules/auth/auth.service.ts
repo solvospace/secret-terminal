@@ -4,15 +4,17 @@ import crypto from "crypto";
 import HashService from "../../services/hash.service.js";
 import TokenService from "../../services/token.service.js";
 import MailService from "../../services/mail.service.js";
-import type { SignUpProperties, LoginProperties } from "./auth.types.js";
+import type { SignUpProperties, LoginProperties, Token } from "./auth.types.js";
 import type { Jwt } from "../../types/jwt.types.js";
 import appHttpStatus from "../../constants/http-status-code.js";
+import { AppError } from "../../classes/error.class.js";
 
 async function signUp(properties: SignUpProperties) {
     const existingUser = await secretTerminalDb.user.findUnique({ where: { email: properties.email } });
 
     if (existingUser) {
-        throw new Error("User already exists.", {
+        throw new AppError({
+            message: "User already exists.",
             cause: {
                 status: appHttpStatus.conflict,
             },
@@ -42,7 +44,8 @@ async function signUp(properties: SignUpProperties) {
 
 async function signIn(properties: LoginProperties) {
     if (!properties.email) {
-        throw new Error("Email is required.", {
+        throw new AppError({
+            message: "Email is required.",
             cause: {
                 status: appHttpStatus.unProcessableContent,
             },
@@ -50,7 +53,8 @@ async function signIn(properties: LoginProperties) {
     }
 
     if (!properties.password) {
-        throw new Error("Password is required.", {
+        throw new AppError({
+            message: "Password is required.",
             cause: {
                 status: appHttpStatus.unProcessableContent,
             },
@@ -64,7 +68,8 @@ async function signIn(properties: LoginProperties) {
     });
 
     if (!foundUser) {
-        throw new Error("Incorrect email or password.", {
+        throw new AppError({
+            message: "Incorrect email or password.",
             cause: {
                 status: appHttpStatus.unProcessableContent,
             },
@@ -74,7 +79,8 @@ async function signIn(properties: LoginProperties) {
     const isMatch = await HashService.compareHashed(properties.password, foundUser.password);
 
     if (!isMatch) {
-        throw new Error("Incorrect password.", {
+        throw new AppError({
+            message: "Incorrect password.",
             cause: {
                 status: appHttpStatus.unProcessableContent,
             },
@@ -108,7 +114,8 @@ async function sendVerificationCode(email: string, userId?: string) {
         });
 
         if (!foundUser) {
-            throw new Error("Incorrect email.", {
+            throw new AppError({
+                message: "Incorrect email.",
                 cause: {
                     status: appHttpStatus.unProcessableContent,
                 },
@@ -144,14 +151,16 @@ async function sendVerificationCode(email: string, userId?: string) {
 
 async function verifyAccount({ email, code }: Record<string, string>) {
     if (!email)
-        throw new Error("Email is required.", {
+        throw new AppError({
+            message: "Email is required.",
             cause: {
                 status: appHttpStatus.unProcessableContent,
             },
         });
 
     if (!code)
-        throw new Error("Verification code is required.", {
+        throw new AppError({
+            message: "Verification code is required.",
             cause: {
                 status: appHttpStatus.unProcessableContent,
             },
@@ -162,7 +171,8 @@ async function verifyAccount({ email, code }: Record<string, string>) {
     });
 
     if (!foundUser) {
-        throw new Error("User doesn't exist.", {
+        throw new AppError({
+            message: "User doesn't exist.",
             cause: {
                 status: appHttpStatus.notFound,
             },
@@ -170,7 +180,8 @@ async function verifyAccount({ email, code }: Record<string, string>) {
     }
 
     if (foundUser.verified) {
-        throw new Error("Account is already verified.", {
+        throw new AppError({
+            message: "Account is already verified.",
             cause: {
                 status: appHttpStatus.conflict,
             },
@@ -178,7 +189,8 @@ async function verifyAccount({ email, code }: Record<string, string>) {
     }
 
     if (foundUser.verificationCode !== code) {
-        throw new Error("Invalid verification code.", {
+        throw new AppError({
+            message: "Invalid verification code.",
             cause: {
                 status: appHttpStatus.unProcessableContent,
             },
@@ -186,7 +198,8 @@ async function verifyAccount({ email, code }: Record<string, string>) {
     }
 
     if (new Date() > foundUser.verificationCodeExpiresAt) {
-        throw new Error("Verification code has expired.", {
+        throw new AppError({
+            message: "Verification code has expired.",
             cause: {
                 status: appHttpStatus.unauthorized,
             },
@@ -214,7 +227,8 @@ async function verifyAccount({ email, code }: Record<string, string>) {
 
 async function forgotPassword(email: string) {
     if (!email)
-        throw new Error("Email missing!!", {
+        throw new AppError({
+            message: "Email missing!!",
             cause: {
                 status: appHttpStatus.unProcessableContent,
             },
@@ -261,14 +275,16 @@ async function verifyResetCode(properties: Record<string, string>) {
     const { resetCode, email } = properties;
 
     if (!resetCode)
-        throw new Error("Reset code missing!!", {
+        throw new AppError({
+            message: "Reset code missing!!",
             cause: {
                 status: appHttpStatus.unProcessableContent,
             },
         });
 
     if (!email)
-        throw new Error("Email is missing!!", {
+        throw new AppError({
+            message: "Email is missing!!",
             cause: {
                 status: appHttpStatus.unProcessableContent,
             },
@@ -281,7 +297,8 @@ async function verifyResetCode(properties: Record<string, string>) {
     });
 
     if (!foundUser) {
-        throw new Error("Invalid reset request!!", {
+        throw new AppError({
+            message: "Invalid reset request!!",
             cause: {
                 status: appHttpStatus.notFound,
             },
@@ -295,7 +312,8 @@ async function verifyResetCode(properties: Record<string, string>) {
     });
 
     if (!resetCodeEntry) {
-        throw new Error("Invalid reset code!!", {
+        throw new AppError({
+            message: "Invalid reset code!!",
             cause: {
                 status: appHttpStatus.unProcessableContent,
             },
@@ -303,7 +321,8 @@ async function verifyResetCode(properties: Record<string, string>) {
     }
 
     if (new Date() >= resetCodeEntry.expiresAt) {
-        throw new Error("Reset code expired!!", {
+        throw new AppError({
+            message: "Reset code expired!!",
             cause: {
                 status: appHttpStatus.unauthorized,
             },
@@ -313,7 +332,8 @@ async function verifyResetCode(properties: Record<string, string>) {
     const isCodeMatched = await HashService.compareHashed(resetCode, resetCodeEntry.code);
 
     if (!isCodeMatched) {
-        throw new Error("Invalid reset code!!", {
+        throw new AppError({
+            message: "Invalid reset code!!",
             cause: {
                 status: appHttpStatus.unauthorized,
             },
@@ -342,7 +362,8 @@ async function changePassword(properties: Record<string, string>) {
     const { userId, password } = properties;
 
     if (!password)
-        throw new Error("Password is required!!", {
+        throw new AppError({
+            message: "Password is required!!",
             cause: {
                 status: appHttpStatus.unProcessableContent,
             },
@@ -355,7 +376,8 @@ async function changePassword(properties: Record<string, string>) {
     });
 
     if (!foundUser)
-        throw new Error(`User doesn't exist!!!`, {
+        throw new AppError({
+            message: `User doesn't exist!!!`,
             cause: {
                 status: appHttpStatus.notFound,
             },
@@ -381,7 +403,8 @@ async function changePassword(properties: Record<string, string>) {
 
 async function refreshToken(token: string) {
     if (!token) {
-        throw new Error("Refresh token is missing!", {
+        throw new AppError({
+            message: "Refresh token is missing!",
             cause: {
                 status: appHttpStatus.unauthorized,
             },
@@ -396,7 +419,8 @@ async function refreshToken(token: string) {
     });
 
     if (!user) {
-        throw new Error("User not found", {
+        throw new AppError({
+            message: "User not found",
             cause: {
                 status: appHttpStatus.notFound,
             },
@@ -418,7 +442,8 @@ async function signOut(token: string) {
     });
 
     if (!storedToken) {
-        throw new Error("Already signed out.", {
+        throw new AppError({
+            message: "Already signed out.",
             cause: {
                 status: appHttpStatus.unauthorized,
             },
@@ -440,7 +465,8 @@ async function signOut(token: string) {
 
 async function manageTokens(userId: string, token?: string) {
     if (!userId) {
-        throw new Error("userId is missing.", {
+        throw new AppError({
+            message: "userId is missing.",
             cause: {
                 status: appHttpStatus.badRequest,
             },
@@ -452,21 +478,32 @@ async function manageTokens(userId: string, token?: string) {
     const newAccessToken = TokenService.generateAccessToken(tokenPayload);
     const newRefreshToken = TokenService.generateRefreshToken(tokenPayload);
 
-    await secretTerminalDb.$transaction(async (tx) => {
-        if (token) {
-            const storedToken = await tx.refreshToken.findUnique({
-                where: {
-                    token,
+    let storedToken: Token | null;
+
+    if (token) {
+        storedToken = await secretTerminalDb.refreshToken.findUnique({
+            where: {
+                token,
+            },
+        });
+
+        if (!storedToken) {
+            throw new AppError({
+                message: "Your session has expired. Please sign in again.",
+                cause: {
+                    status: appHttpStatus.unauthorized,
                 },
             });
+        }
+    }
 
-            if (storedToken) {
-                await tx.refreshToken.delete({
-                    where: {
-                        id: storedToken.id,
-                    },
-                });
-            }
+    await secretTerminalDb.$transaction(async (tx) => {
+        if (storedToken) {
+            await tx.refreshToken.delete({
+                where: {
+                    id: storedToken.id,
+                },
+            });
         }
 
         await tx.refreshToken.create({
@@ -524,7 +561,10 @@ async function mailVerificationCode(email: string, code: string) {
     try {
         await MailService.sendAccountVerificationCode(email, code);
     } catch (error) {
-        throw new Error("Failed to send verification email.");
+        throw new AppError({
+            message: "Failed to send verification email.",
+            cause: { status: appHttpStatus.internalServerError },
+        });
     }
 }
 

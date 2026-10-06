@@ -1,9 +1,11 @@
+import { AppError } from "../../classes/error.class.js";
 import { secretTerminalDb } from "../../config/db.js";
 import appHttpStatus from "../../constants/http-status-code.js";
 
 async function addWatchlist(body: Record<string, string>, userId: string) {
     if (!body.name) {
-        throw new Error("Name is required!!", {
+        throw new AppError({
+            message: "Name is required!!",
             cause: {
                 status: appHttpStatus.badRequest,
             },
@@ -18,7 +20,8 @@ async function addWatchlist(body: Record<string, string>, userId: string) {
     });
 
     if (foundWatchlist?.id) {
-        throw new Error(`${body.name} is already exist!!`, {
+        throw new AppError({
+            message: `${body.name} is already exist!!`,
             cause: {
                 status: appHttpStatus.unProcessableContent,
             },
@@ -42,7 +45,8 @@ async function addWatchlist(body: Record<string, string>, userId: string) {
 
 async function updateWatchlist(watchlistId: string, body: Record<string, string>) {
     if (!watchlistId) {
-        throw new Error("watchlistId is required!!", {
+        throw new AppError({
+            message: "watchlistId is required!!",
             cause: {
                 status: appHttpStatus.badRequest,
             },
@@ -68,7 +72,8 @@ async function updateWatchlist(watchlistId: string, body: Record<string, string>
 
 async function deleteWatchlist(watchlistId: string) {
     if (!watchlistId) {
-        throw new Error("watchlistId is required!!", {
+        throw new AppError({
+            message: "watchlistId is required!!",
             cause: {
                 status: appHttpStatus.badRequest,
             },

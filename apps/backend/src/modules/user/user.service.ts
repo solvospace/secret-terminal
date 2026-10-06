@@ -1,11 +1,10 @@
+import { AppError } from "../../classes/error.class.js";
 import { secretTerminalDb } from "../../config/db.js";
 import appHttpStatus from "../../constants/http-status-code.js";
 
 async function retrieveUserDetails(userId: string) {
     if (!userId) {
-        throw new Error("User ID is required.", {
-            cause: { status: appHttpStatus.badRequest },
-        });
+        throw new AppError({ message: "User ID is required.", cause: { status: appHttpStatus.badRequest } });
     }
 
     const foundUser = await secretTerminalDb.user.findUnique({
@@ -21,15 +20,11 @@ async function retrieveUserDetails(userId: string) {
     });
 
     if (!foundUser) {
-        throw new Error("User not found.", {
-            cause: { status: appHttpStatus.notFound },
-        });
+        throw new AppError({ message: "User not found.", cause: { status: appHttpStatus.notFound } });
     }
 
     if (!foundUser.verified) {
-        throw new Error("Account verification is pending.", {
-            cause: { status: appHttpStatus.forbidden },
-        });
+        throw new AppError({ message: "Account verification is pending.", cause: { status: appHttpStatus.forbidden } });
     }
 
     return {

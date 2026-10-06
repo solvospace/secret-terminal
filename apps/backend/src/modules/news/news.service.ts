@@ -1,10 +1,11 @@
 import { checkImageUrl } from "@secret-terminal/services/image.service";
 import appHttpStatus from "../../constants/http-status-code.js";
+import { AppError } from "../../classes/error.class.js";
 
 async function retrieveLatestNews() {
     try {
         if (!process.env.NEWS_API_KEY) {
-            throw new Error("Unauthorized");
+            throw new AppError({ message: "Unauthorized", cause: { status: appHttpStatus.unauthorized } });
         }
 
         const params: Record<string, string> = {
@@ -19,7 +20,12 @@ async function retrieveLatestNews() {
         const jsonData = await response.json();
 
         if (jsonData.status === "error") {
-            throw new Error(jsonData.results.message ? jsonData.results.message : jsonData.results[0].message);
+            throw new AppError({
+                message: jsonData.results.message ? jsonData.results.message : jsonData.results[0].message,
+                cause: {
+                    status: appHttpStatus.internalServerError,
+                },
+            });
         }
 
         const articles = await createResponseData(jsonData.results);
