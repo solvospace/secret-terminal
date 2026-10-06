@@ -450,14 +450,13 @@ async function signOut(token: string) {
         });
     }
 
-    const deletedToken = secretTerminalDb.refreshToken.delete({
+    await secretTerminalDb.refreshToken.delete({
         where: {
             id: storedToken.id,
         },
     });
 
     return {
-        deletedToken,
         message: "You have been logged out. Have a great day.",
         status: appHttpStatus.ok,
     };
