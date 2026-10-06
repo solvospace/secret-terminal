@@ -486,15 +486,6 @@ async function manageTokens(userId: string, token?: string) {
                 token,
             },
         });
-
-        if (!storedToken) {
-            throw new AppError({
-                message: "Your session has expired. Please sign in again.",
-                cause: {
-                    status: appHttpStatus.unauthorized,
-                },
-            });
-        }
     }
 
     await secretTerminalDb.$transaction(async (tx) => {
