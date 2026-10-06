@@ -13,16 +13,20 @@ const handleSuccess = (response: Response, result: ResultOptions) => {
 
 const handleFailure = (response: Response, error: unknown) => {
     if (error instanceof AppError) {
+        console.error(error.stack);
+
         return response.status(error.cause.status).json({
             message: error.message,
         });
     }
 
-    // if (error instanceof Error) {
-    //     return response.status(appHttpStatus.internalServerError).json({
-    //         message: error.message,
-    //     });
-    // }
+    if (error instanceof Error) {
+        console.error(error.stack);
+
+        return response.status(statusCode.internalServerError).json({
+            message: "We couldn't complete your request. Please try again later.",
+        });
+    }
 
     return response.status(statusCode.internalServerError).json({
         message: "Something went wrong. Please try again in a moment.",

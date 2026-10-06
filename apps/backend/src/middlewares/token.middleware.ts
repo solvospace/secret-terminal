@@ -2,12 +2,20 @@ import { Request, Response, NextFunction } from "express";
 import { Jwt } from "../types/jwt.types.js";
 import TokenService from "../services/token.service.js";
 import appHttpStatus from "../constants/http-status-code.js";
+import { AppError } from "../classes/error.class.js";
+import { handleFailure } from "../services/handle-response.service.js";
 
 export default async function tokenVerification(request: Request, response: Response, next: NextFunction) {
     try {
         const refreshToken = request.cookies.refreshToken;
 
-        if (!refreshToken) throw new Error("Your session has expired. Please sign in again.");
+        if (!refreshToken)
+            throw new AppError({
+                message: "Your session has expired. Please sign in again.",
+                cause: {
+                    status: appHttpStatus.unauthorized,
+                },
+            });
 
         const decodedRt = TokenService.verifyRefreshToken(refreshToken) as Jwt;
         if (decodedRt.error) throw new Error(decodedRt.error);
@@ -15,12 +23,7 @@ export default async function tokenVerification(request: Request, response: Resp
         setNoCacheHeaders(response);
         next();
     } catch (error) {
-        if (error instanceof Error) {
-            return response.status(appHttpStatus.unauthorized).json({
-                success: false,
-                message: error.message,
-            });
-        }
+        handleFailure(response, error);
     }
 }
 

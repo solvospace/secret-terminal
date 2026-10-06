@@ -1,4 +1,6 @@
 import { Resend } from "resend";
+import { AppError } from "../classes/error.class.js";
+import appHttpStatus from "../constants/http-status-code.js";
 
 async function sendResetCode(toEmailId: string, resetCode: string) {
     const resend = new Resend(process.env.RESET_CODE_MAIL_KEY);
@@ -16,7 +18,12 @@ async function sendResetCode(toEmailId: string, resetCode: string) {
     });
 
     if (error) {
-        throw new Error(error.message);
+        throw new AppError({
+            message: error.message,
+            cause: {
+                status: appHttpStatus.internalServerError,
+            },
+        });
     }
 }
 
@@ -36,7 +43,12 @@ async function sendAccountVerificationCode(toEmailId: string, verificationCode: 
     });
 
     if (error) {
-        throw new Error(error.message);
+        throw new AppError({
+            message: error.message,
+            cause: {
+                status: appHttpStatus.internalServerError,
+            },
+        });
     }
 }
 
