@@ -18,11 +18,11 @@ const handleFailure = (response: Response, error: unknown) => {
         });
     }
 
-    if (error instanceof Error) {
-        return response.status(appHttpStatus.internalServerError).json({
-            message: error.message,
-        });
-    }
+    // if (error instanceof Error) {
+    //     return response.status(appHttpStatus.internalServerError).json({
+    //         message: error.message,
+    //     });
+    // }
 
     return response.status(statusCode.internalServerError).json({
         message: "Something went wrong. Please try again in a moment.",
