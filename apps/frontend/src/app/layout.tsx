@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toast";
 import { ThemeProvider } from "@/contexts/theme.context";
 import type { Metadata } from "next";
 import type { Viewport } from "next";
+import appConfig from "@secret-terminal/config/app.config";
 
 const inter = Inter({
     weight: ["400", "500", "600", "700", "800", "900"],
@@ -13,8 +14,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-    title: "Secret Terminal",
-    description: "A simple coin app.",
+    title: appConfig.app.name,
+    description: appConfig.app.description,
 };
 
 export const viewport: Viewport = {

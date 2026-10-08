@@ -18,8 +18,6 @@
     "dependencies": {
         "@prisma/adapter-pg": "^7.8.0",
         "@prisma/client": "^7.8.0",
-        "@secret-terminal/services": "workspace:*",
-        "@secret-terminal/types": "workspace:*",
         "axios": "^1.19.0",
         "bcrypt": "^6.0.0",
         "cookie-parser": "^1.4.7",

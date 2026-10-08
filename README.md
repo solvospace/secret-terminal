@@ -1,7 +1,7 @@
 <div align="center">
   <h1>Secret Terminal</h1>
 
-  <div>A crypto app for live prices, coin insights, watchlists, and market news.</div>
+  <div>Open. Yours.</div>
 
   <div>
     Visit the app at

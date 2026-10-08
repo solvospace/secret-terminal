@@ -1,10 +1,11 @@
 import { MetadataRoute } from "next";
+import appConfig from "@secret-terminal/config/app.config";
 
 export default function manifest(): MetadataRoute.Manifest {
     return {
-        name: "Secret Terminal",
-        short_name: "Secret Terminal",
-        description: "A simple coin app.",
+        name: appConfig.app.name,
+        short_name: appConfig.app.name,
+        description: appConfig.app.description,
         theme_color: "#ffffff",
         background_color: "#ffffff",
         display: "standalone",

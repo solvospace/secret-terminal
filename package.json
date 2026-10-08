@@ -1,6 +1,7 @@
 {
     "name": "secret-terminal",
     "license": "AGPL-3.0-or-later",
+    "version": "0.1.7",
     "private": true,
     "scripts": {
         "dev": "concurrently \"turbo run dev --concurrency=10\" \"wait-on http://localhost:3000 && open http://localhost:3000\"",
@@ -16,6 +17,11 @@
         "@types/node": "24.1.0",
         "typescript": "6.0.3",
         "eslint": "9.39.1"
+    },
+    "dependencies": {
+        "@secret-terminal/services": "workspace:*",
+        "@secret-terminal/config": "workspace:*",
+        "@secret-terminal/types": "workspace:*"
     },
     "packageManager": "pnpm@12.6.0",
     "engines": {
