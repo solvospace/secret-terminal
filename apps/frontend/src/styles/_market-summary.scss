@@ -31,11 +31,12 @@
                     cursor: pointer;
                     display: flex;
                     align-items: center;
-                    color: #007aff;
+                    color: var(--link-color);
 
                     &:hover {
                         text-decoration: underline;
                         font-weight: 500;
+                        color: var(--link-hover-color);
                     }
 
                     .lucide-chevron-right {
