@@ -1,6 +1,6 @@
 "use client";
 
-import { appSettings } from "@/constants/settings.constants";
+import appConfig from "@secret-terminal/config/app.config";
 
 export default function Home() {
     return (
@@ -13,7 +13,7 @@ export default function Home() {
                 className="go-to-terminal-btn"
                 onClick={(event) => {
                     event?.preventDefault();
-                    window.open(appSettings.links.appUrl);
+                    window.open(appConfig.links.app);
                 }}
             >
                 Go to Terminal

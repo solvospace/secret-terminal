@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { LuGithub } from "react-icons/lu";
 import { ThemeToggle } from "../ui/theme-toggle";
-import { appSettings } from "@/constants/settings.constants";
+import appConfig from "@secret-terminal/config/app.config";
 
 export default function Header() {
     return (
@@ -18,7 +18,7 @@ export default function Header() {
             <div className="flex gap-3 sm:ml-0">
                 <Link
                     aria-label="View the repository on GitHub"
-                    href={appSettings.links.github}
+                    href={appConfig.social.github}
                     rel="noopener noreferrer"
                     target="_blank"
                     title="View the repository on GitHub"

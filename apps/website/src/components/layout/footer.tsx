@@ -1,6 +1,6 @@
 "use client";
 
-import { ownerSettings } from "@/constants/settings.constants";
+import appConfig from "@secret-terminal/config/app.config";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 
@@ -16,13 +16,13 @@ export function Footer() {
             <p className="items-center">
                 &copy; {currentYear}
                 <Link
-                    aria-label={ownerSettings.name}
+                    aria-label={appConfig.owner.name}
                     className="font-semibold ml-[4px]"
-                    href={ownerSettings.links.website}
-                    title={ownerSettings.name}
+                    href={appConfig.owner.links.website}
+                    title={appConfig.owner.name}
                     target="_blank"
                 >
-                    {ownerSettings.name}
+                    {appConfig.owner.name}
                 </Link>
                 .
             </p>
