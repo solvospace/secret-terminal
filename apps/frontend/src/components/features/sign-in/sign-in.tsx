@@ -78,7 +78,7 @@ export default memo(function signIn(bindings: Bindings) {
                             ref={captchaRef}
                             id="invisible-hcaptcha"
                             size="invisible"
-                            sitekey={`25c209b8-9de8-464c-83fe-317e4a241aca`}
+                            sitekey={`${process.env.NEXT_PUBLIC_CAPTCHA_SITE_KEY}`}
                             onExpire={() => {
                                 captchaRef.current?.resetCaptcha();
                             }}
