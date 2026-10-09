@@ -4,9 +4,9 @@
     flex-wrap: balance;
 
     .st-sidebar {
-        height: calc(100vh - var(--header-height));
+        height: calc(100vh - var(--header-height) - env(safe-area-inset-bottom));
         z-index: 100;
         margin-top: var(--header-height);
-        padding: 0px 0px env(safe-area-inset-bottom) env(safe-area-inset-left);
+        padding: 0px 0px 0px env(safe-area-inset-left);
     }
 }

@@ -63,7 +63,7 @@ export function StSidebar() {
                 <SidebarFooter>
                     <SidebarTrigger
                         bindings={{
-                            label: "Collapse menu",
+                            label: "Close sidebar",
                         }}
                     />
                 </SidebarFooter>
