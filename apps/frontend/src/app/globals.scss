@@ -132,8 +132,9 @@
 
     --header-height: 45px;
 
-    --link-color: #006d77;
-    --link-hover-color: #00545c;
+    --link-color: #6b7280;
+    --link-hover-color: #374151;
+    --link-active-color: #111827;
 
     --img-bg: var(--main-bg-color);
 }
@@ -214,6 +215,10 @@
 
     --profile-bg-color: var(--main-bg-color);
     --img-bg: #fafbfa;
+
+    --link-color: #a0a7b4;
+    --link-hover-color: #d1d5db;
+    --link-active-color: #ffffff;
 }
 
 @layer base {

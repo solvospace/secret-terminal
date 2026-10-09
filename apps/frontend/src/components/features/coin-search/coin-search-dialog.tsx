@@ -88,7 +88,11 @@ function CoinSearchDialog(bindings: Bindings) {
                                     </InputGroupAddon>
                                 </InputGroup>
 
-                                <div className={`ml-[8px] cursor-pointer text-[12px] text-[var(--grey-color-3)]`}>
+                                <div
+                                    className={`ml-[8px] cursor-pointer text-[12px]
+                                                text-[var(--link-color)] hover:text-[var(--link-hover-color)]
+                                                hover:underline`}
+                                >
                                     <a
                                         onClick={() => {
                                             if (onDialogClose) onDialogClose();
