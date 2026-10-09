@@ -443,7 +443,7 @@ async function signOut(token: string) {
 
     if (!storedToken) {
         throw new AppError({
-            message: "Already signed out.",
+            message: "Please clear this site's cookies and sign in again.",
             cause: {
                 status: appHttpStatus.unauthorized,
             },
