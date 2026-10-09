@@ -134,6 +134,8 @@
 
     --link-color: #006d77;
     --link-hover-color: #00545c;
+
+    --img-bg: var(--main-bg-color);
 }
 
 .dark {
@@ -211,6 +213,7 @@
     --scrollbar-track: #111318;
 
     --profile-bg-color: var(--main-bg-color);
+    --img-bg: #fafbfa;
 }
 
 @layer base {
