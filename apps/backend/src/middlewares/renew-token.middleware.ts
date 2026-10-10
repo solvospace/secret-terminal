@@ -22,7 +22,15 @@ export default async function renewToken(request: Request, response: Response, n
         }
 
         const decodedRt = TokenService.verifyRefreshToken(refreshToken) as Jwt;
-        if (decodedRt.error) throw new Error(decodedRt.error);
+
+        if (decodedRt.error) {
+            throw new AppError({
+                message: "Your session has expired. Please sign in again.",
+                cause: {
+                    status: appHttpStatus.unauthorized,
+                },
+            });
+        }
 
         userId = decodedRt.payload.userId;
 
