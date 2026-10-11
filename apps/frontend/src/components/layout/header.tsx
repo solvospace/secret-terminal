@@ -9,6 +9,7 @@ import { Search } from "lucide-react";
 import { ThemeToggle } from "../ui/theme-toggle";
 import { SidebarTrigger } from "../ui/sidebar";
 import { useSidebar } from "../ui/sidebar";
+import { Button } from "../ui/button";
 
 export default function Header() {
     const { showSearchDialog, setShowSearchDialog } = useHeader();
@@ -27,6 +28,7 @@ export default function Header() {
                                 }}
                             />
                         )}
+
                         <Link
                             href="/"
                             className={`logo`}
@@ -35,14 +37,30 @@ export default function Header() {
                         </Link>
                     </div>
 
-                    <div className="header-right-side-container">
-                        <Search
-                            className="cursor-pointer"
-                            size={iconSize}
-                            onClick={() => {
-                                setShowSearchDialog(true);
-                            }}
-                        />
+                    {!isMobile && (
+                        <div className="search-bar">
+                            <Button
+                                variant={"outline"}
+                                onClick={() => {
+                                    setShowSearchDialog(true);
+                                }}
+                            >
+                                <Search className="size-4 mr-[4px]" />
+                                Search by name...
+                            </Button>
+                        </div>
+                    )}
+
+                    <div className="right-side-container">
+                        {isMobile && (
+                            <Search
+                                className="cursor-pointer"
+                                size={iconSize}
+                                onClick={() => {
+                                    setShowSearchDialog(true);
+                                }}
+                            />
+                        )}
 
                         <ThemeToggle />
 

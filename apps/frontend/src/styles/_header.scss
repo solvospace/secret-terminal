@@ -38,7 +38,27 @@
             }
         }
 
-        .header-right-side-container {
+        .search-bar {
+            button {
+                min-width: 320px;
+                color: var(--grey-color-2);
+                font-weight: unset !important;
+                background-color: hsl(from var(--grey-color-1) h s 94.5%);
+                text-align: left;
+                justify-content: unset;
+                align-items: center;
+                box-shadow: unset;
+                border-color: var(--border-color);
+                font-size: 13px;
+
+                .dark & {
+                    color: var(--grey-color-3) !important;
+                    background-color: var(--main-bg-color);
+                }
+            }
+        }
+
+        .right-side-container {
             display: flex;
             justify-content: flex-end;
             align-items: center;

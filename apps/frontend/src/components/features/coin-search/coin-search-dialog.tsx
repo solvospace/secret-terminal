@@ -52,7 +52,6 @@ function CoinSearchDialog(bindings: Bindings) {
                         onDialogClose();
                     }
                 }}
-                disableCloseOnOutsideClick={true}
             >
                 <DialogContent dialogLevel={dialogLevel}>
                     <DialogHeader
