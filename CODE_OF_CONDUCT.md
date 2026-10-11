@@ -43,7 +43,7 @@ We agree to restrict the following behaviors in our community. Instances, threat
 
 Tensions can occur between community members even when they are trying their best to collaborate. Not every conflict represents a Code of Conduct violation, and this Code of Conduct reinforces encouraged behaviors and norms that can help avoid conflicts and minimize harm.
 
-When an incident does occur, it is important to report it promptly. For general, non-sensitive questions, feel free to open an issue on this repository. Because Code of Conduct reports need to stay confidential, please instead send a direct message to the maintainer, Shubham Tak, via [LinkedIn](https://www.linkedin.com/in/shubhamtak007/).
+When an incident does occur, it is important to report it promptly. For general, non-sensitive questions, feel free to open an issue on this repository. Because Code of Conduct reports need to stay confidential, please instead send an email to **compliance@solvospace.com**.
 
 Community Moderators take reports of violations seriously and will make every effort to respond in a timely manner. They will investigate all reports of Code of Conduct violations, reviewing messages, logs, and recordings, or interviewing witnesses and other participants.
 
@@ -89,7 +89,7 @@ A pattern of repeated violations that the Community Moderators have tried to add
 
 **Consequence:**
 
-A private written warning with conditions for return from suspension. In general, temporary suspensions give the person being suspended time to reflect upon their behavior and possible corrective actions.
+A private, written warning with conditions for return from suspension. In general, temporary suspensions give the person being suspended time to reflect upon their behavior and possible corrective actions.
 
 **Repair:**
 
@@ -113,7 +113,7 @@ This enforcement ladder is intended as a guideline. It does not limit the abilit
 
 ## Appeals
 
-If you believe an enforcement decision was made in error, you may request a review by contacting the maintainer, Shubham Tak, via [LinkedIn](https://www.linkedin.com/in/shubhamtak007/).
+If you believe an enforcement decision was made in error, you may request a review by contacting the compliance team at **compliance@solvospace.com**.
 
 Appeals will be reviewed fairly and, where possible, by someone who was not directly involved in the original decision.
 
