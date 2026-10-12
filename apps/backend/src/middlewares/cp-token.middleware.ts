@@ -1,19 +1,41 @@
 import { Request, Response, NextFunction } from "express";
-import TokenService from "../services/token.service.js";
 import { Jwt } from "../types/jwt.types.js";
+import { AppError } from "../classes/error.class.js";
+import { handleFailure } from "../services/handle-response.service.js";
+import TokenService from "../services/token.service.js";
 import appHttpStatus from "../constants/http-status-code.js";
 
 export default function cpTokenVerification(request: Request, response: Response, next: NextFunction) {
     try {
         const cpt = request.cookies.cpt;
 
-        if (!cpt) throw new Error("Your session has expired. Please try again.");
+        if (!cpt) {
+            throw new AppError({
+                message: "Your session has expired. Please try again.",
+                cause: {
+                    status: appHttpStatus.unauthorized,
+                },
+            });
+        }
 
         const decodedCpt = TokenService.verifyAccessToken(cpt) as Jwt;
-        if (decodedCpt.error) throw new Error(decodedCpt.error);
+
+        if (decodedCpt.error) {
+            throw new AppError({
+                message: decodedCpt.error,
+                cause: {
+                    status: appHttpStatus.unauthorized,
+                },
+            });
+        }
 
         if (decodedCpt.payload.purpose !== "change-password" || !decodedCpt.payload.userId) {
-            throw new Error("Invalid token!!");
+            throw new AppError({
+                message: "Your session has expired. Please try again.",
+                cause: {
+                    status: appHttpStatus.unauthorized,
+                },
+            });
         }
 
         setNoCacheHeaders(response);
@@ -22,12 +44,7 @@ export default function cpTokenVerification(request: Request, response: Response
 
         next();
     } catch (error) {
-        if (error instanceof Error) {
-            return response.status(appHttpStatus.unauthorized).json({
-                success: false,
-                message: error.message,
-            });
-        }
+        handleFailure(response, error);
     }
 }
 
