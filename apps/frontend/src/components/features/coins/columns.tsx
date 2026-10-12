@@ -69,7 +69,7 @@ export const columns: ColumnDef<StCoin>[] = [
 
                     <DropdownMenuContent>
                         <DropdownMenuItem
-                            onSelect={() => {
+                            onClick={() => {
                                 sortByFn("id_asc");
                             }}
                         >
@@ -78,7 +78,7 @@ export const columns: ColumnDef<StCoin>[] = [
                         </DropdownMenuItem>
 
                         <DropdownMenuItem
-                            onSelect={() => {
+                            onClick={() => {
                                 sortByFn("id_desc");
                             }}
                         >
@@ -88,7 +88,7 @@ export const columns: ColumnDef<StCoin>[] = [
 
                         <DropdownMenuItem
                             disabled={!currentSortingValue?.startsWith("id_")}
-                            onSelect={() => {
+                            onClick={() => {
                                 sortByFn(null);
                             }}
                         >
@@ -251,7 +251,7 @@ export const columns: ColumnDef<StCoin>[] = [
 
                     <DropdownMenuContent>
                         <DropdownMenuItem
-                            onSelect={() => {
+                            onClick={() => {
                                 sortByFn("volume_asc");
                             }}
                         >
@@ -260,7 +260,7 @@ export const columns: ColumnDef<StCoin>[] = [
                         </DropdownMenuItem>
 
                         <DropdownMenuItem
-                            onSelect={() => {
+                            onClick={() => {
                                 sortByFn("volume_desc");
                             }}
                         >
@@ -270,7 +270,7 @@ export const columns: ColumnDef<StCoin>[] = [
 
                         <DropdownMenuItem
                             disabled={!currentSortingValue?.startsWith("volume_")}
-                            onSelect={() => {
+                            onClick={() => {
                                 sortByFn(null);
                             }}
                         >
@@ -332,7 +332,7 @@ export const columns: ColumnDef<StCoin>[] = [
 
                     <DropdownMenuContent>
                         <DropdownMenuItem
-                            onSelect={() => {
+                            onClick={() => {
                                 sortByFn("market_cap_asc");
                             }}
                         >
@@ -341,7 +341,7 @@ export const columns: ColumnDef<StCoin>[] = [
                         </DropdownMenuItem>
 
                         <DropdownMenuItem
-                            onSelect={() => {
+                            onClick={() => {
                                 sortByFn("market_cap_desc");
                             }}
                         >
@@ -351,7 +351,7 @@ export const columns: ColumnDef<StCoin>[] = [
 
                         <DropdownMenuItem
                             disabled={!currentSortingValue?.startsWith("market_cap")}
-                            onSelect={() => {
+                            onClick={() => {
                                 sortByFn(null);
                             }}
                         >
