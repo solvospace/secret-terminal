@@ -1,4 +1,4 @@
-import { NavigationBarTab } from "@/interfaces/global.interface";
+import { SidebarMenu } from "@/interfaces/global.interface";
 import { Home, Newspaper, BookmarkPlus, ChartNoAxesColumn, LucideIcon, Coins } from "lucide-react";
 
 const coinKeyList = [
@@ -52,19 +52,19 @@ const coinsTableContextMenuList: Record<string, string>[] = ["View Details", "An
     return { id: crypto.randomUUID(), name };
 });
 
-const sidebarMenuList: NavigationBarTab[] = [
+const sidebarMenuList: SidebarMenu[] = [
     { name: "Home", value: "home" },
     { name: "Coins", value: "coins" },
     { name: "Watchlist", value: "watchlist" },
     { name: "Analysis", value: "coin-analysis" },
     { name: "News", value: "news" },
-].map((tab) => {
+].map((menu) => {
     return {
         id: crypto.randomUUID(),
-        name: tab.name,
-        value: tab.value,
+        name: menu.name,
+        value: menu.value,
         disabled: false,
-        icon: getIcon(tab.value),
+        icon: getIcon(menu.value),
     };
 });
 

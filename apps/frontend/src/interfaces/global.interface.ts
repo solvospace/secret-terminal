@@ -2,16 +2,17 @@ import { LucideIcon } from "lucide-react";
 import { Dispatch, SetStateAction } from "react";
 
 type DialogProps = {
-    showDialog: boolean,
-    setShowDialog: Dispatch<SetStateAction<boolean>>
-}
+    showDialog: boolean;
+    setShowDialog: Dispatch<SetStateAction<boolean>>;
+};
 
-type NavigationBarTab = {
-    id: string,
-    name: string,
-    value: string,
-    disabled?: boolean,
-    icon: LucideIcon
-}
+type SidebarMenu = {
+    id: string;
+    name: string;
+    value: string;
+    disabled?: boolean;
+    icon: LucideIcon;
+    externalUrl?: string | null;
+};
 
-export type { DialogProps, NavigationBarTab };
+export type { DialogProps, SidebarMenu };

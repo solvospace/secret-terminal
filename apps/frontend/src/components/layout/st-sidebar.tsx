@@ -29,6 +29,7 @@ export function StSidebar() {
                     <SidebarGroup>
                         {menuList.map((menu) => {
                             const Icon = menu.icon;
+                            console.log(menu.externalUrl);
 
                             return (
                                 <SidebarMenu key={menu.id}>
@@ -37,21 +38,26 @@ export function StSidebar() {
                                             tooltip={menu.name}
                                             disabled={menu.disabled}
                                             isActive={activeTab === menu.value}
-                                            onClick={(event) => {
-                                                onMenuItemClick(event, menu.value);
-                                                if (isMobile) toggleSidebar();
-                                            }}
                                             style={
                                                 {
                                                     "--sidebar-icon-size": sidebarIconSize,
                                                 } as React.CSSProperties
                                             }
                                         >
-                                            <Icon
-                                                className="!size-[var(--sidebar-icon-size)]"
-                                                size={iconSize}
-                                            />
-                                            {menu.name}
+                                            <a
+                                                href={menu.externalUrl ?? "#"}
+                                                onClick={(event) => {
+                                                    onMenuItemClick(event, menu.value);
+                                                    if (isMobile) toggleSidebar();
+                                                }}
+                                                className="flex gap-2 w-full"
+                                            >
+                                                <Icon
+                                                    className="!size-[var(--sidebar-icon-size)]"
+                                                    size={iconSize}
+                                                />
+                                                {menu.name}
+                                            </a>
                                         </SidebarMenuButton>
                                     </SidebarMenuItem>
                                 </SidebarMenu>

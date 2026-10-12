@@ -4,23 +4,29 @@ import { useState, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { sidebarMenuList } from "@/constants/app.constants";
 import { useUser } from "@/contexts/user.context";
-import { NavigationBarTab } from "@/interfaces/global.interface";
+import { SidebarMenu } from "@/interfaces/global.interface";
 import { Route } from "next";
 
 export default function useStSidebar() {
     const router = useRouter();
     const pathName = usePathname();
     const [activeTab, setActiveTab] = useState<string>("home");
-    const [scrollEnded, setScrollEnded] = useState<boolean>(false);
     const [dialogType, setDialogType] = useState<string | null>(null);
     const [showDialog, setShowDialog] = useState<boolean>(false);
-    const [menuList, setMenuList] = useState<NavigationBarTab[]>([]);
+    const [menuList, setMenuList] = useState<SidebarMenu[]>([]);
     const { user } = useUser();
+
+    useEffect(() => {
+        for (const path of ["/", "/coins"]) {
+            router.prefetch(path as Route);
+        }
+    }, []);
 
     useEffect(() => {
         if (!sidebarMenuList || sidebarMenuList.length === 0) return;
 
         for (const menu of sidebarMenuList) {
+            menu.externalUrl = getExternalUrl(menu.value);
             menu.disabled = false;
 
             if ((!user || !user.id) && menu.value === "watchlist") {
@@ -28,7 +34,7 @@ export default function useStSidebar() {
             }
         }
 
-        setMenuList((previousTabList: NavigationBarTab[]) => {
+        setMenuList((previousTabList: SidebarMenu[]) => {
             return previousTabList.length > 0
                 ? previousTabList.map((previousTab) => {
                       const foundTab = sidebarMenuList.find((currentTab) => previousTab.id === currentTab.id);
@@ -43,31 +49,6 @@ export default function useStSidebar() {
     }, [sidebarMenuList, user]);
 
     useEffect(() => {
-        for (const path of ["/", "/coins"]) {
-            router.prefetch(path as Route);
-        }
-
-        const rootScope = globalThis ?? window ?? null;
-
-        function handleScroll() {
-            const { innerHeight, scrollY } = rootScope;
-            const { offsetHeight } = document.body;
-
-            if (innerHeight + Math.round(scrollY) >= offsetHeight) {
-                setScrollEnded(true);
-            } else {
-                setScrollEnded(false);
-            }
-        }
-
-        rootScope.addEventListener("scroll", handleScroll);
-
-        return () => {
-            rootScope.removeEventListener("scroll", handleScroll);
-        };
-    }, []);
-
-    useEffect(() => {
         switch (pathName) {
             case "/":
                 setActiveTab("home");
@@ -79,37 +60,48 @@ export default function useStSidebar() {
         }
     }, [pathName]);
 
-    function onMenuItemClick(event: React.MouseEvent<HTMLButtonElement>, value: string) {
-        let route;
-
-        switch (value) {
-            case "home":
-                route = "/";
-                break;
-            case "news":
-                setDialogType("news");
-                setShowDialog(true);
-                break;
-            case "watchlist":
-                setDialogType("watchlist");
-                setShowDialog(true);
-                break;
-            case "coin-analysis":
-                setDialogType("coin-analysis");
-                setShowDialog(true);
-                break;
-            case "coins":
-                route = "/coins";
-                break;
-            default:
-                route = "/";
-                break;
-        }
+    function onMenuItemClick(event: React.MouseEvent<HTMLAnchorElement>, value: string) {
+        event.preventDefault();
+        let route = getRoutes(value);
 
         if (route) {
             router.push(route as Route);
         }
     }
 
-    return { scrollEnded, activeTab, onMenuItemClick, dialogType, showDialog, setShowDialog, menuList };
+    function getRoutes(value: string) {
+        switch (value) {
+            case "home":
+                return "/";
+            case "news":
+                setDialogType("news");
+                setShowDialog(true);
+                return;
+            case "watchlist":
+                setDialogType("watchlist");
+                setShowDialog(true);
+                return;
+            case "coin-analysis":
+                setDialogType("coin-analysis");
+                setShowDialog(true);
+                return;
+            case "coins":
+                return "/coins";
+            default:
+                return "/";
+        }
+    }
+
+    function getExternalUrl(value: string) {
+        const origin = globalThis.location?.origin;
+
+        const urls: Record<string, string> = {
+            home: `${origin}`,
+            coins: `${origin}/${value}`,
+        };
+
+        return urls[value] ?? `${origin}}`;
+    }
+
+    return { activeTab, onMenuItemClick, dialogType, showDialog, setShowDialog, menuList };
 }
