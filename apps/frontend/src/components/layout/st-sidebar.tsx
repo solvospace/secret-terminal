@@ -45,11 +45,12 @@ export function StSidebar() {
                                         >
                                             <a
                                                 href={menu.externalUrl ?? "#"}
+                                                aria-disabled={menu.disabled}
                                                 onClick={(event) => {
                                                     onMenuItemClick(event, menu.value);
                                                     if (isMobile) toggleSidebar();
                                                 }}
-                                                className="flex gap-2 w-full"
+                                                className={`flex gap-2 w-full ${menu.disabled && "pointer-events-none"}`}
                                             >
                                                 <Icon
                                                     className="!size-[var(--sidebar-icon-size)]"

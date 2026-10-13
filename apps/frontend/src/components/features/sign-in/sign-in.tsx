@@ -248,14 +248,17 @@ export default memo(function signIn(bindings: Bindings) {
                                                         </div>
 
                                                         {formType === "signIn" && (
-                                                            <a
-                                                                className={`text-[var(--grey-color-3)] cursor-pointer ${submittingData && "disable-element"}`}
-                                                                onClick={() => {
-                                                                    setFormType("forgotPassword");
-                                                                }}
-                                                            >
-                                                                Forgot password?
-                                                            </a>
+                                                            <div className={`${submittingData && "disable-wrapper"}`}>
+                                                                <a
+                                                                    className={`link-text ${submittingData && "disable-element"}`}
+                                                                    aria-disabled={submittingData}
+                                                                    onClick={() => {
+                                                                        setFormType("forgotPassword");
+                                                                    }}
+                                                                >
+                                                                    Forgot password?
+                                                                </a>
+                                                            </div>
                                                         )}
                                                     </div>
                                                 </label>
@@ -337,7 +340,7 @@ export default memo(function signIn(bindings: Bindings) {
                             "Already have an account?"}
 
                         <a
-                            className="underline cursor-pointer ml-[3px]"
+                            className="link-text !ml-[2px] !text-[12px]"
                             onClick={() => {
                                 setFormType(formType === "signIn" ? "signUp" : "signIn");
                                 resetForm();

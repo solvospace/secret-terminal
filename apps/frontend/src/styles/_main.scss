@@ -134,11 +134,13 @@ body {
     border-right: 1px solid var(--border-color);
 }
 
-.disable-element {
-    pointer-events: none !important;
-    color: gray !important;
+.disable-wrapper {
     cursor: not-allowed !important;
-    text-decoration: none !important;
+
+    .disable-element {
+        pointer-events: none !important;
+        opacity: 0.7 !important;
+    }
 }
 
 .top-loading-bar {

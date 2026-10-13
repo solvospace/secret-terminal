@@ -3,3 +3,16 @@
     font-weight: 600;
     margin-bottom: 8px;
 }
+
+.link-text {
+    color: var(--link-color);
+    margin-left: 8px;
+    font-size: 13px;
+
+    &:hover {
+        color: var(--link-hover-color);
+        cursor: pointer;
+        text-decoration: underline;
+        font-weight: 500;
+    }
+}

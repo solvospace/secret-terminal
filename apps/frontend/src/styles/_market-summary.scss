@@ -28,16 +28,9 @@
                 color: var(--th-color);
 
                 .more-link {
-                    cursor: pointer;
                     display: flex;
                     align-items: center;
-                    color: var(--link-color);
-
-                    &:hover {
-                        text-decoration: underline;
-                        font-weight: 500;
-                        color: var(--link-hover-color);
-                    }
+                    @extend .link-text;
 
                     .lucide-chevron-right {
                         width: 13px;
