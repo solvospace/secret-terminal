@@ -1,6 +1,7 @@
 import { checkImageUrl } from "@secret-terminal/services/image.service";
 import appHttpStatus from "../../constants/http-status-code.js";
 import { AppError } from "../../classes/error.class.js";
+import { cleanResponse } from "../../services/clean-response.service.js";
 
 async function retrieveLatestNews() {
     try {
@@ -33,7 +34,7 @@ async function retrieveLatestNews() {
         return {
             status: appHttpStatus.ok,
             data: {
-                data: articles,
+                data: cleanResponse(articles),
                 nextPage: jsonData.nextPage,
             },
         };
