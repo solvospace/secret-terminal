@@ -25,11 +25,10 @@ export function StSidebar() {
     return (
         <>
             <Sidebar collapsible="icon">
-                <SidebarContent>
+                <SidebarContent id="st-sidebar-content">
                     <SidebarGroup>
                         {menuList.map((menu) => {
                             const Icon = menu.icon;
-                            console.log(menu.externalUrl);
 
                             return (
                                 <SidebarMenu key={menu.id}>

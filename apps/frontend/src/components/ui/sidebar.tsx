@@ -89,6 +89,52 @@ function SidebarProvider({
         return isMobile ? setOpenMobile((open) => !open) : setOpen((open) => !open);
     }, [isMobile, setOpen, setOpenMobile]);
 
+    React.useEffect(() => {
+        const stSidebar = document.querySelector(".st-sidebar") as HTMLDivElement | null;
+
+        const openLinkInNewTab = (link: HTMLAnchorElement) => {
+            const newLink = document.createElement("a");
+
+            Object.assign(newLink, {
+                href: link.href,
+                target: "_blank",
+                rel: "noopener noreferrer",
+            }).click();
+
+            newLink.remove();
+        };
+
+        const handleKeyDown = (event: KeyboardEvent) => {
+            const target = event.target as HTMLElement;
+            const link = target.closest("a");
+
+            if (link instanceof HTMLAnchorElement && (event.metaKey || event.ctrlKey) && event.key === "Enter") {
+                event.preventDefault();
+                event.stopPropagation();
+                openLinkInNewTab(link);
+            }
+        };
+
+        const handleClick = (event: MouseEvent) => {
+            const target = event.target as HTMLElement;
+            const link = target.closest("a");
+
+            if (link instanceof HTMLAnchorElement && (event.metaKey || event.ctrlKey)) {
+                event.preventDefault();
+                event.stopPropagation();
+                openLinkInNewTab(link);
+            }
+        };
+
+        stSidebar?.addEventListener("keydown", handleKeyDown);
+        stSidebar?.addEventListener("click", handleClick);
+
+        return () => {
+            stSidebar?.removeEventListener("keydown", handleKeyDown);
+            stSidebar?.removeEventListener("click", handleClick);
+        };
+    }, []);
+
     // Adds a keyboard shortcut to toggle the sidebar.
     React.useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {

@@ -96,11 +96,11 @@ export default function useStSidebar() {
         const origin = globalThis.location?.origin;
 
         const urls: Record<string, string> = {
-            home: `${origin}`,
+            home: origin,
             coins: `${origin}/${value}`,
         };
 
-        return urls[value] ?? `${origin}}`;
+        return urls[value] ?? origin;
     }
 
     return { activeTab, onMenuItemClick, dialogType, showDialog, setShowDialog, menuList };
