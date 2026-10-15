@@ -477,21 +477,12 @@ async function manageTokens(userId: string, token?: string) {
     const newAccessToken = TokenService.generateAccessToken(tokenPayload);
     const newRefreshToken = TokenService.generateRefreshToken(tokenPayload);
 
-    let storedToken: Token | null;
-
-    if (token) {
-        storedToken = await secretTerminalDb.refreshToken.findUnique({
-            where: {
-                token,
-            },
-        });
-    }
-
     await secretTerminalDb.$transaction(async (tx) => {
-        if (storedToken) {
-            await tx.refreshToken.delete({
+        if (token) {
+            await tx.refreshToken.deleteMany({
                 where: {
-                    id: storedToken.id,
+                    token,
+                    userId,
                 },
             });
         }
