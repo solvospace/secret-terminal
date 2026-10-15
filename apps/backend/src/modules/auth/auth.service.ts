@@ -512,14 +512,14 @@ function setResponseHeaders(response: Response, result: { accessToken: string; r
     response.cookie("accessToken", result.accessToken, {
         httpOnly: true,
         secure: true,
-        maxAge: 15 * 60 * 1000,
+        maxAge: Number(process.env.COOKIE_AT_AGE),
         sameSite: "none",
     });
 
     response.cookie("refreshToken", result.refreshToken, {
         httpOnly: true,
         secure: true,
-        maxAge: 7 * 24 * 60 * 60 * 1000,
+        maxAge: Number(process.env.COOKIE_RT_AGE),
         sameSite: "none",
     });
 }
