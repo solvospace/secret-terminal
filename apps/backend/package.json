@@ -1,7 +1,6 @@
 {
     "name": "backend",
-    "version": "1.0.0",
-    "description": "",
+    "private": true,
     "main": "index.js",
     "scripts": {
         "dev": "node --watch --inspect=9230 --import tsx src/server.ts",
