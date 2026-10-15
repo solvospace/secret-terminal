@@ -9,8 +9,6 @@ await connectDatabases();
 
 const app = express();
 
-const BODY_LIMIT = "2mb";
-
 const allowedOrigins =
     process.env.CORS_ORIGINS?.split(",")
         .map((origin) => origin.trim())
@@ -50,18 +48,18 @@ app.use(
     }),
 );
 
-app.use(express.json({ limit: BODY_LIMIT }));
+app.use(express.json({ limit: process.env.BODY_LIMIT }));
 
 app.use(
     express.urlencoded({
         extended: true,
-        limit: BODY_LIMIT,
+        limit: process.env.BODY_LIMIT,
     }),
 );
 
-app.use(express.text({ limit: BODY_LIMIT }));
+app.use(express.text({ limit: process.env.BODY_LIMIT }));
 
-app.use(express.raw({ limit: BODY_LIMIT }));
+app.use(express.raw({ limit: process.env.BODY_LIMIT }));
 
 app.use(cookieParser());
 
