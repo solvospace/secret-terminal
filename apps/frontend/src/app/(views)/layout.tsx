@@ -6,7 +6,7 @@ import { LoadingContextProvider } from "@/contexts/loading.context";
 import { TouchDetectorContextProvider } from "@/contexts/touch-detector.context";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { StSidebar } from "@/components/layout/st-sidebar";
-import { sidebarWidth } from "@/constants/app.constants";
+import { sidebarWidth } from "@/constants/sidebar.constants";
 
 export default function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
     return (

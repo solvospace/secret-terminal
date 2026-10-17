@@ -6,11 +6,14 @@ import { Button } from "@/components/ui/button";
 import { columns } from "@/components/features/coins/columns";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { getRowsPerPageDefaultValue } from "@secret-terminal/services/utils.service";
-import { coinsTableContextMenuList } from "@/constants/app.constants";
 import useCoinList from "@/hooks/use-coin-list";
 import DataTable from "@/components/features/coins/data-table";
 import CoinDetailsDialog from "@/components/features/coin-details/coin-details-dialog";
 import { StCoin } from "@secret-terminal/types/coin-list.types";
+
+const coinsTableContextMenuList: Record<string, string>[] = ["View Details", "Analyze Coin"].map((name) => {
+    return { id: crypto.randomUUID(), name };
+});
 
 function CoinList() {
     const {

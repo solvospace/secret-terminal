@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
-import { sidebarMenuList } from "@/constants/app.constants";
+import { sidebarMenuList } from "@/constants/sidebar.constants";
 import { useUser } from "@/contexts/user.context";
 import { SidebarMenu } from "@/interfaces/global.interface";
 import { Route } from "next";

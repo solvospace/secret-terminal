@@ -10,13 +10,13 @@ import {
     SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { iconSize, sidebarIconSize } from "@/constants/app.constants";
+import { sidebarIconSize } from "@/constants/sidebar.constants";
+import { DialogProps } from "@/interfaces/global.interface";
+import { useSidebar } from "@/components/ui/sidebar";
 import useStSidebar from "@/hooks/use-st-sidebar";
 import WatchlistDialog from "../features/watchlist/watchlist-dialog";
 import NewsDialog from "../features/news/news-dialog";
-import { DialogProps } from "@/interfaces/global.interface";
 import CoinSearchDialog from "../features/coin-search/coin-search-dialog";
-import { useSidebar } from "@/components/ui/sidebar";
 
 export function StSidebar() {
     const { activeTab, onMenuItemClick, dialogType, showDialog, setShowDialog, menuList } = useStSidebar();
@@ -52,10 +52,7 @@ export function StSidebar() {
                                                 }}
                                                 className={`flex gap-2 w-full ${menu.disabled && "pointer-events-none"}`}
                                             >
-                                                <Icon
-                                                    className="!size-[var(--sidebar-icon-size)]"
-                                                    size={iconSize}
-                                                />
+                                                <Icon className="!size-[var(--sidebar-icon-size)]" />
                                                 {menu.name}
                                             </a>
                                         </SidebarMenuButton>
