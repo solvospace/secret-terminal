@@ -50,7 +50,7 @@ export function StSidebar() {
                                                     onMenuItemClick(event, menu.value);
                                                     if (isMobile) toggleSidebar();
                                                 }}
-                                                className={`flex gap-2 w-full ${menu.disabled && "pointer-events-none"}`}
+                                                className={`st-sidebar-menu-button ${menu.disabled && "pointer-events-none"}`}
                                             >
                                                 <Icon className="!size-[var(--sidebar-icon-size)]" />
                                                 {menu.name}

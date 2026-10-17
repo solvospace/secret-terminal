@@ -8,5 +8,24 @@
         z-index: 100;
         margin-top: var(--header-height);
         padding: 0px 0px 0px env(safe-area-inset-left);
+
+        [data-slot="sidebar-inner"] {
+            [data-slot="sidebar-content"] {
+                [data-slot="sidebar-group"] {
+                    [data-slot="sidebar-menu"] {
+                        [data-slot="sidebar-menu-item"] {
+                            [data-slot="sidebar-menu-button"] {
+                                .st-sidebar-menu-button {
+                                    display: flex;
+                                    gap: 0.5rem;
+                                    width: 100%;
+                                    align-items: center;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }
