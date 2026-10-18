@@ -4,7 +4,7 @@ import crypto from "crypto";
 import HashService from "../../services/hash.service.js";
 import TokenService from "../../services/token.service.js";
 import MailService from "../../services/mail.service.js";
-import type { SignUpProperties, LoginProperties, Token } from "./auth.types.js";
+import type { SignUpProperties, SignInProperties } from "./auth.types.js";
 import type { Jwt } from "../../types/jwt.types.js";
 import appHttpStatus from "../../constants/http-status-code.js";
 import { AppError } from "../../classes/error.class.js";
@@ -42,7 +42,7 @@ async function signUp(properties: SignUpProperties) {
     };
 }
 
-async function signIn(properties: LoginProperties) {
+async function signIn(properties: SignInProperties) {
     if (!properties.email) {
         throw new AppError({
             message: "Email is required.",

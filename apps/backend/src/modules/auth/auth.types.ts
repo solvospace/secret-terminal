@@ -6,7 +6,7 @@ type SignUpProperties = {
     password: string;
 };
 
-type LoginProperties = {
+type SignInProperties = {
     email: string;
     password: string;
     cookies: Record<string, string>;
@@ -19,4 +19,4 @@ type Token = {
     userId: string;
 };
 
-export type { SignUpProperties, LoginProperties, Token };
+export type { SignUpProperties, SignInProperties, Token };
