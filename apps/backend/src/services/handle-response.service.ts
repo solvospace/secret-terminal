@@ -2,7 +2,6 @@ import { AppError } from "../classes/error.class.js";
 import { ResultOptions } from "../classes/result.class.js";
 import { Response } from "express";
 import statusCode from "../constants/http-status-code.js";
-import appHttpStatus from "../constants/http-status-code.js";
 
 const handleSuccess = (response: Response, result: ResultOptions) => {
     return response.status(result.status).json({
