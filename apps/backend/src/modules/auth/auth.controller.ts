@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
-import AuthenticationService from "./auth.service.js";
-import appHttpStatus from "../../constants/http-status-code.js";
 import { handleSuccess, handleFailure } from "../../services/handle-response.service.js";
+import AuthenticationService from "./auth.service.js";
 
 const signUp = async (request: Request, response: Response) => {
     try {

@@ -1,4 +1,3 @@
-import { isAxiosError } from "axios";
 import { coinGeckoClient } from "../../lib/api-client.js";
 import { coinGeckoEndpoints } from "../../lib/endpoints.js";
 import appHttpStatus from "../../constants/http-status-code.js";

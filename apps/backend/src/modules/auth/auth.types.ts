@@ -1,5 +1,3 @@
-import { User } from "../user/user.types.js";
-
 type SignUpProperties = {
     name: string;
     email: string;
