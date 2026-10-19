@@ -89,9 +89,9 @@ function GlobalMarketStats() {
                                 <Popover>
                                     <PopoverTrigger
                                         render={
-                                            <div className="link-text">
+                                            <button className="link-text">
                                                 More <ChevronRight className="size-3" />
-                                            </div>
+                                            </button>
                                         }
                                     />
                                     <PopoverContent>
@@ -132,7 +132,7 @@ function Dominance({
                 <tbody className={`${view != "table" && "flex gap-[16px]"}`}>
                     {marketCapShareList.slice(0, count).map((marketCapShareItem, index) => {
                         return (
-                            <tr>
+                            <tr key={globalThis?.crypto.randomUUID()}>
                                 <td>{marketCapShareItem.name}&nbsp;</td>
                                 <td>{marketCapShareItem.value}</td>
                             </tr>
