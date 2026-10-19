@@ -29,7 +29,7 @@ export default function CoinDetailsBlock(bindings: Bindings) {
                             )}
 
                             {(coinDetails.websiteUrl || coinDetails.socialLinks || coinDetails.currentPrice) && (
-                                <table className="cnv-table">
+                                <table className="st-table">
                                     <tbody>
                                         {coinDetails.websiteUrl && (
                                             <tr>

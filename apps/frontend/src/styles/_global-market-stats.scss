@@ -21,6 +21,15 @@
                 font-size: 12px;
                 margin-bottom: 4px;
                 color: var(--th-color);
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+
+                .link-text {
+                    display: flex;
+                    align-items: center;
+                    font-size: inherit;
+                }
             }
 
             .value {

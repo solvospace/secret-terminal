@@ -486,7 +486,7 @@ function WatchlistDetailsDialog(props: any) {
                 </DialogHeader>
 
                 <DialogBody>
-                    <table className="cnv-table">
+                    <table className="st-table">
                         <tbody>
                             <tr>
                                 <td>Name</td>

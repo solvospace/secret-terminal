@@ -1,10 +1,11 @@
 "use client";
 
-import { Skeleton } from "@/components/ui/skeleton";
-import { Spinner } from "@/components/ui/spinner";
 import useGlobalMarketStats from "@/hooks/use-global-market-stats";
+import { Skeleton } from "@/components/ui/skeleton";
 import { formatValueInUsdCompact, roundOffNumber } from "@secret-terminal/services/utils.service";
+import { ChevronRight } from "lucide-react";
 import { FaCaretUp, FaCaretDown } from "react-icons/fa";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 function GlobalMarketStats() {
     const { globalMarketStats, fetchingGlobalMarketStats, scrollReachedBottom } = useGlobalMarketStats();
@@ -83,28 +84,63 @@ function GlobalMarketStats() {
 
                     {globalMarketStats.totalMarketCapital && (
                         <div className="group">
-                            <div className="label">Dominance</div>
+                            <div className="label">
+                                Dominance
+                                <Popover>
+                                    <PopoverTrigger
+                                        render={
+                                            <div className="link-text">
+                                                More <ChevronRight className="size-3" />
+                                            </div>
+                                        }
+                                    />
+                                    <PopoverContent>
+                                        <Dominance
+                                            view={"table"}
+                                            marketCapShareList={globalMarketStats.totalMarketCapital.marketCapShareList}
+                                        />
+                                    </PopoverContent>
+                                </Popover>
+                            </div>
 
                             <div className="value">
-                                {globalMarketStats.totalMarketCapital.marketCapShareList
-                                    .slice(0, 3)
-                                    .map((marketCapShareItem, index) => {
-                                        return (
-                                            <span
-                                                key={globalThis?.crypto.randomUUID()}
-                                                className="mr-[10px]"
-                                            >
-                                                {marketCapShareItem.name}&nbsp;
-                                                {marketCapShareItem.value}
-                                            </span>
-                                        );
-                                    })}
+                                <Dominance
+                                    count={3}
+                                    marketCapShareList={globalMarketStats.totalMarketCapital.marketCapShareList}
+                                />
                             </div>
                         </div>
                     )}
                 </div>
             )}
         </section>
+    );
+}
+
+function Dominance({
+    count,
+    view,
+    marketCapShareList,
+}: {
+    count?: number;
+    view?: string;
+    marketCapShareList: Record<string, string>[];
+}) {
+    return (
+        <>
+            <table className={`${view === "table" && "st-table"}`}>
+                <tbody className={`${view != "table" && "flex gap-[16px]"}`}>
+                    {marketCapShareList.slice(0, count).map((marketCapShareItem, index) => {
+                        return (
+                            <tr>
+                                <td>{marketCapShareItem.name}&nbsp;</td>
+                                <td>{marketCapShareItem.value}</td>
+                            </tr>
+                        );
+                    })}
+                </tbody>
+            </table>
+        </>
     );
 }
 
