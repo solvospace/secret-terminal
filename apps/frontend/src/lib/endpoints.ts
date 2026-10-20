@@ -25,6 +25,9 @@ const secretTerminalEndpoints = {
     },
     watchlists: "v1/watchlists",
     watchlistCoins: "v1/watchlistCoins",
+    ai: {
+        generateText: "v1/ai/generate-text",
+    },
 };
 
 const binanceEndpoints = {

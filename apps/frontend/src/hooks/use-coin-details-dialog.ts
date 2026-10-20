@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { ClientCoinProperties } from "@secret-terminal/types/coin-details.types";
 import { retrieveCoinDetailsByCoinId } from "@/services/coin.service";
 import { CoinDetailsDialogCoin } from "../interfaces/coin.interface";
+import { createText } from "@/services/ai.service";
 
 type Bindings = {
     showDialog: boolean;
@@ -36,7 +37,7 @@ export default function useCoinDetailsDialog(bindings: Bindings) {
         try {
             const response = await retrieveCoinDetailsByCoinId(coinId);
             const coinProperties = response.data.data;
-            coinProperties.description = await getCoinDescription(coinProperties.description, coinProperties.name);
+            coinProperties.description = await getCoinDescription(coinProperties.name);
             if (coinProperties) setCoinDetails(coinProperties);
         } catch (error) {
             console.error(error);
@@ -45,14 +46,14 @@ export default function useCoinDetailsDialog(bindings: Bindings) {
         }
     }
 
-    async function fetchCoinDetailsByName(coinSymbol: string) {
+    async function fetchCoinDetailsByName(nameOrSymbol: string) {
         if (!coin) return;
 
         setCoinDetails(null);
         setFetchingCoinDetails(true);
 
         try {
-            const description = await getCoinDescription(null, coinSymbol);
+            const description = await getCoinDescription(nameOrSymbol);
 
             if (!description) return;
 
@@ -68,32 +69,17 @@ export default function useCoinDetailsDialog(bindings: Bindings) {
         }
     }
 
-    async function getCoinDescription(description: string | null, name: string) {
-        if (description && description?.length < 300) {
-            return description;
-        }
-
-        const descriptionPrompt = `Explain ${name} in 50 to 100 words. Briefly cover what it is,
+    async function getCoinDescription(symbol: string) {
+        const prompt = `Explain ${symbol} in 50 to 100 words. Briefly cover what it is,
                     its main purpose, how it works, its key features, and what makes it different from other cryptocurrencies.
                     Use simple, clear language suitable for someone who understands basic cryptocurrency concepts.
                     Avoid unnecessary technical details, speculation, and overly promotional language.`;
 
-        if ("LanguageModel" in globalThis) {
-            const session = await (self as any).LanguageModel.create({
-                expectedInputs: [{ type: "text", languages: ["en"] }],
-                expectedOutputs: [{ type: "text", languages: ["en"] }],
-            });
-
-            return await session.prompt(descriptionPrompt);
+        try {
+            const response = await createText({ prompt });
+            return response.data.data;
+        } finally {
         }
-
-        if (!description) return null;
-
-        return description
-            .split(/(?<=[.!?])\s+/)
-            .filter(Boolean)
-            .slice(0, 4)
-            .join(" ");
     }
 
     function isUUID(value: string) {
