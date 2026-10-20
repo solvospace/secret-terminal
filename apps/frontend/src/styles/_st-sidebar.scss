@@ -11,6 +11,13 @@
 
         [data-slot="sidebar-inner"] {
             [data-slot="sidebar-content"] {
+                .spinner-group {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    height: 100vh;
+                }
+
                 [data-slot="sidebar-group"] {
                     [data-slot="sidebar-menu"] {
                         [data-slot="sidebar-menu-item"] {

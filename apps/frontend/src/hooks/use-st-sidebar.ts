@@ -14,7 +14,7 @@ export default function useStSidebar() {
     const [dialogType, setDialogType] = useState<string | null>(null);
     const [showDialog, setShowDialog] = useState<boolean>(false);
     const [menuList, setMenuList] = useState<SidebarMenu[]>([]);
-    const { user } = useUser();
+    const { user, fetchingUser } = useUser();
 
     useEffect(() => {
         for (const path of ["/", "/coins"]) {
@@ -103,5 +103,5 @@ export default function useStSidebar() {
         return urls[value] ?? origin;
     }
 
-    return { activeTab, onMenuItemClick, dialogType, showDialog, setShowDialog, menuList };
+    return { activeTab, onMenuItemClick, dialogType, showDialog, setShowDialog, menuList, fetchingUser };
 }
