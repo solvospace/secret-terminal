@@ -23,7 +23,7 @@
         "@secret-terminal/config": "workspace:*",
         "@secret-terminal/types": "workspace:*"
     },
-    "packageManager": "pnpm@12.6.0",
+    "packageManager": "pnpm@12.14.0",
     "engines": {
         "node": "24.20.0"
     }
