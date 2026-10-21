@@ -9,6 +9,13 @@ import type { Jwt } from "../../types/jwt.types.js";
 import appHttpStatus from "../../constants/http-status-code.js";
 import { AppError } from "../../classes/error.class.js";
 
+const cookieOptions = {
+    httpOnly: true,
+    secure: true,
+    sameSite: "none" as const,
+    path: "/",
+};
+
 async function signUp(properties: SignUpProperties) {
     const existingUser = await secretTerminalDb.user.findUnique({ where: { email: properties.email } });
 
@@ -510,32 +517,19 @@ function generateCode(length = 6) {
 
 function setResponseHeaders(response: Response, result: { accessToken: string; refreshToken: string }) {
     response.cookie("accessToken", result.accessToken, {
-        httpOnly: true,
-        secure: true,
+        ...cookieOptions,
         maxAge: Number(process.env.COOKIE_AT_AGE),
-        sameSite: "none",
     });
 
     response.cookie("refreshToken", result.refreshToken, {
-        httpOnly: true,
-        secure: true,
+        ...cookieOptions,
         maxAge: Number(process.env.COOKIE_RT_AGE),
-        sameSite: "none",
     });
 }
 
 function clearTokensFromCookies(response: Response) {
-    response.clearCookie("refreshToken", {
-        httpOnly: true,
-        secure: true,
-        sameSite: "none",
-    });
-
-    response.clearCookie("accessToken", {
-        httpOnly: true,
-        secure: true,
-        sameSite: "none",
-    });
+    response.clearCookie("accessToken", cookieOptions);
+    response.clearCookie("refreshToken", cookieOptions);
 }
 
 async function mailVerificationCode(email: string, code: string) {
