@@ -16,7 +16,8 @@ COPY . .
 
 RUN pnpm install --offline --frozen-lockfile
 
-RUN pnpm --dir apps/backend run build
+RUN pnpm --dir apps/backend run prisma:generate
+RUN pnpm --dir apps/backend exec tsc -p tsconfig.json
 
 EXPOSE 5000
 
