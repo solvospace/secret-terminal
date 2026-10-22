@@ -1,0 +1,55 @@
+name: Deploy Backend
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+    paths:
+      - "apps/backend/**"
+      - "packages/**"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - "pnpm-workspace.yaml"
+      - "turbo.json"
+      - ".github/workflows/deploy.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: fly-deploy-${{github.ref}}
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy ${{github.ref_name}}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Fly CLI
+        uses: superfly/flyctl-actions/setup-flyctl@master
+
+      - name: Deploy dev
+        if: github.ref == 'refs/heads/develop'
+        run: |
+          flyctl deploy . \
+            --config apps/backend/fly.dev.toml \
+            --dockerfile apps/backend/Dockerfile \
+            --remote-only
+        env:
+          FLY_API_TOKEN: ${{secrets.FLY_API_TOKEN_DEV}}
+
+      - name: Deploy prod
+        if: github.ref == 'refs/heads/main'
+        run: |
+          flyctl deploy . \
+            --config apps/backend/fly.toml \
+            --dockerfile apps/backend/Dockerfile \
+            --remote-only
+        env:
+          FLY_API_TOKEN: ${{secrets.FLY_API_TOKEN_PROD}}
