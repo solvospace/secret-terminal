@@ -39,8 +39,7 @@ jobs:
               run: |
                   fly deploy . \
                     --config apps/backend/fly.dev.toml \
-                    --dockerfile apps/backend/Dockerfile \
-                    --depot=false
+                    --dockerfile apps/backend/Dockerfile
               env:
                   FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN_DEV }}
 
@@ -49,7 +48,6 @@ jobs:
               run: |
                   fly deploy . \
                     --config apps/backend/fly.toml \
-                    --dockerfile apps/backend/Dockerfile \
-                    --depot=false
+                    --dockerfile apps/backend/Dockerfile
               env:
                   FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN_PROD }}
