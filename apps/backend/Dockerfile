@@ -8,9 +8,13 @@ RUN corepack enable
 
 WORKDIR /app
 
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+
+RUN pnpm fetch
+
 COPY . .
 
-RUN pnpm install --frozen-lockfile
+RUN pnpm install --offline --frozen-lockfile
 
 RUN pnpm --dir apps/backend run build
 
