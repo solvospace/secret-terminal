@@ -6,7 +6,7 @@
     "scripts": {
         "dev": "concurrently \"turbo run dev --concurrency=10\" \"wait-on http://localhost:3000 && open http://localhost:3000\"",
         "clean": "turbo run clean && rm -rf .turbo && rm -rf .next && rm -rf node_modules && rm -rf dist",
-        "build": "turbo build --concurrency=1",
+        "build": "turbo build",
         "start": "turbo start",
         "lint": "turbo lint"
     },
