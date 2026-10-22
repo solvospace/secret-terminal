@@ -37,7 +37,7 @@ jobs:
             - name: Deploy development
               if: github.ref == 'refs/heads/dev'
               run: |
-                  fly deploy . \
+                  flyctl deploy . \
                     --config apps/backend/fly.dev.toml \
                     --dockerfile apps/backend/Dockerfile \
                     --remote-only
@@ -47,7 +47,7 @@ jobs:
             - name: Deploy production
               if: github.ref == 'refs/heads/main'
               run: |
-                  fly deploy . \
+                  flyctl deploy . \
                     --config apps/backend/fly.toml \
                     --dockerfile apps/backend/Dockerfile \
                     --remote-only
