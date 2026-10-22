@@ -8,8 +8,7 @@
         "start": "node ./dist/src/server.js",
         "lint": "eslint .",
         "prisma:generate": "tsx scripts/prisma-generate.ts",
-        "prisma:migrate": "tsx scripts/prisma-migrate.ts",
-        "postinstall": "pnpm run prisma:generate"
+        "prisma:migrate": "tsx scripts/prisma-migrate.ts"
     },
     "keywords": [],
     "author": "",
