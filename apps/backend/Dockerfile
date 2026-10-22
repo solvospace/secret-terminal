@@ -14,7 +14,7 @@ RUN pnpm fetch
 
 COPY . .
 
-RUN cd ../.. && pnpm install --offline --frozen-lockfile
+RUN pnpm install --offline --frozen-lockfile
 
 RUN pnpm --dir apps/backend run build
 
