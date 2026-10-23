@@ -23,7 +23,7 @@ const handleFailure = (response: Response, error: unknown) => {
         console.error(error.stack);
 
         return response.status(statusCode.internalServerError).json({
-            message: "We couldn't complete your request. Please try again later.",
+            message: error.message ?? "We couldn't complete your request. Please try again later.",
         });
     }
 
