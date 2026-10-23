@@ -18,8 +18,7 @@ const signUp = async (request: Request, response: Response) => {
 const signIn = async (request: Request, response: Response) => {
     try {
         const { email, password } = request.body;
-        const cookies = request.cookies;
-        const result = await AuthenticationService.signIn({ email, password, cookies });
+        const result = await AuthenticationService.signIn({ email, password });
 
         AuthenticationService.clearTokensFromCookies(response);
         if (result.tokens) AuthenticationService.setResponseHeaders(response, result.tokens);

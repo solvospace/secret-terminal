@@ -7,7 +7,6 @@ type SignUpProperties = {
 type SignInProperties = {
     email: string;
     password: string;
-    cookies: Record<string, string>;
 };
 
 type Token = {

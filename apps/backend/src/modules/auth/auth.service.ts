@@ -98,7 +98,7 @@ async function signIn(properties: SignInProperties) {
         return await sendVerificationCode(foundUser.email, foundUser.id);
     }
 
-    const tokens = await manageTokens(foundUser.id, properties.cookies.refreshToken);
+    const tokens = await manageTokens(foundUser.id);
     return {
         tokens,
         status: appHttpStatus.ok,
