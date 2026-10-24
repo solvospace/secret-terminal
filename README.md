@@ -1,7 +1,7 @@
 <div align="center">
   <h1>Secret Terminal</h1>
 
-  <div>Open. Yours.</div>
+  <div>An open-source platform for the crypto ecosystem.</div>
 
   <div>
     Visit the app at

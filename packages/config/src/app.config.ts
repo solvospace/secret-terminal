@@ -2,8 +2,8 @@ const appConfig = {
     app: {
         name: "Secret Terminal",
         version: "0.1.7",
-        tagline: "Open. Yours.",
-        description: "Open-source crypto app.",
+        tagline: "An open-source platform for the crypto ecosystem.",
+        description: "An open-source platform for the crypto ecosystem.",
     },
 
     links: {
