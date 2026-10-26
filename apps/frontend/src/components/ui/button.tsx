@@ -4,7 +4,7 @@ import { cn } from "cn";
 
 const buttonVariants = cva(
     `group/button inline-flex shrink-0 items-center justify-center cursor-pointer rounded-[var(--border-radius)]
-    border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none
+    border border-transparent bg-clip-padding text-[13px] font-medium whitespace-nowrap transition-all outline-none select-none
      focus-visible:border-1 focus-visible:border-[var(--main-color)] active:not-aria-[haspopup]:translate-y-px
       disabled:pointer-event-none disabled:cursor-not-allowed disabled:opacity-35
     aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20
