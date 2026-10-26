@@ -43,8 +43,8 @@ function PopoverContent({
                 <PopoverPrimitive.Popup
                     data-slot="popover-content"
                     className={cn(
-                        `tooltip-content z-50 flex w-72 origin-(--transform-origin) flex-col gap-4 rounded-[var(--border-radius)] bg-popover
-                         p-[8px] text-sm text-popover-foreground shadow-md ring-1 ring-foreground/10 outline-hidden
+                        `tooltip-content z-50 flex w-max origin-(--transform-origin) flex-col gap-4
+                        rounded-[var(--border-radius)] bg-popover p-[8px] text-sm text-popover-foreground shadow-lg ring-1 ring-foreground/10 outline-hidden
                          duration-100 data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2
                           data-[side=inline-start]:slide-in-from-right-2 data-[side=left]:slide-in-from-right-2
                           data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2
