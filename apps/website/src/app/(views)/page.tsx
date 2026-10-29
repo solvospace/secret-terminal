@@ -15,7 +15,7 @@ export default function Home() {
                 className="go-to-terminal-btn"
                 onClick={(event) => {
                     event?.preventDefault();
-                    window.open(appConfig.links.app);
+                    window.open(appConfig.links.app, "_self");
                 }}
             >
                 Go to Terminal
