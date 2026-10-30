@@ -1,10 +1,12 @@
-FROM node:24.22.1-alpine
+FROM node:24.22.1-bookworm-slim
 
-WORKDIR /app
-
-RUN apk add --no-cache openssl
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends openssl ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
 
 RUN corepack enable
+
+WORKDIR /app
 
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 
