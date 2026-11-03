@@ -1,6 +1,7 @@
 packages:
     - "apps/*"
     - "packages/*"
+
 allowBuilds:
     "@parcel/watcher": true
     "@prisma/engines": true
@@ -9,15 +10,99 @@ allowBuilds:
     prisma: true
     sharp: true
     unrs-resolver: true
+
 minimumReleaseAgeExclude:
-  - '@next/env@16.4.0'
-  - '@next/swc-darwin-arm64@16.4.0'
-  - '@next/swc-darwin-x64@16.4.0'
-  - '@next/swc-linux-arm64-gnu@16.4.0'
-  - '@next/swc-linux-arm64-musl@16.4.0'
-  - '@next/swc-linux-x64-gnu@16.4.0'
-  - '@next/swc-linux-x64-musl@16.4.0'
-  - '@next/swc-win32-arm64-msvc@16.4.0'
-  - '@next/swc-win32-x64-msvc@16.4.0'
-  - next@16.4.0
-  - '@solvospace/dev-tooling@0.1.0 || 1.0.0'
+    - "@next/env@16.4.0"
+    - "@next/swc-darwin-arm64@16.4.0"
+    - "@next/swc-darwin-x64@16.4.0"
+    - "@next/swc-linux-arm64-gnu@16.4.0"
+    - "@next/swc-linux-arm64-musl@16.4.0"
+    - "@next/swc-linux-x64-gnu@16.4.0"
+    - "@next/swc-linux-x64-musl@16.4.0"
+    - "@next/swc-win32-arm64-msvc@16.4.0"
+    - "@next/swc-win32-x64-msvc@16.4.0"
+    - next@16.4.0
+    - "@solvospace/dev-tooling@0.1.0 || 1.0.0"
+
+catalog:
+    "turbo": "2.11.10"
+    "typescript": "6.0.3"
+    "next": "16.4.2"
+    "husky": "9.1.7"
+    "oxfmt": "0.75.0"
+    "oxlint": "1.90.0"
+    "@types/node": "24.1.0"
+    "lint-staged": "16.2.7"
+    "@commitlint/cli": "21.2.4"
+    "@commitlint/config-conventional": "21.2.4"
+    "@commitlint/types": "21.2.3"
+    "concurrently": "10.0.5"
+    "wait-on": "9.1.0"
+    "@base-ui/react": "^1.8.0"
+    "@hcaptcha/react-hcaptcha": "^2.0.2"
+    "@tanstack/react-form": "^1.33.3"
+    "@tanstack/react-form-nextjs": "^1.33.3"
+    "@tanstack/react-table": "^8.21.3"
+    "@tanstack/react-virtual": "^3.14.9"
+    "@vercel/analytics": "^1.6.1"
+    "ajv": "^8.20.0"
+    "axios": "^1.19.0"
+    "class-variance-authority": "^0.7.1"
+    "clsx": "^2.1.1"
+    "cn": "^0.3.0"
+    "lucide": "^0.562.0"
+    "lucide-react": "^1.28.0"
+    "next-themes": "^0.4.6"
+    "postcss": "^8.5.25"
+    "proxy-from-env": "^2.1.0"
+    "react": "19.2.7"
+    "react-dom": "19.2.7"
+    "react-icons": "^5.7.0"
+    "recharts": "^3.8.0"
+    "sass": "^1.102.0"
+    "tailwind-merge": "^3.6.0"
+    "zod": "^4.4.3"
+    "@prisma/adapter-pg": "^7.8.0"
+    "@prisma/client": "^7.8.0"
+    "ai": "^7.0.143"
+    "bcrypt": "^6.0.0"
+    "cookie-parser": "^1.4.7"
+    "cors": "^2.8.6"
+    "express": "^5.2.1"
+    "hcaptcha": "^0.2.0"
+    "helmet": "^8.2.0"
+    "jsonwebtoken": "^9.0.3"
+    "pg": "^8.21.0"
+    "resend": "^6.12.4"
+    "dotenv": "^17.4.2"
+    "esbuild": "^0.28.1"
+    "tsx": "^4.23.4"
+    "@eslint/js": "9.39.1"
+    "@tailwindcss/postcss": "^4.3.3"
+    "@types/bcrypt": "^6.0.0"
+    "@types/cookie-parser": "^1.4.10"
+    "@types/cors": "^2.8.19"
+    "@types/dom-chromium-ai": "^0.0.16"
+    "@types/express": "^5.0.6"
+    "@types/jsonwebtoken": "^9.0.10"
+    "@types/ms": "^2.1.0"
+    "@types/pg": "^8.20.0"
+    "@types/react": "19.2.17"
+    "@types/react-dom": "19.2.3"
+    "babel-plugin-react-compiler": "^1.0.0"
+    "baseline-browser-mapping": "^2.11.10"
+    "eslint-config-next": "16.3.3"
+    "globals": "^17.12.0"
+    "prisma": "^7.8.0"
+    "tailwindcss": "^4.3.3"
+    "ts-node": "^10.9.2"
+    "ts-node-dev": "^2.0.0"
+    "typescript-eslint": "^8.70.0"
+
+overrides:
+    "@types/react": "19.2.17"
+    "@types/react-dom": "19.2.3"
+    "postcss": "8.5.25"
+    "sharp": "^0.35.0"
+    "brace-expansion": "5.0.8"
+    "find-my-way": "9.7.0"

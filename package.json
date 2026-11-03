@@ -1,45 +1,53 @@
 {
     "name": "secret-terminal",
-    "license": "AGPL-3.0-or-later",
     "version": "0.1.7",
     "private": true,
+    "license": "AGPL-3.0-or-later",
+    "repository": "https://github.com/solvospace/secret-terminal.git",
     "scripts": {
         "dev": "concurrently \"turbo run dev --concurrency=10\" \"wait-on http://localhost:3000 && open http://localhost:3000\"",
         "clean": "turbo run clean && rm -rf .turbo .next node_modules dist",
         "build": "turbo build --concurrency=4",
         "start": "turbo start",
-        "format": "biome format --write .",
-        "format:check": "biome format .",
-        "lint": "biome lint .",
-        "check": "biome check .",
-        "check:fix": "biome check --write .",
+        "format": "oxfmt",
+        "format:check": "oxfmt --check",
+        "lint": "oxlint --deny-warnings",
+        "lint:fix": "oxlint --fix",
+        "check": "oxfmt --check && oxlint --deny-warnings",
+        "check:fix": "oxlint --fix && oxfmt",
+        "typecheck": "tsc --noEmit",
         "prepare": "husky"
-    },
-    "devDependencies": {
-        "@biomejs/biome": "^2.6.4",
-        "@commitlint/cli": "^21.2.4",
-        "@commitlint/config-conventional": "^21.2.4",
-        "@commitlint/types": "^21.2.3",
-        "@types/node": "24.1.0",
-        "concurrently": "^10.0.5",
-        "husky": "^9.1.7",
-        "lint-staged": "^17.6.0",
-        "turbo": "2.11.10",
-        "typescript": "6.0.3",
-        "wait-on": "^9.1.0"
     },
     "dependencies": {
         "@secret-terminal/config": "workspace:*",
         "@secret-terminal/services": "workspace:*",
         "@secret-terminal/types": "workspace:*"
     },
-    "packageManager": "pnpm@12.14.0",
+    "devDependencies": {
+        "@commitlint/cli": "catalog:",
+        "@commitlint/config-conventional": "catalog:",
+        "@commitlint/types": "catalog:",
+        "@types/node": "catalog:",
+        "concurrently": "catalog:",
+        "husky": "catalog:",
+        "lint-staged": "catalog:",
+        "oxfmt": "catalog:",
+        "oxlint": "catalog:",
+        "turbo": "catalog:",
+        "typescript": "catalog:",
+        "wait-on": "catalog:"
+    },
+    "lint-staged": {
+        "*.{js,jsx,ts,tsx,cjs,mjs,cts,mts}": [
+            "oxlint --fix --deny-warnings",
+            "oxfmt"
+        ],
+        "*.{json,jsonc,css,md}": [
+            "oxfmt"
+        ]
+    },
     "engines": {
         "node": ">=24.22.2"
     },
-    "lint-staged": {
-        "*.{js,jsx,ts,tsx,json,jsonc}": [
-            "biome check --write"
-        ]
-    }
+    "packageManager": "pnpm@12.14.0"
 }
