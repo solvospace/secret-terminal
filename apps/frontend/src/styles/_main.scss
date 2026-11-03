@@ -24,6 +24,15 @@ body {
     color: var(--text-color);
 }
 
+.go-to-terminal-btn {
+    background-color: var(--main-color);
+    border-radius: var(--border-radius);
+    padding: 4px 12px;
+    font-weight: 500;
+    color: var(--text-color);
+    cursor: pointer;
+}
+
 ::-webkit-scrollbar {
     height: 5px;
     width: 6px;

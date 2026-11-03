@@ -1,9 +1,9 @@
 "use client";
 
+import { ThemeToggle } from "../../../../components/ui/theme-toggle";
+import appConfig from "@secret-terminal/config/app.config";
 import Link from "next/link";
 import { LuGithub } from "react-icons/lu";
-import { ThemeToggle } from "../ui/theme-toggle";
-import appConfig from "@secret-terminal/config/app.config";
 
 export default function Header() {
     return (

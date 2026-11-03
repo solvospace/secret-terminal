@@ -1,15 +1,16 @@
 "use client";
 
-import Link from "next/link";
-import useHeader from "@/hooks/use-header";
+import { Button } from "../ui/button";
+import { SidebarTrigger } from "../ui/sidebar";
+import { useSidebar } from "../ui/sidebar";
+import { ThemeToggle } from "../ui/theme-toggle";
 import AccountCentre from "@/components/features/account/account-centre";
 import CoinSearchDialog from "@/components/features/coin-search/coin-search-dialog";
 import { iconSize } from "@/constants/app.constants";
+import useHeader from "@/hooks/use-header";
 import { Search } from "lucide-react";
-import { ThemeToggle } from "../ui/theme-toggle";
-import { SidebarTrigger } from "../ui/sidebar";
-import { useSidebar } from "../ui/sidebar";
-import { Button } from "../ui/button";
+import { Route } from "next";
+import Link from "next/link";
 
 export default function Header() {
     const { showSearchDialog, setShowSearchDialog } = useHeader();
@@ -30,7 +31,7 @@ export default function Header() {
                         )}
 
                         <Link
-                            href="/"
+                            href={"/" as Route}
                             className={`logo`}
                         >
                             secret<span className="text-[var(--main-color)] text-[25px]">_</span>terminal

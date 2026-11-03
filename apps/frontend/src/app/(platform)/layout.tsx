@@ -1,12 +1,12 @@
-import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
+import Header from "@/components/layout/header";
 import LoadingBar from "@/components/layout/loading-bar";
-import { UserContextProvider } from "@/contexts/user.context";
+import { StSidebar } from "@/components/layout/st-sidebar";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import { sidebarWidth } from "@/constants/sidebar.constants";
 import { LoadingContextProvider } from "@/contexts/loading.context";
 import { TouchDetectorContextProvider } from "@/contexts/touch-detector.context";
-import { SidebarProvider } from "@/components/ui/sidebar";
-import { StSidebar } from "@/components/layout/st-sidebar";
-import { sidebarWidth } from "@/constants/sidebar.constants";
+import { UserContextProvider } from "@/contexts/user.context";
 
 export default function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
     return (
