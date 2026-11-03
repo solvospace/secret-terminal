@@ -7,8 +7,8 @@ const appConfig = {
     },
 
     links: {
-        website: "https://www.secretterminal.com",
-        app: "https://app.secretterminal.com",
+        website: "https://www.secretterminal.com/",
+        app: "https://app.secretterminal.com/",
     },
 
     social: {

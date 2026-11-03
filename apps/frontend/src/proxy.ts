@@ -1,3 +1,4 @@
+import appConfig from "@secret-terminal/config/app.config";
 import { NextRequest, NextResponse } from "next/server";
 
 export function proxy(request: NextRequest) {
@@ -10,12 +11,12 @@ export function proxy(request: NextRequest) {
 
     const url = request.nextUrl.clone();
 
-    if (hostname === "localhost" || hostname === "secretterminal.com" || hostname === "www.secretterminal.com") {
+    if (hostname === "localhost" || hostname === "secretterminal.com" || hostname === appConfig.links.website) {
         url.pathname = `/sites${pathname}`;
         return NextResponse.rewrite(url);
     }
 
-    if (hostname === "app.secretterminal.com") {
+    if (hostname === "app.secretterminal.com" || hostname === appConfig.links.app) {
         url.pathname = `/platform${pathname}`;
         return NextResponse.rewrite(url);
     }
