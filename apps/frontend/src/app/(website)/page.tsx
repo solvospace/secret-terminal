@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import appConfig from "@secret-terminal/config/app.config";
 
 export default function Home() {
@@ -11,15 +12,16 @@ export default function Home() {
 
             <div className="mb-4 text-sm">{appConfig.app.description}</div>
 
-            <button
-                className="go-to-terminal-btn"
+            <Button
+                className="!text-[14px]"
+                size="sm"
                 onClick={(event) => {
                     event?.preventDefault();
                     window.location.assign(appConfig.links.app);
                 }}
             >
                 Go to Terminal
-            </button>
+            </Button>
         </section>
     );
 }
