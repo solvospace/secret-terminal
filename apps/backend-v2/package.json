@@ -17,9 +17,12 @@
         "test:e2e": "vitest run --config ./vitest.config.e2e.ts"
     },
     "dependencies": {
+        "@fastify/cookie": "catalog:",
+        "@fastify/helmet": "catalog:",
         "@nestjs/common": "catalog:",
         "@nestjs/core": "catalog:",
-        "@nestjs/platform-express": "catalog:",
+        "@nestjs/platform-fastify": "catalog:",
+        "@prisma/client": "catalog:",
         "reflect-metadata": "catalog:",
         "rxjs": "catalog:"
     },
@@ -35,6 +38,7 @@
         "oxlint": "catalog:",
         "oxlint-tsgolint": "catalog:",
         "prettier": "catalog:",
+        "prisma": "catalog:",
         "source-map-support": "catalog:",
         "supertest": "catalog:",
         "typescript": "catalog:",
