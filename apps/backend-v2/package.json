@@ -20,9 +20,12 @@
         "@fastify/cookie": "catalog:",
         "@fastify/helmet": "catalog:",
         "@nestjs/common": "catalog:",
+        "@nestjs/config": "catalog:",
         "@nestjs/core": "catalog:",
         "@nestjs/platform-fastify": "catalog:",
         "@prisma/client": "catalog:",
+        "class-transformer": "catalog:",
+        "class-validator": "catalog:",
         "reflect-metadata": "catalog:",
         "rxjs": "catalog:"
     },
