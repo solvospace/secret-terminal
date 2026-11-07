@@ -1,4 +1,4 @@
-import { PrismaClient } from "../../prisma/generated/client.js";
+import { PrismaClient } from "./../generated/prisma/client.js";
 import { Injectable, OnModuleDestroy, OnModuleInit } from "@nestjs/common";
 import { Logger } from "@nestjs/common";
 import { PrismaPg } from "@prisma/adapter-pg";
