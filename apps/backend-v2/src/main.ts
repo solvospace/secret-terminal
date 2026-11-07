@@ -24,6 +24,8 @@ async function bootstrap() {
         },
     );
 
+    app.enableShutdownHooks();
+
     app.enableCors({
         origin: (origin, callback) => {
             if (!origin) {

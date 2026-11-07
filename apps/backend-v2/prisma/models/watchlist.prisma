@@ -1,0 +1,15 @@
+model Watchlist {
+    id          String   @id @unique @default(dbgenerated("uuidv7()")) @db.Uuid
+    name        String   @unique
+    description String?
+    createdAt   DateTime @default(now()) @map("created_at") @db.Timestamp(6)
+    updatedAt   DateTime @default(now()) @updatedAt() @map("updated_at") @db.Timestamp(6)
+
+    watchlistCoins WatchlistCoin[]
+    userId         String          @db.Uuid
+    user           User            @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+    @@unique([userId, name])
+    @@map("watchlists")
+    @@schema("watchlist")
+}
