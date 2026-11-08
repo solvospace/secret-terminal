@@ -1,6 +1,8 @@
 import { AppModule } from "./app.module.js";
 import cookie from "@fastify/cookie";
+import formbody from "@fastify/formbody";
 import helmet from "@fastify/helmet";
+import multipart from "@fastify/multipart";
 import { ValidationPipe, VersioningType } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
 import { FastifyAdapter, NestFastifyApplication } from "@nestjs/platform-fastify";
@@ -52,8 +54,8 @@ async function bootstrap() {
     });
 
     await app.register(cookie);
-
-    app.useBodyParser("text/plain");
+    await app.register(formbody);
+    await app.register(multipart);
 
     app.useGlobalPipes(
         new ValidationPipe({

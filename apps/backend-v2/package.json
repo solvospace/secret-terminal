@@ -18,7 +18,9 @@
     },
     "dependencies": {
         "@fastify/cookie": "catalog:",
+        "@fastify/formbody": "catalog:",
         "@fastify/helmet": "catalog:",
+        "@fastify/multipart": "catalog:",
         "@nestjs/common": "catalog:",
         "@nestjs/config": "catalog:",
         "@nestjs/core": "catalog:",
