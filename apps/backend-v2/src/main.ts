@@ -10,7 +10,8 @@ const allowedOrigins =
         .map((origin) => origin.trim())
         .filter(Boolean) ?? [];
 
-const companyRegex = process.env.CORS_COMPANY_REGEX ? new RegExp(process.env.CORS_COMPANY_REGEX, "i") : null;
+const companyRegexOne = process.env.CORS_COMPANY_REGEX_ONE ? new RegExp(process.env.CORS_COMPANY_REGEX_ONE, "i") : null;
+const companyRegexTwo = process.env.CORS_COMPANY_REGEX_TWO ? new RegExp(process.env.CORS_COMPANY_REGEX_TWO, "i") : null;
 const bodyLimit = Number(process.env.BODY_LIMIT);
 
 async function bootstrap() {
@@ -32,7 +33,7 @@ async function bootstrap() {
                 return callback(null, true);
             }
 
-            if (allowedOrigins.includes(origin) || companyRegex?.test(origin)) {
+            if (allowedOrigins.includes(origin) || companyRegexOne?.test(origin) || companyRegexTwo?.test(origin)) {
                 return callback(null, true);
             }
 

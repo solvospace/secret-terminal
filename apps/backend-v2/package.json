@@ -25,10 +25,20 @@
         "@nestjs/platform-fastify": "catalog:",
         "@prisma/adapter-pg": "catalog:",
         "@prisma/client": "catalog:",
+        "@types/bcrypt": "catalog:",
+        "@types/jsonwebtoken": "catalog:",
+        "@types/ms": "catalog:",
+        "axios": "catalog:",
+        "bcrypt": "catalog:",
         "class-transformer": "catalog:",
         "class-validator": "catalog:",
+        "fastify": "catalog:",
+        "hcaptcha": "catalog:",
+        "jsonwebtoken": "catalog:",
         "reflect-metadata": "catalog:",
-        "rxjs": "catalog:"
+        "resend": "catalog:",
+        "rxjs": "catalog:",
+        "zod": "catalog:"
     },
     "devDependencies": {
         "@nestjs/cli": "catalog:",
@@ -47,6 +57,6 @@
         "supertest": "catalog:",
         "typescript": "catalog:",
         "vite": "catalog:",
-        "vitest": "catalog:"
+        "vitest": "4.1.12"
     }
 }
