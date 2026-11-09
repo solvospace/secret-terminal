@@ -2,7 +2,7 @@ import type { AuthenticatedRequest } from "../types/authenticated-request.type.j
 import type { Jwt } from "../types/jwt.types.js";
 import type { FastifyReply } from "fastify";
 
-import { AuthenticationService } from "../../modules/auth/auth.service.js";
+import AuthenticationService from "../../modules/auth/auth.service.js";
 import { AppException } from "../exceptions/app.exception.js";
 import TokenService from "../services/token.service.js";
 import { CanActivate, ExecutionContext, HttpStatus, Injectable } from "@nestjs/common";

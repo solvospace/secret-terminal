@@ -60,6 +60,7 @@
         "prisma": "catalog:",
         "source-map-support": "catalog:",
         "supertest": "catalog:",
+        "tsx": "catalog:",
         "typescript": "catalog:",
         "vite": "catalog:",
         "vitest": "catalog:"
