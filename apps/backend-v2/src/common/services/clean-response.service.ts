@@ -1,9 +1,9 @@
 type Response = string | number | boolean | null | undefined | Response[] | { [key: string]: Response };
 type CleanResponse = string | number | boolean | CleanResponse[] | { [key: string]: CleanResponse };
 
-function cleanResponse(response: Response): CleanResponse {
+function cleanResponse(response: Response): CleanResponse | null | undefined {
     if (response === null || response === undefined) {
-        throw new Error("response is required!");
+        return response;
     }
 
     if (Array.isArray(response)) {
@@ -12,9 +12,20 @@ function cleanResponse(response: Response): CleanResponse {
 
     if (typeof response === "object") {
         return Object.entries(response).reduce((acc: Record<string, CleanResponse>, [key, value]) => {
-            if (value !== null && value !== undefined) {
-                acc[key] = cleanResponse(value);
+            const cleanedValue = cleanResponse(value);
+
+            if (
+                cleanedValue !== null &&
+                cleanedValue !== undefined &&
+                !(
+                    typeof cleanedValue === "object" &&
+                    !Array.isArray(cleanedValue) &&
+                    Object.keys(cleanedValue).length === 0
+                )
+            ) {
+                acc[key] = cleanedValue;
             }
+
             return acc;
         }, {});
     }

@@ -1,10 +1,10 @@
 import type { FastifyReply, FastifyRequest } from "fastify";
 
-import { CaptchaGuard } from "../common/guards/captcha.guard.js";
-import { CpTokenGuard } from "../common/guards/cp-token.guard.js";
-import { TokenVerificationGuard } from "../common/guards/token-verification.guard.js";
-import { ZodValidationPipe } from "../common/pipes/zod-validation.pipe.js";
-import { handleResponse } from "../common/utils/api-response.util.js";
+import { CaptchaGuard } from "../../common/guards/captcha.guard.js";
+import { CpTokenGuard } from "../../common/guards/cp-token.guard.js";
+import { TokenVerificationGuard } from "../../common/guards/token-verification.guard.js";
+import { ZodValidationPipe } from "../../common/pipes/zod-validation.pipe.js";
+import { handleResponse } from "../../common/utils/api-response.util.js";
 import { AuthenticationService } from "./auth.service.js";
 import { signInSchema, signUpSchema } from "./auth.validation.js";
 import { Body, Controller, Patch, Post, Req, Res, UseGuards } from "@nestjs/common";

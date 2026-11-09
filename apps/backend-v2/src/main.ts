@@ -48,7 +48,7 @@ async function bootstrap() {
         contentSecurityPolicy: {
             directives: {
                 defaultSrc: ["'self'"],
-                connectSrc: ["'self'", `http://localhost:${process.env.PORT}`],
+                connectSrc: ["'self'", process.env.LOCALHOST_URL!],
             },
         },
     });
