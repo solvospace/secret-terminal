@@ -13,7 +13,7 @@ import { RouterModule } from "@nestjs/core";
         WatchlistModule,
         RouterModule.register([
             {
-                path: "watchlist",
+                path: "watchlists",
                 module: WatchlistModule,
                 children: [
                     {

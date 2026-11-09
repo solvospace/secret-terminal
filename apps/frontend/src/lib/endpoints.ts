@@ -24,7 +24,7 @@ const secretTerminalEndpoints = {
         marketChart: "v1/market-chart",
     },
     watchlists: "v1/watchlists",
-    watchlistCoins: "v1/watchlistCoins",
+    watchlistCoins: "v1/watchlists/coins",
     ai: {
         generateText: "v1/ai/generate-text",
     },
