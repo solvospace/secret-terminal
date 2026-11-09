@@ -9,7 +9,7 @@ import { CanActivate, ExecutionContext, HttpStatus, Injectable } from "@nestjs/c
 const sessionExpiredMessage = "Your session has expired. Please sign in again.";
 
 @Injectable()
-export class TokenVerificationGuard implements CanActivate {
+export class TokenVerification implements CanActivate {
     constructor(private readonly prisma: PrismaService) {}
 
     async canActivate(context: ExecutionContext): Promise<boolean> {

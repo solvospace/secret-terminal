@@ -1,12 +1,11 @@
-import axios from "axios";
-
-const coinGeckoClient = axios.create({
-    baseURL: "https://api.coingecko.com/api/",
-    headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        "x-cg-demo-api-key": process.env.COIN_GECKO_API_KEY,
+const coinGeckoEndpoints = {
+    coins: {
+        coinListWithMarketData: "v3/coins/markets",
+        coinDataById: "v3/coins",
+        search: "v3/search",
+        trending: "v3/search/trending",
+        globalMarket: "v3/global",
     },
-});
+};
 
-export { coinGeckoClient };
+export { coinGeckoEndpoints };

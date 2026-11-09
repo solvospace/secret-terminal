@@ -1,7 +1,16 @@
 import { AppController } from "./app.controller.js";
 import { AppService } from "./app.service.js";
-import { AuthModule } from "./auth/auth.module.js";
-import { PrismaModule } from "./prisma/prisma.module.js";
+import AiModule from "./modules/ai/ai.module.js";
+import { CoinsModule } from "./modules/coins/coins.module.js";
+import { GlobalMarketModule } from "./modules/global-market/global-market.module.js";
+import { MarketChartModule } from "./modules/market-chart/market-chart.module.js";
+import NewsService from "./modules/news/news.service.js";
+import SearchModule from "./modules/search/search.module.js";
+import TrendingModule from "./modules/trending/trending.module.js";
+import WatchlistModule from "./modules/watchlist/watchlist.module.js";
+import AuthenticationModule from "@/modules/auth/auth.module.js";
+import UserModule from "@/modules/user/user.module.js";
+import { PrismaModule } from "@/prisma/prisma.module.js";
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 
@@ -11,7 +20,16 @@ import { ConfigModule } from "@nestjs/config";
             isGlobal: true,
         }),
         PrismaModule,
-        AuthModule,
+        AuthenticationModule,
+        UserModule,
+        WatchlistModule,
+        TrendingModule,
+        AiModule,
+        SearchModule,
+        NewsService,
+        MarketChartModule,
+        GlobalMarketModule,
+        CoinsModule,
     ],
     controllers: [AppController],
     providers: [AppService],

@@ -3,16 +3,16 @@ import type { FastifyReply } from "fastify";
 import { HttpStatus } from "@nestjs/common";
 
 interface ApiResponseOptions<T = unknown> {
-    message: string;
+    message?: string;
     data?: T;
     status?: HttpStatus;
 }
 
-export function handleResponse<T>(reply: FastifyReply, result: ApiResponseOptions<T>) {
-    const { status = HttpStatus.OK, message, data } = result;
+export function handleResponse(reply: FastifyReply, apiResponse: ApiResponseOptions) {
+    reply.status(apiResponse.status ?? HttpStatus.OK);
 
-    return reply.status(status).send({
-        message,
-        ...(data !== undefined && { data }),
-    });
+    return {
+        message: apiResponse.message,
+        data: apiResponse.data,
+    };
 }

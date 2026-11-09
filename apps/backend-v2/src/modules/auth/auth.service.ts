@@ -1,10 +1,10 @@
 import type { SignUpProperties, SignInProperties } from "./auth.types.js";
 
-import { AppException } from "../common/exceptions/app.exception.js";
-import HashService from "../common/services/hash.service.js";
-import MailService from "../common/services/mail.service.js";
-import TokenService from "../common/services/token.service.js";
-import { PrismaService } from "../prisma/prisma.service.js";
+import { AppException } from "../../common/exceptions/app.exception.js";
+import HashService from "../../common/services/hash.service.js";
+import MailService from "../../common/services/mail.service.js";
+import TokenService from "../../common/services/token.service.js";
+import { PrismaService } from "../../prisma/prisma.service.js";
 import { Injectable, HttpStatus } from "@nestjs/common";
 import { FastifyReply } from "fastify";
 import crypto from "node:crypto";
@@ -17,7 +17,7 @@ const cookieOptions = {
 };
 
 @Injectable()
-export class AuthenticationService {
+export default class AuthenticationService {
     constructor(private readonly prisma: PrismaService) {}
 
     async signUp(properties: SignUpProperties) {
