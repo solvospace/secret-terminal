@@ -5,7 +5,6 @@ import { CaptchaGuard } from "../../common/guards/captcha.guard.js";
 import { CpTokenGuard } from "../../common/guards/cp-token.guard.js";
 import { TokenVerification } from "../../common/guards/token-verification.guard.js";
 import { ZodValidationPipe } from "../../common/pipes/zod-validation.pipe.js";
-import { handleResponse } from "../../common/utils/api-response.util.js";
 import AuthenticationService from "./auth.service.js";
 import { signInSchema, signUpSchema } from "./auth.validation.js";
 import { Body, Controller, Patch, Post, Req, Res, UseGuards } from "@nestjs/common";
@@ -19,7 +18,7 @@ export default class AuthController {
     async signUp(@Body(new ZodValidationPipe(signUpSchema)) body: any, @Res({ passthrough: true }) reply: FastifyReply) {
         const result = await this.authService.signUp(body);
         this.authService.clearAuthCookies(reply);
-        return handleResponse(reply, result);
+        return result;
     }
 
     @Post("sign-in")
@@ -33,7 +32,7 @@ export default class AuthController {
             this.authService.setAuthCookies(reply, result.tokens);
         }
 
-        return handleResponse(reply, result);
+        return result;
     }
 
     @Post("verify-account")
@@ -49,16 +48,14 @@ export default class AuthController {
             this.authService.setAuthCookies(reply, result.tokens);
         }
 
-        return handleResponse(reply, result);
+        return result;
     }
 
     @Post("account-verification-code")
     async accountVerificationCode(@Body() body: { email: string }, @Res({ passthrough: true }) reply: FastifyReply) {
         const result = await this.authService.sendVerificationCode(body.email);
-
         this.authService.clearAuthCookies(reply);
-
-        return handleResponse(reply, result);
+        return result;
     }
 
     @Post("refresh-token")
@@ -70,13 +67,12 @@ export default class AuthController {
         this.authService.clearAuthCookies(reply);
         this.authService.setAuthCookies(reply, result.tokens);
 
-        return handleResponse(reply, result);
+        return result;
     }
 
     @Post("forgot-password")
-    async forgotPassword(@Body() body: { email: string }, @Res({ passthrough: true }) reply: FastifyReply) {
-        const result = await this.authService.forgotPassword(body.email);
-        return handleResponse(reply, result);
+    async forgotPassword(@Body() body: { email: string }) {
+        return await this.authService.forgotPassword(body.email);
     }
 
     @Post("verify-reset-code")
@@ -93,10 +89,10 @@ export default class AuthController {
             secure: true,
             sameSite: "none",
             path: "/",
-            maxAge: 5 * 60,
+            maxAge: Number(process.env.CPT_AGE),
         });
 
-        return handleResponse(reply, result);
+        return result;
     }
 
     @Patch("change-password")
@@ -118,7 +114,7 @@ export default class AuthController {
             path: "/",
         });
 
-        return handleResponse(reply, result);
+        return result;
     }
 
     @Post("sign-out")
@@ -129,6 +125,6 @@ export default class AuthController {
 
         this.authService.clearAuthCookies(reply);
 
-        return handleResponse(reply, result);
+        return result;
     }
 }

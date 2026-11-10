@@ -1,15 +1,12 @@
-import type { FastifyReply } from "fastify";
-
 import { AppException } from "@/common/exceptions/app.exception.js";
-import { handleResponse } from "@/common/utils/api-response.util.js";
-import { Body, Controller, HttpCode, HttpStatus, Post, Res } from "@nestjs/common";
+import { Body, Controller, HttpCode, HttpStatus, Post } from "@nestjs/common";
 import { generateText } from "ai";
 
 @Controller("ai")
 export default class AiController {
     @Post("generate-text")
     @HttpCode(HttpStatus.OK)
-    async produce(@Body() body: any, @Res({ passthrough: true }) reply: FastifyReply) {
+    async produce(@Body() body: any) {
         const { prompt, model } = body;
 
         if (!prompt)
@@ -20,6 +17,6 @@ export default class AiController {
             prompt,
         });
 
-        return handleResponse(reply, { data: text });
+        return { data: text };
     }
 }

@@ -10,21 +10,22 @@ export type AppErrorOptions = {
     cause: CauseOptions;
 };
 
-export class AppException extends HttpException {
-    declare cause: CauseOptions;
+export type AppExceptionResponse = {
+    statusCode: HttpStatus;
+    message: string;
+    errorCode?: string;
+};
 
+export class AppException extends HttpException {
     constructor({ message, cause }: AppErrorOptions) {
-        super(
-            {
-                statusCode: cause.status,
-                message,
-                errorCode: cause.code,
-            },
-            cause.status,
-            { cause },
-        );
+        const response: AppExceptionResponse = {
+            statusCode: cause.status,
+            message,
+            ...(cause.code ? { errorCode: cause.code } : {}),
+        };
+
+        super(response, cause.status, { cause });
 
         this.name = AppException.name;
-        this.cause = cause;
     }
 }

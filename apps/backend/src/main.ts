@@ -1,4 +1,6 @@
 import { AppModule } from "./app.module.js";
+import { HttpExceptionFilter } from "./common/filters/http-exception.filter.js";
+import { ResponseInterceptor } from "./common/interceptors/response.interceptor.js";
 import cookie from "@fastify/cookie";
 import helmet from "@fastify/helmet";
 import multipart from "@fastify/multipart";
@@ -35,6 +37,8 @@ async function bootstrap() {
         },
     );
 
+    app.useGlobalFilters(new HttpExceptionFilter());
+    app.useGlobalInterceptors(new ResponseInterceptor());
     app.enableShutdownHooks();
 
     app.enableCors({
