@@ -6,4 +6,4 @@ import { Module } from "@nestjs/common";
     controllers: [CoinsController],
     providers: [CoinsService],
 })
-export class CoinsModule {}
+export default class CoinsModule {}

@@ -8,5 +8,6 @@ import { Module } from "@nestjs/common";
 @Module({
     controllers: [AuthController],
     providers: [AuthenticationService, CaptchaGuard, CpTokenGuard, TokenVerification],
+    exports: [AuthenticationService],
 })
 export default class AuthenticationModule {}

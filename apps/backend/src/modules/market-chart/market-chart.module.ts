@@ -6,4 +6,4 @@ import { Module } from "@nestjs/common";
     controllers: [MarketChartController],
     providers: [MarketChartService],
 })
-export class MarketChartModule {}
+export default class MarketChartModule {}

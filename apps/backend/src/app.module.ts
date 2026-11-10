@@ -1,10 +1,10 @@
 import { AppController } from "./app.controller.js";
 import { AppService } from "./app.service.js";
 import AiModule from "./modules/ai/ai.module.js";
-import { CoinsModule } from "./modules/coins/coins.module.js";
-import { GlobalMarketModule } from "./modules/global-market/global-market.module.js";
-import { MarketChartModule } from "./modules/market-chart/market-chart.module.js";
-import NewsService from "./modules/news/news.service.js";
+import CoinsModule from "./modules/coins/coins.module.js";
+import GlobalMarketModule from "./modules/global-market/global-market.module.js";
+import MarketChartModule from "./modules/market-chart/market-chart.module.js";
+import NewsModule from "./modules/news/news.modules.js";
 import SearchModule from "./modules/search/search.module.js";
 import TrendingModule from "./modules/trending/trending.module.js";
 import WatchlistModule from "./modules/watchlist/watchlist.module.js";
@@ -18,6 +18,7 @@ import { ConfigModule } from "@nestjs/config";
     imports: [
         ConfigModule.forRoot({
             isGlobal: true,
+            envFilePath: ".env",
         }),
         PrismaModule,
         AuthenticationModule,
@@ -26,7 +27,7 @@ import { ConfigModule } from "@nestjs/config";
         TrendingModule,
         AiModule,
         SearchModule,
-        NewsService,
+        NewsModule,
         MarketChartModule,
         GlobalMarketModule,
         CoinsModule,

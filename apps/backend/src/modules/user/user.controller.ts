@@ -7,7 +7,7 @@ import { handleResponse } from "../../common/utils/api-response.util.js";
 import UserService from "./user.service.js";
 import { Controller, Get, Req, Res, UseGuards } from "@nestjs/common";
 
-@Controller("user")
+@Controller("users")
 @UseGuards(TokenVerification, RenewToken)
 export default class UserController {
     constructor(private readonly userService: UserService) {}

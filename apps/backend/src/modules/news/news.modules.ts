@@ -6,4 +6,4 @@ import { Module } from "@nestjs/common";
     controllers: [NewsController],
     providers: [NewsService],
 })
-export class NewsModule {}
+export default class NewsModule {}

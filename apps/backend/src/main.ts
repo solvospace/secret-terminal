@@ -1,6 +1,5 @@
 import { AppModule } from "./app.module.js";
 import cookie from "@fastify/cookie";
-import formbody from "@fastify/formbody";
 import helmet from "@fastify/helmet";
 import multipart from "@fastify/multipart";
 import { ValidationPipe, VersioningType } from "@nestjs/common";
@@ -54,7 +53,6 @@ async function bootstrap() {
     });
 
     await app.register(cookie);
-    await app.register(formbody);
     await app.register(multipart);
 
     app.useGlobalPipes(

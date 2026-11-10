@@ -6,4 +6,4 @@ import { Module } from "@nestjs/common";
     controllers: [GlobalMarketController],
     providers: [GlobalMarketService],
 })
-export class GlobalMarketModule {}
+export default class GlobalMarketModule {}

@@ -9,7 +9,6 @@ import { formatValueIntoCommaSeparated, roundOffNumber } from "@secret-terminal/
 export default class GlobalMarketService {
     async retrieveGlobalMarketData() {
         const response = await coinGeckoClient.get(coinGeckoEndpoints.coins.globalMarket);
-
         const globalMarketData = this.createGlobalMarketStatistics(response.data.data);
 
         return {
