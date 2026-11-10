@@ -32,7 +32,7 @@
         "react-dom": "catalog:",
         "react-icons": "catalog:",
         "recharts": "catalog:",
-        "sass": "catalog: ",
+        "sass": "catalog:",
         "tailwind-merge": "catalog:",
         "tsx": "catalog:",
         "zod": "catalog:"
