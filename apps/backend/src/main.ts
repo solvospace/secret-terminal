@@ -5,14 +5,23 @@ import multipart from "@fastify/multipart";
 import { ValidationPipe, VersioningType } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
 import { FastifyAdapter, NestFastifyApplication } from "@nestjs/platform-fastify";
+import { existsSync } from "node:fs";
+import * as path from "node:path";
+import { loadEnvFile } from "node:process";
+
+const envPath = path.resolve(process.cwd(), ".env");
+
+if (existsSync(envPath)) {
+    loadEnvFile(envPath);
+}
 
 const allowedOrigins =
     process.env.CORS_ORIGINS?.split(",")
         .map((origin) => origin.trim())
         .filter(Boolean) ?? [];
 
-const companyRegexOne = process.env.CORS_COMPANY_REGEX_ONE ? new RegExp(process.env.CORS_COMPANY_REGEX_ONE) : null;
-const companyRegexTwo = process.env.CORS_COMPANY_REGEX_TWO ? new RegExp(process.env.CORS_COMPANY_REGEX_TWO) : null;
+const companyRegexOne = process.env.CORS_COMPANY_REGEX_ONE ? new RegExp(process.env.CORS_COMPANY_REGEX_ONE, "i") : null;
+const companyRegexTwo = process.env.CORS_COMPANY_REGEX_TWO ? new RegExp(process.env.CORS_COMPANY_REGEX_TWO, "i") : null;
 const bodyLimit = Number(process.env.BODY_LIMIT);
 
 async function bootstrap() {
