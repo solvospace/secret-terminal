@@ -39,7 +39,7 @@ export default class WatchlistController {
     }
 
     @Get()
-    async retrieveWatchlists(@Res({ passthrough: true }) request: AuthenticatedRequest, reply: FastifyReply) {
+    async retrieveWatchlists(@Req() request: AuthenticatedRequest, @Res({ passthrough: true }) reply: FastifyReply) {
         const result = await this.watchlistService.retrieveWatchlists(request.userId);
         return handleResponse(reply, result);
     }

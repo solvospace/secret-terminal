@@ -9,7 +9,7 @@ interface ApiResponseOptions<T = unknown> {
 }
 
 export function handleResponse(reply: FastifyReply, apiResponse: ApiResponseOptions) {
-    reply.status(apiResponse.status ?? HttpStatus.OK);
+    reply.code(apiResponse.status ?? HttpStatus.OK);
 
     return {
         message: apiResponse.message,

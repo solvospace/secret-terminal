@@ -9,11 +9,11 @@ import { handleResponse } from "@/common/utils/api-response.util.js";
 import { Body, Controller, Delete, Get, Param, Post, Query, Res, UseGuards } from "@nestjs/common";
 
 @Controller()
+@UseGuards(TokenVerification, RenewToken)
 export default class CoinsController {
     constructor(private readonly coinsService: CoinsService) {}
 
     @Post()
-    @UseGuards(TokenVerification, RenewToken)
     async addWatchlistCoin(
         @Body(new ZodValidationPipe(watchlistCoinSchema))
         @Res({ passthrough: true })
@@ -25,7 +25,6 @@ export default class CoinsController {
     }
 
     @Delete(":id")
-    @UseGuards(TokenVerification, RenewToken)
     async deleteWatchlistCoin(
         @Param("id") id: string,
         @Res({ passthrough: true })
@@ -36,11 +35,9 @@ export default class CoinsController {
     }
 
     @Get()
-    @UseGuards(TokenVerification, RenewToken)
     async retrieveWatchlistCoins(
         @Query() queryParams: Record<string, string>,
-        @Res({ passthrough: true })
-        reply: FastifyReply,
+        @Res({ passthrough: true }) reply: FastifyReply,
     ) {
         const result = await this.coinsService.retrieveWatchlistCoins({
             watchlistId: queryParams.watchlistId,
