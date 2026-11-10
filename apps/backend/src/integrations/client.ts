@@ -1,8 +1,13 @@
 import axios from "axios";
+import { existsSync } from "node:fs";
 import * as path from "node:path";
 import { loadEnvFile } from "node:process";
 
-loadEnvFile(path.resolve(process.cwd(), ".env"));
+const envPath = path.resolve(process.cwd(), ".env");
+
+if (existsSync(envPath)) {
+    loadEnvFile(envPath);
+}
 
 const coinGeckoClient = axios.create({
     baseURL: process.env.COIN_GECKO_BASE_URL,
