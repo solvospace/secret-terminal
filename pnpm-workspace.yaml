@@ -19,13 +19,17 @@ overrides:
     "@types/react-dom": 19.2.3
     "postcss": 8.5.25
     "sharp": ^0.35.0
-    "brace-expansion": 5.0.9
+    "brace-expansion": 5.0.12
     "find-my-way": 9.7.0
 
 catalog:
     "turbo": 2.11.10
     "typescript": 6.0.3
     "next": 16.4.6
+    "vite": 8.3.8
+    "vitest": 5.1.0
+    "wait-on": 9.1.0
+    "zod": 4.6.7
     "fastify": 5.12.8
     "@fastify/cookie": "11.1.5"
     "@fastify/helmet": "13.2.0"
@@ -38,10 +42,6 @@ catalog:
     "@nestjs/testing": 12.3.2
     "@nestjs/config": "12.1.0"
     "@nestjs/schematics": 12.0.12
-    "vite": 8.0.0
-    "vitest": 4.1.2
-    "wait-on": 9.1.0
-    "zod": 4.6.7
     "concurrently": 10.0.6
     "typescript-eslint": ^8.70.0
     "@base-ui/react": ^1.8.0
@@ -116,3 +116,4 @@ minimumReleaseAgeExclude:
     - "@turbo/*"
     - "next"
     - "turbo"
+    - "vite"
