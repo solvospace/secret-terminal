@@ -18,6 +18,8 @@ RUN pnpm install --offline --frozen-lockfile
 
 RUN pnpm --dir apps/backend run build
 
+ENV NODE_ENV=production
+
 EXPOSE 5000
 
-CMD ["pnpm", "--dir", "apps/backend", "start"]
+CMD ["node", "apps/backend/dist/main.js"]
