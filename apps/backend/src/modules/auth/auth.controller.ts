@@ -1,13 +1,13 @@
-import type { AuthenticatedRequest } from "@/common/types/authenticated-request.type.js";
-import type { FastifyReply, FastifyRequest } from "fastify";
-
 import { CaptchaGuard } from "../../common/guards/captcha.guard.js";
 import { CpTokenGuard } from "../../common/guards/cp-token.guard.js";
 import { TokenVerification } from "../../common/guards/token-verification.guard.js";
 import { ZodValidationPipe } from "../../common/pipes/zod-validation.pipe.js";
 import AuthenticationService from "./auth.service.js";
+import type { SignInProperties, SignUpProperties } from "./auth.types.js";
 import { signInSchema, signUpSchema } from "./auth.validation.js";
+import type { AuthenticatedRequest } from "@/common/types/authenticated-request.type.js";
 import { Body, Controller, Patch, Post, Req, Res, UseGuards } from "@nestjs/common";
+import type { FastifyReply, FastifyRequest } from "fastify";
 
 @Controller("auth")
 export default class AuthController {
@@ -15,7 +15,10 @@ export default class AuthController {
 
     @Post("sign-up")
     @UseGuards(CaptchaGuard)
-    async signUp(@Body(new ZodValidationPipe(signUpSchema)) body: any, @Res({ passthrough: true }) reply: FastifyReply) {
+    async signUp(
+        @Body(new ZodValidationPipe(signUpSchema)) body: SignUpProperties,
+        @Res({ passthrough: true }) reply: FastifyReply,
+    ) {
         const result = await this.authService.signUp(body);
         this.authService.clearAuthCookies(reply);
         return result;
@@ -23,7 +26,10 @@ export default class AuthController {
 
     @Post("sign-in")
     @UseGuards(CaptchaGuard)
-    async signIn(@Body(new ZodValidationPipe(signInSchema)) body: any, @Res({ passthrough: true }) reply: FastifyReply) {
+    async signIn(
+        @Body(new ZodValidationPipe(signInSchema)) body: SignInProperties,
+        @Res({ passthrough: true }) reply: FastifyReply,
+    ) {
         const result = await this.authService.signIn(body);
 
         this.authService.clearAuthCookies(reply);
