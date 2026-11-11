@@ -14,17 +14,9 @@
     "singleAttributePerLine": true,
     "ignorePatterns": [],
     "sortImports": {
-        "groups": [
-            [
-                "value-builtin",
-                "value-external",
-                "value-internal",
-                "value-parent",
-                "value-sibling",
-                "value-index",
-                "type-import",
-                "unknown"
-            ]
-        ]
+        "newlinesBetween": false,
+        "order": "asc",
+        "ignoreCase": true,
+        "groups": ["value-default-import", "value-named-import", "type-import", "unknown"]
     }
 }
