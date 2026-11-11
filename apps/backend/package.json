@@ -47,7 +47,6 @@
     },
     "devDependencies": {
         "@nestjs/cli": "catalog:",
-        "@nestjs/mau": "catalog:",
         "@nestjs/schematics": "catalog:",
         "@nestjs/testing": "catalog:",
         "@types/express": "catalog:",

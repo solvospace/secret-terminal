@@ -5,7 +5,7 @@
     "license": "AGPL-3.0-or-later",
     "repository": "https://github.com/solvospace/secret-terminal.git",
     "scripts": {
-        "dev": "concurrently \"turbo run dev --concurrency=10\" \"wait-on http://app.localhost:3000 && open http://app.localhost:3000\"",
+        "dev": "concurrently \"turbo run dev --concurrency=20\" \"wait-on http://app.localhost:3000 && open http://app.localhost:3000\"",
         "clean": "turbo run clean && rm -rf .turbo .next node_modules dist",
         "build": "turbo build --concurrency=4",
         "start": "turbo start",
@@ -49,5 +49,5 @@
     "engines": {
         "node": ">=24.22.2"
     },
-    "packageManager": "pnpm@12.14.0"
+    "packageManager": "pnpm@12.18.0"
 }
