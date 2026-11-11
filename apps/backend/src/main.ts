@@ -23,8 +23,10 @@ const allowedOrigins =
         .filter(Boolean) ?? [];
 
 const companyRegexOne = process.env.CORS_COMPANY_REGEX_ONE ? new RegExp(process.env.CORS_COMPANY_REGEX_ONE, "i") : null;
+
 const companyRegexTwo = process.env.CORS_COMPANY_REGEX_TWO ? new RegExp(process.env.CORS_COMPANY_REGEX_TWO, "i") : null;
-const bodyLimit = Number(process.env.BODY_LIMIT);
+
+const bodyLimit = Number(process.env.BODY_LIMIT ?? 1048576);
 
 async function bootstrap() {
     const app = await NestFactory.create<NestFastifyApplication>(
@@ -37,9 +39,17 @@ async function bootstrap() {
         },
     );
 
-    app.useGlobalFilters(new HttpExceptionFilter());
-    app.useGlobalInterceptors(new ResponseInterceptor());
-    app.enableShutdownHooks();
+    await app.register(helmet, {
+        contentSecurityPolicy: {
+            directives: {
+                defaultSrc: ["'self'"],
+                connectSrc: ["'self'", ...(process.env.LOCALHOST_URL ? [process.env.LOCALHOST_URL] : [])],
+            },
+        },
+    });
+
+    await app.register(cookie);
+    await app.register(multipart);
 
     app.enableCors({
         origin: (origin, callback) => {
@@ -56,17 +66,8 @@ async function bootstrap() {
         credentials: true,
     });
 
-    await app.register(helmet, {
-        contentSecurityPolicy: {
-            directives: {
-                defaultSrc: ["'self'"],
-                connectSrc: ["'self'", process.env.LOCALHOST_URL!],
-            },
-        },
-    });
-
-    await app.register(cookie);
-    await app.register(multipart);
+    app.useGlobalFilters(new HttpExceptionFilter());
+    app.useGlobalInterceptors(new ResponseInterceptor());
 
     app.useGlobalPipes(
         new ValidationPipe({
@@ -77,11 +78,13 @@ async function bootstrap() {
     );
 
     app.setGlobalPrefix("api");
+
     app.enableVersioning({
         type: VersioningType.URI,
         defaultVersion: "1",
     });
 
+    app.enableShutdownHooks();
     await app.listen(Number(process.env.PORT ?? 5002), "0.0.0.0");
 }
 
