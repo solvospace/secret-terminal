@@ -1,7 +1,7 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import appConfig from "@secret-terminal/config/app.config";
+import { Button } from "@/components/ui/button";
 
 export default function Home() {
     return (
@@ -17,7 +17,7 @@ export default function Home() {
                 size="sm"
                 onClick={(event) => {
                     event?.preventDefault();
-                    window.location.assign(appConfig.links.app);
+                    window.location.assign(String(process.env.NEXT_PUBLIC_APP_URL));
                 }}
             >
                 Go to Terminal
