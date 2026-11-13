@@ -1,6 +1,6 @@
 .st-toast {
     left: 5px;
-    --color: #fafafa;
+    --color: #ffffff;
 
     [data-slot="toast-icon"] {
         svg {
@@ -11,34 +11,25 @@
     [data-slot="toast-content"] {
         border-radius: var(--border-radius);
         color: var(--color) !important;
-
-        &.warning {
-            color: #000000 !important;
-
-            svg {
-                color: inherit !important;
-            }
-        }
     }
 
     .warning {
-        background-color: #bb8725 !important;
-        border-color: #bb8725 !important;
-        color: #000000 !important;
+        background-color: #78551d !important;
+        border-color: #a77a2e !important;
     }
 
     .info {
         background-color: #23425c !important;
-        border-color: #23425c !important;
+        border-color: #35658a !important;
     }
 
     .success {
-        background-color: var(--color-green-800) !important;
-        border-color: var(--color-green-800) !important;
+        background-color: #245c3a !important;
+        border-color: #368653 !important;
     }
 
     .error {
-        background-color: var(--color-red-800) !important;
-        border-color: var(--color-red-800) !important;
+        background-color: #762f35 !important;
+        border-color: #a9434b !important;
     }
 }
