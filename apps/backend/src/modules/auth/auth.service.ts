@@ -1,13 +1,20 @@
-import type { SignUpProperties, SignInProperties } from "./auth.types.js";
-
-import { AppException } from "../../common/exceptions/app.exception.js";
 import HashService from "../../common/services/hash.service.js";
 import MailService from "../../common/services/mail.service.js";
 import TokenService from "../../common/services/token.service.js";
-import { PrismaService } from "../../prisma/prisma.service.js";
-import { Injectable, HttpStatus } from "@nestjs/common";
-import { FastifyReply } from "fastify";
 import crypto from "node:crypto";
+import { PrismaService } from "../../prisma/prisma.service.js";
+import {
+    Injectable,
+    HttpStatus,
+    ConflictException,
+    UnprocessableEntityException,
+    NotFoundException,
+    UnauthorizedException,
+    BadRequestException,
+    InternalServerErrorException,
+} from "@nestjs/common";
+import { FastifyReply } from "fastify";
+import type { SignUpProperties, SignInProperties } from "./auth.types.js";
 
 const cookieOptions = {
     httpOnly: true,
@@ -26,12 +33,7 @@ export default class AuthenticationService {
         });
 
         if (existingUser) {
-            throw new AppException({
-                message: "User already exists.",
-                cause: {
-                    status: HttpStatus.CONFLICT,
-                },
-            });
+            throw new ConflictException("User already exists.");
         }
 
         const verificationCode = this.generateCode();
@@ -59,17 +61,11 @@ export default class AuthenticationService {
 
     async signIn(properties: SignInProperties) {
         if (!properties.email) {
-            throw new AppException({
-                message: "Email is required.",
-                cause: { status: HttpStatus.UNPROCESSABLE_ENTITY },
-            });
+            throw new UnprocessableEntityException("Email is required.");
         }
 
         if (!properties.password) {
-            throw new AppException({
-                message: "Password is required.",
-                cause: { status: HttpStatus.UNPROCESSABLE_ENTITY },
-            });
+            throw new UnprocessableEntityException("Password is required.");
         }
 
         const foundUser = await this.prisma.user.findUnique({
@@ -77,19 +73,13 @@ export default class AuthenticationService {
         });
 
         if (!foundUser) {
-            throw new AppException({
-                message: "Incorrect email or password.",
-                cause: { status: HttpStatus.UNPROCESSABLE_ENTITY },
-            });
+            throw new UnprocessableEntityException("Incorrect email or password.");
         }
 
         const isMatch = await HashService.compareHashed(properties.password, foundUser.password);
 
         if (!isMatch) {
-            throw new AppException({
-                message: "Incorrect email or password.",
-                cause: { status: HttpStatus.UNPROCESSABLE_ENTITY },
-            });
+            throw new UnprocessableEntityException("Incorrect email or password.");
         }
 
         if (!foundUser.verified) {
@@ -116,10 +106,7 @@ export default class AuthenticationService {
             });
 
             if (!foundUser) {
-                throw new AppException({
-                    message: "Incorrect email.",
-                    cause: { status: HttpStatus.UNPROCESSABLE_ENTITY },
-                });
+                throw new UnprocessableEntityException("Incorrect email.");
             }
 
             localUserId = foundUser.id;
@@ -148,17 +135,11 @@ export default class AuthenticationService {
 
     async verifyAccount({ email, code }: Record<string, string>) {
         if (!email) {
-            throw new AppException({
-                message: "Email is required.",
-                cause: { status: HttpStatus.UNPROCESSABLE_ENTITY },
-            });
+            throw new UnprocessableEntityException("Email is required.");
         }
 
         if (!code) {
-            throw new AppException({
-                message: "Verification code is required.",
-                cause: { status: HttpStatus.UNPROCESSABLE_ENTITY },
-            });
+            throw new UnprocessableEntityException("Verification code is required.");
         }
 
         const foundUser = await this.prisma.user.findUnique({
@@ -166,31 +147,19 @@ export default class AuthenticationService {
         });
 
         if (!foundUser) {
-            throw new AppException({
-                message: "User doesn't exist.",
-                cause: { status: HttpStatus.NOT_FOUND },
-            });
+            throw new NotFoundException("User doesn't exist.");
         }
 
         if (foundUser.verified) {
-            throw new AppException({
-                message: "Account is already verified.",
-                cause: { status: HttpStatus.CONFLICT },
-            });
+            throw new ConflictException("Account is already verified.");
         }
 
         if (foundUser.verificationCode !== code) {
-            throw new AppException({
-                message: "Invalid verification code.",
-                cause: { status: HttpStatus.UNPROCESSABLE_ENTITY },
-            });
+            throw new UnprocessableEntityException("Invalid verification code.");
         }
 
         if (!foundUser.verificationCodeExpiresAt || new Date() > foundUser.verificationCodeExpiresAt) {
-            throw new AppException({
-                message: "Verification code has expired.",
-                cause: { status: HttpStatus.UNAUTHORIZED },
-            });
+            throw new UnauthorizedException("Verification code has expired.");
         }
 
         await this.prisma.user.update({
@@ -213,10 +182,7 @@ export default class AuthenticationService {
 
     async forgotPassword(email: string) {
         if (!email) {
-            throw new AppException({
-                message: "Email is required.",
-                cause: { status: HttpStatus.UNPROCESSABLE_ENTITY },
-            });
+            throw new UnprocessableEntityException("Email is required.");
         }
 
         const foundUser = await this.prisma.user.findUnique({
@@ -260,17 +226,11 @@ export default class AuthenticationService {
         const { resetCode, email } = properties;
 
         if (!resetCode) {
-            throw new AppException({
-                message: "Reset code is required.",
-                cause: { status: HttpStatus.UNPROCESSABLE_ENTITY },
-            });
+            throw new UnprocessableEntityException("Reset code is required.");
         }
 
         if (!email) {
-            throw new AppException({
-                message: "Email is required.",
-                cause: { status: HttpStatus.UNPROCESSABLE_ENTITY },
-            });
+            throw new UnprocessableEntityException("Email is required.");
         }
 
         const foundUser = await this.prisma.user.findUnique({
@@ -278,10 +238,7 @@ export default class AuthenticationService {
         });
 
         if (!foundUser) {
-            throw new AppException({
-                message: "Invalid reset request.",
-                cause: { status: HttpStatus.NOT_FOUND },
-            });
+            throw new NotFoundException("Invalid reset request.");
         }
 
         const resetCodeEntry = await this.prisma.resetCode.findFirst({
@@ -289,26 +246,17 @@ export default class AuthenticationService {
         });
 
         if (!resetCodeEntry) {
-            throw new AppException({
-                message: "Invalid reset code.",
-                cause: { status: HttpStatus.UNPROCESSABLE_ENTITY },
-            });
+            throw new UnprocessableEntityException("Invalid reset code.");
         }
 
         if (new Date() >= resetCodeEntry.expiresAt) {
-            throw new AppException({
-                message: "Reset code expired.",
-                cause: { status: HttpStatus.UNAUTHORIZED },
-            });
+            throw new UnauthorizedException("Reset code expired.");
         }
 
         const isCodeMatched = await HashService.compareHashed(resetCode, resetCodeEntry.code);
 
         if (!isCodeMatched) {
-            throw new AppException({
-                message: "Invalid reset code.",
-                cause: { status: HttpStatus.UNAUTHORIZED },
-            });
+            throw new UnauthorizedException("Invalid reset code.");
         }
 
         await this.prisma.resetCode.delete({
@@ -331,10 +279,7 @@ export default class AuthenticationService {
         const { userId, password } = properties;
 
         if (!password) {
-            throw new AppException({
-                message: "Password is required.",
-                cause: { status: HttpStatus.UNPROCESSABLE_ENTITY },
-            });
+            throw new UnprocessableEntityException("Password is required.");
         }
 
         const foundUser = await this.prisma.user.findUnique({
@@ -342,10 +287,7 @@ export default class AuthenticationService {
         });
 
         if (!foundUser) {
-            throw new AppException({
-                message: "User doesn't exist.",
-                cause: { status: HttpStatus.NOT_FOUND },
-            });
+            throw new NotFoundException("User doesn't exist.");
         }
 
         const hashedPassword = await HashService.generateHash(password);
@@ -363,10 +305,7 @@ export default class AuthenticationService {
 
     async refreshToken(token: string) {
         if (!token) {
-            throw new AppException({
-                message: "Refresh token is missing.",
-                cause: { status: HttpStatus.UNAUTHORIZED },
-            });
+            throw new UnauthorizedException("Refresh token is missing.");
         }
 
         const decoded = TokenService.verifyRefreshToken(token);
@@ -381,10 +320,7 @@ export default class AuthenticationService {
             !("userId" in decoded.payload) ||
             typeof decoded.payload.userId !== "string"
         ) {
-            throw new AppException({
-                message: "Invalid or expired refresh token.",
-                cause: { status: HttpStatus.UNAUTHORIZED },
-            });
+            throw new UnauthorizedException("Invalid or expired refresh token.");
         }
 
         const user = await this.prisma.user.findUnique({
@@ -392,10 +328,7 @@ export default class AuthenticationService {
         });
 
         if (!user) {
-            throw new AppException({
-                message: "User not found.",
-                cause: { status: HttpStatus.NOT_FOUND },
-            });
+            throw new NotFoundException("User not found.");
         }
 
         const tokens = await this.manageTokens(user.id, token);
@@ -413,10 +346,7 @@ export default class AuthenticationService {
         });
 
         if (!storedToken) {
-            throw new AppException({
-                message: "Please clear this site's cookies and sign in again.",
-                cause: { status: HttpStatus.UNAUTHORIZED },
-            });
+            throw new UnauthorizedException("Please clear this site's cookies and sign in again.");
         }
 
         await this.prisma.refreshToken.delete({
@@ -431,10 +361,7 @@ export default class AuthenticationService {
 
     async manageTokens(userId: string, token?: string) {
         if (!userId) {
-            throw new AppException({
-                message: "User ID is missing.",
-                cause: { status: HttpStatus.BAD_REQUEST },
-            });
+            throw new BadRequestException("User ID is missing.");
         }
 
         const tokenPayload = { userId };
@@ -494,10 +421,7 @@ export default class AuthenticationService {
         try {
             await MailService.sendAccountVerificationCode(email, code);
         } catch {
-            throw new AppException({
-                message: "Failed to send verification email.",
-                cause: { status: HttpStatus.INTERNAL_SERVER_ERROR },
-            });
+            throw new InternalServerErrorException("Failed to send verification email.");
         }
     }
 }

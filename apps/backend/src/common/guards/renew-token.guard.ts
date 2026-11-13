@@ -1,11 +1,9 @@
+import AuthenticationService from "../../modules/auth/auth.service.js";
+import TokenService from "../services/token.service.js";
+import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from "@nestjs/common";
 import type { AuthenticatedRequest } from "../types/authenticated-request.type.js";
 import type { Jwt } from "../types/jwt.types.js";
 import type { FastifyReply } from "fastify";
-
-import AuthenticationService from "../../modules/auth/auth.service.js";
-import { AppException } from "../exceptions/app.exception.js";
-import TokenService from "../services/token.service.js";
-import { CanActivate, ExecutionContext, HttpStatus, Injectable } from "@nestjs/common";
 
 @Injectable()
 export class RenewToken implements CanActivate {
@@ -21,23 +19,13 @@ export class RenewToken implements CanActivate {
         const accessToken = request.cookies?.accessToken;
 
         if (!refreshToken) {
-            throw new AppException({
-                message: "Your session has expired. Please sign in again.",
-                cause: {
-                    status: HttpStatus.UNAUTHORIZED,
-                },
-            });
+            throw new UnauthorizedException("Your session has expired. Please sign in again.");
         }
 
         const decodedRt = TokenService.verifyRefreshToken(refreshToken) as Jwt;
 
         if (decodedRt.error) {
-            throw new AppException({
-                message: "Your session has expired. Please sign in again.",
-                cause: {
-                    status: HttpStatus.UNAUTHORIZED,
-                },
-            });
+            throw new UnauthorizedException("Your session has expired. Please sign in again.");
         }
 
         const userId = decodedRt.payload.userId;

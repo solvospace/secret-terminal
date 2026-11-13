@@ -1,6 +1,5 @@
-import { AppException } from "@/common/exceptions/app.exception.js";
 import { PrismaService } from "@/prisma/prisma.service.js";
-import { HttpStatus, Injectable } from "@nestjs/common";
+import { BadRequestException, HttpStatus, Injectable, UnprocessableEntityException } from "@nestjs/common";
 
 @Injectable()
 export default class CoinsService {
@@ -15,12 +14,7 @@ export default class CoinsService {
         });
 
         if (foundWatchlistCoin?.id) {
-            throw new AppException({
-                message: `${requestBody.name} already added in watchlist!!`,
-                cause: {
-                    status: HttpStatus.UNPROCESSABLE_ENTITY,
-                },
-            });
+            throw new UnprocessableEntityException(`${requestBody.name} already added in watchlist!!`);
         }
 
         const watchlistCoin = await this.prisma.watchlistCoin.create({
@@ -42,12 +36,7 @@ export default class CoinsService {
 
     async deleteWatchListCoin(watchlistCoinId: string) {
         if (!watchlistCoinId) {
-            throw new AppException({
-                message: "watchlistCoinId is required!!",
-                cause: {
-                    status: HttpStatus.BAD_REQUEST,
-                },
-            });
+            throw new BadRequestException("watchlistCoinId is required!!");
         }
 
         await this.prisma.watchlistCoin.delete({

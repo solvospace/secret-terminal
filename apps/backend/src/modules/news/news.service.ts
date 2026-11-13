@@ -1,20 +1,13 @@
-import type { NewsArticle, NewsApiResponse } from "./news.types.js";
-
-import { AppException } from "../../common/exceptions/app.exception.js";
 import { cleanResponse } from "../../common/services/clean-response.service.js";
-import { Injectable, HttpStatus } from "@nestjs/common";
+import { Injectable, UnauthorizedException, BadGatewayException } from "@nestjs/common";
 import { checkImageUrl } from "@secret-terminal/services/image.service";
+import type { NewsArticle, NewsApiResponse } from "./news.types.js";
 
 @Injectable()
 export default class NewsService {
     async retrieveLatestNews() {
         if (!process.env.NEWS_API_KEY) {
-            throw new AppException({
-                message: "News API key is not configured.",
-                cause: {
-                    status: HttpStatus.INTERNAL_SERVER_ERROR,
-                },
-            });
+            throw new UnauthorizedException("News API key is not configured.");
         }
 
         const params = new URLSearchParams({
@@ -26,12 +19,7 @@ export default class NewsService {
         const response = await fetch(`${process.env.NEWS_API_URL}?${params.toString()}`);
 
         if (!response.ok) {
-            throw new AppException({
-                message: "Failed to retrieve latest news.",
-                cause: {
-                    status: HttpStatus.BAD_GATEWAY,
-                },
-            });
+            throw new BadGatewayException("Failed to retrieve latest news.");
         }
 
         const jsonData = (await response.json()) as NewsApiResponse;
@@ -40,12 +28,7 @@ export default class NewsService {
             const message =
                 jsonData.results?.message ?? jsonData.results?.[0]?.message ?? "Failed to retrieve latest news.";
 
-            throw new AppException({
-                message,
-                cause: {
-                    status: HttpStatus.BAD_GATEWAY,
-                },
-            });
+            throw new BadGatewayException(message);
         }
 
         const articles = await this.createResponseData(jsonData.results);

@@ -1,6 +1,5 @@
-import { AppException } from "../../common/exceptions/app.exception.js";
 import { PrismaService } from "../../prisma/prisma.service.js";
-import { HttpStatus, Injectable } from "@nestjs/common";
+import { BadRequestException, ForbiddenException, HttpStatus, Injectable, NotFoundException } from "@nestjs/common";
 
 @Injectable()
 export default class UserService {
@@ -8,7 +7,7 @@ export default class UserService {
 
     async retrieveUserDetails(userId: string) {
         if (!userId) {
-            throw new AppException({ message: "User ID is required.", cause: { status: HttpStatus.BAD_REQUEST } });
+            throw new BadRequestException("User ID is required.");
         }
 
         const foundUser = await this.prisma.user.findUnique({
@@ -24,14 +23,11 @@ export default class UserService {
         });
 
         if (!foundUser) {
-            throw new AppException({ message: "User not found.", cause: { status: HttpStatus.NOT_FOUND } });
+            throw new NotFoundException("User not found.");
         }
 
         if (!foundUser.verified) {
-            throw new AppException({
-                message: "Account verification is pending.",
-                cause: { status: HttpStatus.FORBIDDEN },
-            });
+            throw new ForbiddenException("Account verification is pending.");
         }
 
         return {

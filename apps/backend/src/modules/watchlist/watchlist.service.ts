@@ -1,6 +1,5 @@
-import { AppException } from "../../common/exceptions/app.exception.js";
 import { PrismaService } from "../../prisma/prisma.service.js";
-import { Injectable, HttpStatus } from "@nestjs/common";
+import { Injectable, HttpStatus, BadRequestException, UnprocessableEntityException } from "@nestjs/common";
 
 @Injectable()
 export default class WatchlistService {
@@ -8,12 +7,7 @@ export default class WatchlistService {
 
     async addWatchlist(body: Record<string, string>, userId: string) {
         if (!body.name) {
-            throw new AppException({
-                message: "Name is required.",
-                cause: {
-                    status: HttpStatus.BAD_REQUEST,
-                },
-            });
+            throw new BadRequestException("Name is required.");
         }
 
         const foundWatchlist = await this.prisma.watchlist.findFirst({
@@ -24,12 +18,7 @@ export default class WatchlistService {
         });
 
         if (foundWatchlist) {
-            throw new AppException({
-                message: `${body.name} already exists.`,
-                cause: {
-                    status: HttpStatus.UNPROCESSABLE_ENTITY,
-                },
-            });
+            throw new UnprocessableEntityException(`${body.name} already exists.`);
         }
 
         const watchlist = await this.prisma.watchlist.create({
@@ -49,12 +38,7 @@ export default class WatchlistService {
 
     async updateWatchlist(watchlistId: string, body: Record<string, string>) {
         if (!watchlistId) {
-            throw new AppException({
-                message: "Watchlist ID is required.",
-                cause: {
-                    status: HttpStatus.BAD_REQUEST,
-                },
-            });
+            throw new BadRequestException("Watchlist ID is required.");
         }
 
         const updatedEntry = await this.prisma.watchlist.update({
@@ -75,12 +59,7 @@ export default class WatchlistService {
 
     async deleteWatchlist(watchlistId: string) {
         if (!watchlistId) {
-            throw new AppException({
-                message: "Watchlist ID is required.",
-                cause: {
-                    status: HttpStatus.BAD_REQUEST,
-                },
-            });
+            throw new BadRequestException("Watchlist ID is required.");
         }
 
         await this.prisma.watchlist.delete({

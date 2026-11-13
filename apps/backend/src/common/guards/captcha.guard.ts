@@ -1,5 +1,4 @@
-import { AppException } from "../exceptions/app.exception.js";
-import { CanActivate, ExecutionContext, HttpStatus, Injectable } from "@nestjs/common";
+import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from "@nestjs/common";
 import { FastifyRequest } from "fastify";
 import { verify } from "hcaptcha";
 
@@ -22,23 +21,13 @@ export class CaptchaGuard implements CanActivate {
         const secretKey = process.env.CAPTCHA_SECRET_KEY;
 
         if (typeof captchaToken !== "string" || !captchaToken || !secretKey) {
-            throw new AppException({
-                message: "Unauthorized.",
-                cause: {
-                    status: HttpStatus.UNAUTHORIZED,
-                },
-            });
+            throw new UnauthorizedException("Unauthorized.");
         }
 
         const result = await verify(secretKey, captchaToken);
 
         if (!result.success) {
-            throw new AppException({
-                message: "CAPTCHA verification failed.",
-                cause: {
-                    status: HttpStatus.UNAUTHORIZED,
-                },
-            });
+            throw new UnauthorizedException("CAPTCHA verification failed.");
         }
 
         return true;

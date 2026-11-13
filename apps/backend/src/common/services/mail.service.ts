@@ -1,5 +1,4 @@
-import { AppException } from "../exceptions/app.exception.js";
-import { HttpStatus } from "@nestjs/common";
+import { InternalServerErrorException } from "@nestjs/common";
 import { Resend } from "resend";
 
 async function sendResetCode(toEmailId: string, resetCode: string) {
@@ -18,12 +17,7 @@ async function sendResetCode(toEmailId: string, resetCode: string) {
     });
 
     if (error) {
-        throw new AppException({
-            message: error.message,
-            cause: {
-                status: HttpStatus.INTERNAL_SERVER_ERROR,
-            },
-        });
+        throw new InternalServerErrorException(error.message);
     }
 }
 
@@ -43,12 +37,7 @@ async function sendAccountVerificationCode(toEmailId: string, verificationCode: 
     });
 
     if (error) {
-        throw new AppException({
-            message: error.message,
-            cause: {
-                status: HttpStatus.INTERNAL_SERVER_ERROR,
-            },
-        });
+        throw new InternalServerErrorException(error.message);
     }
 }
 

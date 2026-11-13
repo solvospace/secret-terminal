@@ -1,10 +1,8 @@
+import TokenService from "../services/token.service.js";
+import { PrismaService } from "../../prisma/prisma.service.js";
+import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from "@nestjs/common";
 import type { Jwt } from "../types/jwt.types.js";
 import type { FastifyRequest } from "fastify";
-
-import { PrismaService } from "../../prisma/prisma.service.js";
-import { AppException } from "../exceptions/app.exception.js";
-import TokenService from "../services/token.service.js";
-import { CanActivate, ExecutionContext, HttpStatus, Injectable } from "@nestjs/common";
 
 const sessionExpiredMessage = "Your session has expired. Please sign in again.";
 
@@ -20,23 +18,13 @@ export class TokenVerification implements CanActivate {
         const refreshToken = request.cookies.refreshToken;
 
         if (!refreshToken) {
-            throw new AppException({
-                message: sessionExpiredMessage,
-                cause: {
-                    status: HttpStatus.UNAUTHORIZED,
-                },
-            });
+            throw new UnauthorizedException(sessionExpiredMessage);
         }
 
         const decodedRt = TokenService.verifyRefreshToken(refreshToken) as Jwt;
 
         if (decodedRt.error) {
-            throw new AppException({
-                message: sessionExpiredMessage,
-                cause: {
-                    status: HttpStatus.UNAUTHORIZED,
-                },
-            });
+            throw new UnauthorizedException(sessionExpiredMessage);
         }
 
         const storedToken = await this.prisma.refreshToken.findUnique({
@@ -46,12 +34,7 @@ export class TokenVerification implements CanActivate {
         });
 
         if (!storedToken) {
-            throw new AppException({
-                message: sessionExpiredMessage,
-                cause: {
-                    status: HttpStatus.UNAUTHORIZED,
-                },
-            });
+            throw new UnauthorizedException(sessionExpiredMessage);
         }
 
         reply.header("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
