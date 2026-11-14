@@ -2,7 +2,7 @@
     "name": "frontend",
     "private": true,
     "scripts": {
-        "dev": "next dev --inspect=9229",
+        "dev": "next dev --inspect=9229 --port=7575",
         "build": "next build",
         "start": "next start",
         "lint": "eslint ."

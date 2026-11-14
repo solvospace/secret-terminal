@@ -17,6 +17,6 @@
         "newlinesBetween": false,
         "order": "asc",
         "ignoreCase": true,
-        "groups": ["value-default-import", "value-named-import", "type-import", "unknown"]
+        "groups": ["value-builtin", "value-default-import", "value-named-import", "type-import", "unknown"]
     }
 }
