@@ -1,11 +1,10 @@
-import type { CoinDetailsServerResponse } from "@secret-terminal/types/coin-details.types";
-import type { CoingeckoCoin, CoinListApiParams } from "@secret-terminal/types/coin-list.types";
-
 import { cleanResponse } from "../../common/services/clean-response.service.js";
-import { coinGeckoClient } from "../../integrations/client.js";
-import { coinGeckoEndpoints } from "../../integrations/endpoints.js";
+import { coinGeckoClient } from "../../integrations/client/client.js";
+import { coinGeckoEndpoints } from "../../integrations/client/endpoints.js";
 import { Injectable } from "@nestjs/common";
 import { getRowsPerPageDefaultValue } from "@secret-terminal/services/utils.service";
+import type { CoinDetailsServerResponse } from "@secret-terminal/types/coin-details.types";
+import type { CoingeckoCoin, CoinListApiParams } from "@secret-terminal/types/coin-list.types";
 
 @Injectable()
 export default class CoinsService {
