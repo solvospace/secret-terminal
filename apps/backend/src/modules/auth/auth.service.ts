@@ -12,6 +12,8 @@ import {
     NotFoundException,
     UnauthorizedException,
     BadRequestException,
+    Logger,
+    InternalServerErrorException,
 } from "@nestjs/common";
 import { Mailer } from "@nestjs/mail";
 import { FastifyReply } from "fastify";
@@ -26,6 +28,7 @@ const cookieOptions = {
 
 @Injectable()
 export default class AuthenticationService {
+    private readonly logger = new Logger(AuthenticationService.name);
     constructor(
         private readonly prisma: PrismaService,
         private readonly mailer: Mailer,
@@ -397,6 +400,46 @@ export default class AuthenticationService {
         };
     }
 
+    private generateCode(length = 6) {
+        const min = Math.pow(10, length - 1);
+        const max = Math.pow(10, length);
+
+        return crypto.randomInt(min, max).toString();
+    }
+
+    private async sendPasswordResetEmail(email: string, resetCode: string): Promise<void> {
+        try {
+            await this.mailer.send(PasswordResetMail, {
+                to: email,
+                data: {
+                    toEmailAddress: email,
+                    resetCode,
+                },
+            });
+        } catch (error: unknown) {
+            this.handleMailError(error);
+        }
+    }
+
+    private async sendAccountVerificationEmail(email: string, verificationCode: string): Promise<void> {
+        try {
+            await this.mailer.send(AccountVerificationMail, {
+                to: email,
+                data: {
+                    toEmailAddress: email,
+                    verificationCode,
+                },
+            });
+        } catch (error) {
+            this.handleMailError(error);
+        }
+    }
+
+    private handleMailError(error: unknown) {
+        this.logger.error("Failed to send mail", error instanceof Error ? error.stack : String(error));
+        throw new InternalServerErrorException("Unable to send mail");
+    }
+
     setAuthCookies(reply: FastifyReply, tokens: { accessToken: string; refreshToken: string }) {
         reply.cookie("accessToken", tokens.accessToken, {
             ...cookieOptions,
@@ -412,32 +455,5 @@ export default class AuthenticationService {
     clearAuthCookies(reply: FastifyReply) {
         reply.clearCookie("accessToken", cookieOptions);
         reply.clearCookie("refreshToken", cookieOptions);
-    }
-
-    private generateCode(length = 6) {
-        const min = Math.pow(10, length - 1);
-        const max = Math.pow(10, length);
-
-        return crypto.randomInt(min, max).toString();
-    }
-
-    private async sendPasswordResetEmail(email: string, resetCode: string): Promise<void> {
-        await this.mailer.send(PasswordResetMail, {
-            to: email,
-            data: {
-                toEmailAddress: email,
-                resetCode,
-            },
-        });
-    }
-
-    private async sendAccountVerificationEmail(email: string, verificationCode: string): Promise<void> {
-        await this.mailer.send(AccountVerificationMail, {
-            to: email,
-            data: {
-                toEmailAddress: email,
-                verificationCode,
-            },
-        });
     }
 }
