@@ -1,7 +1,8 @@
-import HashService from "../../common/services/hash.service.js";
-import MailService from "../../common/services/mail.service.js";
-import TokenService from "../../common/services/token.service.js";
 import crypto from "node:crypto";
+import HashService from "../../common/services/hash.service.js";
+import TokenService from "../../common/services/token.service.js";
+import AccountVerificationMail from "./emails/account-verification.mail.js";
+import PasswordResetMail from "./emails/password-reset-mail.js";
 import { PrismaService } from "../../prisma/prisma.service.js";
 import {
     Injectable,
@@ -11,8 +12,8 @@ import {
     NotFoundException,
     UnauthorizedException,
     BadRequestException,
-    InternalServerErrorException,
 } from "@nestjs/common";
+import { Mailer } from "@nestjs/mail";
 import { FastifyReply } from "fastify";
 import type { SignUpProperties, SignInProperties } from "./auth.types.js";
 
@@ -25,7 +26,10 @@ const cookieOptions = {
 
 @Injectable()
 export default class AuthenticationService {
-    constructor(private readonly prisma: PrismaService) {}
+    constructor(
+        private readonly prisma: PrismaService,
+        private readonly mailer: Mailer,
+    ) {}
 
     async signUp(properties: SignUpProperties) {
         const existingUser = await this.prisma.user.findUnique({
@@ -49,7 +53,7 @@ export default class AuthenticationService {
         });
 
         if (user.id) {
-            await this.mailVerificationCode(user.email, verificationCode);
+            await this.sendAccountVerificationEmail(user.email, verificationCode);
         }
 
         return {
@@ -123,7 +127,7 @@ export default class AuthenticationService {
             },
         });
 
-        await this.mailVerificationCode(email, verificationCode);
+        await this.sendAccountVerificationEmail(email, verificationCode);
 
         return {
             tokens: null,
@@ -214,7 +218,7 @@ export default class AuthenticationService {
             });
         });
 
-        await MailService.sendResetCode(email, resetCode);
+        await this.sendPasswordResetEmail(email, resetCode);
 
         return {
             message,
@@ -417,11 +421,23 @@ export default class AuthenticationService {
         return crypto.randomInt(min, max).toString();
     }
 
-    private async mailVerificationCode(email: string, code: string) {
-        try {
-            await MailService.sendAccountVerificationCode(email, code);
-        } catch {
-            throw new InternalServerErrorException("Failed to send verification email.");
-        }
+    private async sendPasswordResetEmail(email: string, resetCode: string): Promise<void> {
+        await this.mailer.send(PasswordResetMail, {
+            to: email,
+            data: {
+                toEmailAddress: email,
+                resetCode,
+            },
+        });
+    }
+
+    private async sendAccountVerificationEmail(email: string, verificationCode: string): Promise<void> {
+        await this.mailer.send(AccountVerificationMail, {
+            to: email,
+            data: {
+                toEmailAddress: email,
+                verificationCode,
+            },
+        });
     }
 }
