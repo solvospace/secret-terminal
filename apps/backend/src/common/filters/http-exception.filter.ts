@@ -10,14 +10,14 @@ export class HttpExceptionFilter implements ExceptionFilter {
 
         const request = ctx.getRequest<NodeRequest>();
         const reply = ctx.getResponse<NodeResponse>();
-        const status = exception.getStatus() ?? HttpStatus.INTERNAL_SERVER_ERROR;
+        const status = exception instanceof HttpException ? exception.getStatus() : HttpStatus.INTERNAL_SERVER_ERROR;
 
         this.logger.error(
             `${request.method} ${request.url} - ${status}`,
             exception instanceof Error ? exception.stack : undefined,
         );
 
-        reply.status(status).send({
+        reply.status(status).json({
             success: false,
             message: exception.message ?? "Internal server error",
             errorCode: exception.errorCode ?? "UNKNOWN_ERROR",

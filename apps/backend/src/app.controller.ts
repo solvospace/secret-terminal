@@ -5,7 +5,7 @@ import { SkipThrottle } from "@nestjs/throttler";
 export class AppController {
     @Get()
     @SkipThrottle()
-    async healthCheck() {
+    healthCheck() {
         return {
             message: "Application is healthy.",
             data: {

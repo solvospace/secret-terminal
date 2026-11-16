@@ -5,7 +5,7 @@ import helmet from "helmet";
 import { AppModule } from "./app.module.js";
 import { HttpExceptionFilter } from "./common/filters/http-exception.filter.js";
 import { ResponseInterceptor } from "./common/interceptors/response.interceptor.js";
-import { ValidationPipe, VersioningType, Cookies } from "@nestjs/common";
+import { ValidationPipe, VersioningType } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
 import { NodeAdapter, NestNodeApplication } from "@nestjs/platform-node";
 
@@ -45,8 +45,6 @@ async function bootstrap() {
             },
         }),
     );
-
-    app.use(Cookies());
 
     app.enableCors({
         origin: (origin, callback) => {

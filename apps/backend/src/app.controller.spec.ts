@@ -23,7 +23,7 @@ describe("AppController", () => {
                 send: vi.fn(),
             } as any;
 
-            appController.healthCheck(reply);
+            appController.healthCheck();
 
             expect(reply.status).toHaveBeenCalledWith(HttpStatus.OK);
             expect(reply.send).toHaveBeenCalled();

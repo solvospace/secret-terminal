@@ -79,6 +79,6 @@ import { ThrottlerGuard, ThrottlerModule } from "@nestjs/throttler";
 })
 export class AppModule implements NestModule {
     configure(consumer: MiddlewareConsumer) {
-        consumer.apply(CookieMiddleware).forRoutes("*");
+        consumer.apply(CookieMiddleware).forRoutes("*path");
     }
 }
