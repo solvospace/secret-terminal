@@ -2,7 +2,7 @@ import path, { join } from "node:path";
 import { ConfigService } from "@nestjs/config";
 import { FileTemplateEngine, ResendTransport } from "@nestjs/mail";
 
-const rootDir = path.resolve(__dirname, "../../");
+const rootDir = path.resolve(import.meta.dirname, "../../");
 
 export const createMailConfig = (config: ConfigService) => ({
     transport: new ResendTransport({
