@@ -1,8 +1,7 @@
 import { AppController } from "./app.controller.js";
 import { AppService } from "./app.service.js";
-import { HttpStatus } from "@nestjs/common";
 import { Test, TestingModule } from "@nestjs/testing";
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, beforeEach } from "vitest";
 
 describe("AppController", () => {
     let appController: AppController;
@@ -18,15 +17,7 @@ describe("AppController", () => {
 
     describe("root", () => {
         it("should return healthy status.", () => {
-            const reply = {
-                status: vi.fn().mockReturnThis(),
-                send: vi.fn(),
-            } as any;
-
-            appController.healthCheck();
-
-            expect(reply.status).toHaveBeenCalledWith(HttpStatus.OK);
-            expect(reply.send).toHaveBeenCalled();
+            expect(appController.healthCheck()).toHaveProperty("message", "Application is healthy.");
         });
     });
 });
