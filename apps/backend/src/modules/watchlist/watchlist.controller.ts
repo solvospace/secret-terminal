@@ -1,9 +1,8 @@
-import type { AuthenticatedRequest } from "@/common/types/authenticated-request.type.js";
-
 import WatchlistService from "./watchlist.service.js";
 import { RenewToken } from "@/common/guards/renew-token.guard.js";
 import { TokenVerification } from "@/common/guards/token-verification.guard.js";
 import { Body, Controller, Delete, Get, Param, Patch, Post, Req, UseGuards } from "@nestjs/common";
+import type { AppRequest } from "@/common/types/app-request.type.js";
 
 @Controller()
 @UseGuards(TokenVerification, RenewToken)
@@ -11,7 +10,7 @@ export default class WatchlistController {
     constructor(private readonly watchlistService: WatchlistService) {}
 
     @Post()
-    async addWatchlist(@Req() request: AuthenticatedRequest, @Body() body: Record<string, string>) {
+    async addWatchlist(@Req() request: AppRequest, @Body() body: Record<string, string>) {
         return await this.watchlistService.addWatchlist(body, request.userId);
     }
 
@@ -26,7 +25,7 @@ export default class WatchlistController {
     }
 
     @Get()
-    async retrieveWatchlists(@Req() request: AuthenticatedRequest) {
+    async retrieveWatchlists(@Req() request: AppRequest) {
         return await this.watchlistService.retrieveWatchlists(request.userId);
     }
 }

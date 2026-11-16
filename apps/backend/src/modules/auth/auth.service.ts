@@ -16,7 +16,7 @@ import {
     InternalServerErrorException,
 } from "@nestjs/common";
 import { Mailer } from "@nestjs/mail";
-import { FastifyReply } from "fastify";
+import { NodeResponse } from "@nestjs/platform-node";
 import type { SignUpProperties, SignInProperties } from "./auth.types.js";
 
 const cookieOptions = {
@@ -440,7 +440,7 @@ export default class AuthenticationService {
         throw new InternalServerErrorException("Unable to send mail");
     }
 
-    setAuthCookies(reply: FastifyReply, tokens: { accessToken: string; refreshToken: string }) {
+    setAuthCookies(reply: NodeResponse, tokens: { accessToken: string; refreshToken: string }) {
         reply.cookie("accessToken", tokens.accessToken, {
             ...cookieOptions,
             maxAge: Number(process.env.COOKIE_AT_AGE),
@@ -452,7 +452,7 @@ export default class AuthenticationService {
         });
     }
 
-    clearAuthCookies(reply: FastifyReply) {
+    clearAuthCookies(reply: NodeResponse) {
         reply.clearCookie("accessToken", cookieOptions);
         reply.clearCookie("refreshToken", cookieOptions);
     }

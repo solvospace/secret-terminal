@@ -1,3 +1,4 @@
+import CookieMiddleware from "./common/middlewares/cookie.middleware.js";
 import MailModule from "./integrations/mail/mail.module.js";
 import AiModule from "./modules/ai/ai.module.js";
 import CoinsModule from "./modules/coins/coins.module.js";
@@ -13,7 +14,7 @@ import UserModule from "@/modules/user/user.module.js";
 import { AppController } from "./app.controller.js";
 import { AppService } from "./app.service.js";
 import { PrismaModule } from "@/prisma/prisma.module.js";
-import { Module } from "@nestjs/common";
+import { MiddlewareConsumer, Module, NestModule } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { APP_GUARD, RouterModule } from "@nestjs/core";
 import { ThrottlerGuard, ThrottlerModule } from "@nestjs/throttler";
@@ -76,4 +77,8 @@ import { ThrottlerGuard, ThrottlerModule } from "@nestjs/throttler";
         },
     ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+    configure(consumer: MiddlewareConsumer) {
+        consumer.apply(CookieMiddleware).forRoutes("*");
+    }
+}

@@ -5,9 +5,9 @@ import { TokenVerification } from "../../common/guards/token-verification.guard.
 import { ZodValidationPipe } from "../../common/pipes/zod-validation.pipe.js";
 import { signInSchema, signUpSchema } from "./auth.validation.js";
 import { Body, Controller, Patch, Post, Req, Res, UseGuards } from "@nestjs/common";
+import { NodeResponse } from "@nestjs/platform-node";
 import type { SignInProperties, SignUpProperties } from "./auth.types.js";
-import type { AuthenticatedRequest } from "@/common/types/authenticated-request.type.js";
-import type { FastifyReply, FastifyRequest } from "fastify";
+import type { AppRequest } from "@/common/types/app-request.type.js";
 
 @Controller("auth")
 export default class AuthController {
@@ -17,7 +17,7 @@ export default class AuthController {
     @UseGuards(CaptchaGuard)
     async signUp(
         @Body(new ZodValidationPipe(signUpSchema)) body: SignUpProperties,
-        @Res({ passthrough: true }) reply: FastifyReply,
+        @Res({ passthrough: true }) reply: NodeResponse,
     ) {
         const result = await this.authService.signUp(body);
         this.authService.clearAuthCookies(reply);
@@ -28,7 +28,7 @@ export default class AuthController {
     @UseGuards(CaptchaGuard)
     async signIn(
         @Body(new ZodValidationPipe(signInSchema)) body: SignInProperties,
-        @Res({ passthrough: true }) reply: FastifyReply,
+        @Res({ passthrough: true }) reply: NodeResponse,
     ) {
         const result = await this.authService.signIn(body);
 
@@ -44,7 +44,7 @@ export default class AuthController {
     @Post("verify-account")
     async accountVerification(
         @Body() body: { email: string; code: string },
-        @Res({ passthrough: true }) reply: FastifyReply,
+        @Res({ passthrough: true }) reply: NodeResponse,
     ) {
         const result = await this.authService.verifyAccount(body);
 
@@ -58,7 +58,7 @@ export default class AuthController {
     }
 
     @Post("account-verification-code")
-    async accountVerificationCode(@Body() body: { email: string }, @Res({ passthrough: true }) reply: FastifyReply) {
+    async accountVerificationCode(@Body() body: { email: string }, @Res({ passthrough: true }) reply: NodeResponse) {
         const result = await this.authService.sendVerificationCode(body.email);
         this.authService.clearAuthCookies(reply);
         return result;
@@ -66,7 +66,7 @@ export default class AuthController {
 
     @Post("refresh-token")
     @UseGuards(TokenVerification)
-    async refreshToken(@Req() request: FastifyRequest, @Res({ passthrough: true }) reply: FastifyReply) {
+    async refreshToken(@Req() request: AppRequest, @Res({ passthrough: true }) reply: NodeResponse) {
         const token = request.cookies.refreshToken!;
         const result = await this.authService.refreshToken(token);
 
@@ -84,13 +84,13 @@ export default class AuthController {
     @Post("verify-reset-code")
     async verifyResetCode(
         @Body() body: { resetCode: string; email: string },
-        @Res({ passthrough: true }) reply: FastifyReply,
+        @Res({ passthrough: true }) reply: NodeResponse,
     ) {
         const result = await this.authService.verifyResetCode(body);
 
         this.authService.clearAuthCookies(reply);
 
-        reply.setCookie("cpt", result.token, {
+        reply.cookie("cpt", result.token, {
             httpOnly: true,
             secure: true,
             sameSite: "none",
@@ -104,9 +104,9 @@ export default class AuthController {
     @Patch("change-password")
     @UseGuards(CpTokenGuard)
     async changePassword(
-        @Req() request: AuthenticatedRequest,
+        @Req() request: AppRequest,
         @Body() body: { password: string },
-        @Res({ passthrough: true }) reply: FastifyReply,
+        @Res({ passthrough: true }) reply: NodeResponse,
     ) {
         const result = await this.authService.changePassword({
             userId: request.userId,
@@ -125,7 +125,7 @@ export default class AuthController {
 
     @Post("sign-out")
     @UseGuards(TokenVerification)
-    async signOut(@Req() request: FastifyRequest, @Res({ passthrough: true }) reply: FastifyReply) {
+    async signOut(@Req() request: AppRequest, @Res({ passthrough: true }) reply: NodeResponse) {
         const token = request.cookies.refreshToken!;
         const result = await this.authService.signOut(token);
 

@@ -1,20 +1,11 @@
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from "@nestjs/common";
-import { FastifyRequest } from "fastify";
+import { NodeRequest } from "@nestjs/platform-node";
 import { verify } from "hcaptcha";
-
-type CaptchaRequest = FastifyRequest<{
-    Body: {
-        captchaToken?: string;
-    };
-    Querystring: {
-        captchaToken?: string;
-    };
-}>;
 
 @Injectable()
 export class CaptchaGuard implements CanActivate {
     async canActivate(context: ExecutionContext): Promise<boolean> {
-        const request = context.switchToHttp().getRequest<CaptchaRequest>();
+        const request = context.switchToHttp().getRequest<NodeRequest>();
 
         const captchaToken = request.body?.captchaToken ?? request.query?.captchaToken;
 
