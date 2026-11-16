@@ -1,7 +1,7 @@
-import axios from "axios";
 import { existsSync } from "node:fs";
 import * as path from "node:path";
 import { loadEnvFile } from "node:process";
+import axios from "axios";
 
 const envPath = path.resolve(process.cwd(), ".env");
 

@@ -1,5 +1,5 @@
-import { coinGeckoClient } from "../../integrations/client.js";
-import { coinGeckoEndpoints } from "../../integrations/endpoints.js";
+import { coinGeckoClient } from "../../integrations/client/client.js";
+import { coinGeckoEndpoints } from "../../integrations/client/endpoints.js";
 import { Injectable } from "@nestjs/common";
 
 @Injectable()

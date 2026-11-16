@@ -1,7 +1,8 @@
-import HashService from "../../common/services/hash.service.js";
-import MailService from "../../common/services/mail.service.js";
-import TokenService from "../../common/services/token.service.js";
 import crypto from "node:crypto";
+import HashService from "../../common/services/hash.service.js";
+import TokenService from "../../common/services/token.service.js";
+import AccountVerificationMail from "./emails/account-verification.mail.js";
+import PasswordResetMail from "./emails/password-reset-mail.js";
 import { PrismaService } from "../../prisma/prisma.service.js";
 import {
     Injectable,
@@ -11,8 +12,10 @@ import {
     NotFoundException,
     UnauthorizedException,
     BadRequestException,
+    Logger,
     InternalServerErrorException,
 } from "@nestjs/common";
+import { Mailer } from "@nestjs/mail";
 import { FastifyReply } from "fastify";
 import type { SignUpProperties, SignInProperties } from "./auth.types.js";
 
@@ -25,7 +28,11 @@ const cookieOptions = {
 
 @Injectable()
 export default class AuthenticationService {
-    constructor(private readonly prisma: PrismaService) {}
+    private readonly logger = new Logger(AuthenticationService.name);
+    constructor(
+        private readonly prisma: PrismaService,
+        private readonly mailer: Mailer,
+    ) {}
 
     async signUp(properties: SignUpProperties) {
         const existingUser = await this.prisma.user.findUnique({
@@ -49,7 +56,7 @@ export default class AuthenticationService {
         });
 
         if (user.id) {
-            await this.mailVerificationCode(user.email, verificationCode);
+            await this.sendAccountVerificationEmail(user.email, verificationCode);
         }
 
         return {
@@ -123,7 +130,7 @@ export default class AuthenticationService {
             },
         });
 
-        await this.mailVerificationCode(email, verificationCode);
+        await this.sendAccountVerificationEmail(email, verificationCode);
 
         return {
             tokens: null,
@@ -214,7 +221,7 @@ export default class AuthenticationService {
             });
         });
 
-        await MailService.sendResetCode(email, resetCode);
+        await this.sendPasswordResetEmail(email, resetCode);
 
         return {
             message,
@@ -393,6 +400,46 @@ export default class AuthenticationService {
         };
     }
 
+    private generateCode(length = 6) {
+        const min = Math.pow(10, length - 1);
+        const max = Math.pow(10, length);
+
+        return crypto.randomInt(min, max).toString();
+    }
+
+    private async sendPasswordResetEmail(email: string, resetCode: string): Promise<void> {
+        try {
+            await this.mailer.send(PasswordResetMail, {
+                to: email,
+                data: {
+                    toEmailAddress: email,
+                    resetCode,
+                },
+            });
+        } catch (error: unknown) {
+            this.handleMailError(error);
+        }
+    }
+
+    private async sendAccountVerificationEmail(email: string, verificationCode: string): Promise<void> {
+        try {
+            await this.mailer.send(AccountVerificationMail, {
+                to: email,
+                data: {
+                    toEmailAddress: email,
+                    verificationCode,
+                },
+            });
+        } catch (error) {
+            this.handleMailError(error);
+        }
+    }
+
+    private handleMailError(error: unknown) {
+        this.logger.error("Failed to send mail", error instanceof Error ? error.stack : String(error));
+        throw new InternalServerErrorException("Unable to send mail");
+    }
+
     setAuthCookies(reply: FastifyReply, tokens: { accessToken: string; refreshToken: string }) {
         reply.cookie("accessToken", tokens.accessToken, {
             ...cookieOptions,
@@ -408,20 +455,5 @@ export default class AuthenticationService {
     clearAuthCookies(reply: FastifyReply) {
         reply.clearCookie("accessToken", cookieOptions);
         reply.clearCookie("refreshToken", cookieOptions);
-    }
-
-    private generateCode(length = 6) {
-        const min = Math.pow(10, length - 1);
-        const max = Math.pow(10, length);
-
-        return crypto.randomInt(min, max).toString();
-    }
-
-    private async mailVerificationCode(email: string, code: string) {
-        try {
-            await MailService.sendAccountVerificationCode(email, code);
-        } catch {
-            throw new InternalServerErrorException("Failed to send verification email.");
-        }
     }
 }
