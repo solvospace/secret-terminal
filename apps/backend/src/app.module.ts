@@ -15,12 +15,32 @@ import { AppService } from "./app.service.js";
 import { PrismaModule } from "@/prisma/prisma.module.js";
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
-import { RouterModule } from "@nestjs/core";
+import { APP_GUARD, RouterModule } from "@nestjs/core";
+import { ThrottlerGuard, ThrottlerModule } from "@nestjs/throttler";
 
 @Module({
     imports: [
         ConfigModule.forRoot({
             isGlobal: true,
+        }),
+        ThrottlerModule.forRoot({
+            throttlers: [
+                {
+                    name: "short",
+                    ttl: 1000,
+                    limit: 3,
+                },
+                {
+                    name: "medium",
+                    ttl: 10000,
+                    limit: 20,
+                },
+                {
+                    name: "long",
+                    ttl: 60000,
+                    limit: 100,
+                },
+            ],
         }),
         PrismaModule,
         MailModule,
@@ -48,6 +68,12 @@ import { RouterModule } from "@nestjs/core";
         CoinsModule,
     ],
     controllers: [AppController],
-    providers: [AppService],
+    providers: [
+        AppService,
+        {
+            provide: APP_GUARD,
+            useClass: ThrottlerGuard,
+        },
+    ],
 })
 export class AppModule {}

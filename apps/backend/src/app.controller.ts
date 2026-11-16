@@ -1,8 +1,10 @@
 import { Controller, Get } from "@nestjs/common";
+import { SkipThrottle } from "@nestjs/throttler";
 
 @Controller("health")
 export class AppController {
     @Get()
+    @SkipThrottle()
     async healthCheck() {
         return {
             message: "Application is healthy.",
