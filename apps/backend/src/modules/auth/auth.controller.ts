@@ -15,13 +15,8 @@ export default class AuthController {
 
     @Post("sign-up")
     @UseGuards(CaptchaGuard)
-    async signUp(
-        @Body(new ZodValidationPipe(signUpSchema)) body: SignUpProperties,
-        @Res({ passthrough: true }) reply: NodeResponse,
-    ) {
-        const result = await this.authService.signUp(body);
-        this.authService.clearAuthCookies(reply);
-        return result;
+    async signUp(@Body(new ZodValidationPipe(signUpSchema)) body: SignUpProperties) {
+        return await this.authService.signUp(body);
     }
 
     @Post("sign-in")
