@@ -19,7 +19,7 @@ const localRegex = process.env.CORS_LOCAL_REGEX ? new RegExp(process.env.CORS_LO
 const companyRegexOne = process.env.CORS_COMPANY_REGEX_ONE ? new RegExp(process.env.CORS_COMPANY_REGEX_ONE, "i") : null;
 const companyRegexTwo = process.env.CORS_COMPANY_REGEX_TWO ? new RegExp(process.env.CORS_COMPANY_REGEX_TWO, "i") : null;
 
-const bodyLimit = Number(process.env.BODY_LIMIT ?? 1048576);
+const bodyLimit = process.env.BODY_LIMIT ?? "1mb";
 
 async function bootstrap() {
     const app = await NestFactory.create<NestNodeApplication>(AppModule, new NodeAdapter(), {
