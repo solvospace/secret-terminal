@@ -35,7 +35,6 @@
         "bcrypt": "catalog:",
         "class-transformer": "catalog:",
         "class-validator": "catalog:",
-        "cookie": "catalog:",
         "hcaptcha": "catalog:",
         "helmet": "catalog:",
         "jsonwebtoken": "catalog:",
