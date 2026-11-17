@@ -60,7 +60,7 @@ catalog:
     "@tanstack/react-table": ^8.21.3
     "@tanstack/react-virtual": ^3.14.9
     "@types/bcrypt": ^6.0.0
-    "@types/dom-chromium-ai": ^0.0.16
+    "@types/dom-chromium-ai": ^0.0.18
     "@types/express": ^5.0.0
     "@types/jsonwebtoken": ^9.0.10
     "@types/ms": ^2.1.0

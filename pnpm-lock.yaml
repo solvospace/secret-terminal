@@ -243,8 +243,8 @@ catalogs:
       specifier: ^6.0.0
       version: 6.0.0
     '@types/dom-chromium-ai':
-      specifier: ^0.0.16
-      version: 0.0.16
+      specifier: ^0.0.18
+      version: 0.0.18
     '@types/express':
       specifier: ^5.0.0
       version: 5.0.6
@@ -699,7 +699,7 @@ importers:
         version: 4.3.5
       '@types/dom-chromium-ai':
         specifier: 'catalog:'
-        version: 0.0.16
+        version: 0.0.18
       '@types/react':
         specifier: 19.2.17
         version: 19.2.17
@@ -2715,8 +2715,8 @@ packages:
   '@types/deep-eql@4.0.2':
     resolution: {integrity: sha512-c9h9dVVMigMPc4bwTvC5dxqtqJZwQPePsWjPlpSOnojbor6pGqdk541lfA7AqFQr5pB1BRdq0juY9db81BwyFw==}
 
-  '@types/dom-chromium-ai@0.0.16':
-    resolution: {integrity: sha512-Z0vOBWckovkc85zctYKGEUUBHaqt9Oz8AUhAVyoNLAsMGlBhMNl/8w1n8JG1y0g7TW03EzWt5RsdcDD70ra58g==}
+  '@types/dom-chromium-ai@0.0.18':
+    resolution: {integrity: sha512-/ZITAMdViQlLmEs56d/ET9qJ42EfnrBrLw5gRB4p0raDoavGDacqP9VITK8wNM0f9bPmnddHZeJ+FWIkWi6JlQ==}
 
   '@types/estree@1.0.10':
     resolution: {integrity: sha512-lTyOMnOcmRBzdCv6/4zUZCrEhV0xrqQiUZBZtVcbmLHBXKLnN8q89v/wKRF/Q0HbwVsqbIG3o5HDoFl9sduM+g==}
@@ -7365,7 +7365,7 @@ snapshots:
 
   '@types/deep-eql@4.0.2': {}
 
-  '@types/dom-chromium-ai@0.0.16': {}
+  '@types/dom-chromium-ai@0.0.18': {}
 
   '@types/estree@1.0.10': {}
 
