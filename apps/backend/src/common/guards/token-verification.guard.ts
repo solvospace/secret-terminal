@@ -1,8 +1,8 @@
 import TokenService from "../services/token.service.js";
 import { PrismaService } from "../../prisma/prisma.service.js";
+import { AppRequest } from "../types/app-request.type.js";
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from "@nestjs/common";
 import type { Jwt } from "../types/jwt.types.js";
-import type { FastifyRequest } from "fastify";
 
 const sessionExpiredMessage = "Your session has expired. Please sign in again.";
 
@@ -11,11 +11,11 @@ export class TokenVerification implements CanActivate {
     constructor(private readonly prisma: PrismaService) {}
 
     async canActivate(context: ExecutionContext): Promise<boolean> {
-        const request = context.switchToHttp().getRequest<FastifyRequest>();
+        const request = context.switchToHttp().getRequest<AppRequest>();
 
         const reply = context.switchToHttp().getResponse();
 
-        const refreshToken = request.cookies.refreshToken;
+        const refreshToken = request.cookies?.refreshToken;
 
         if (!refreshToken) {
             throw new UnauthorizedException(sessionExpiredMessage);

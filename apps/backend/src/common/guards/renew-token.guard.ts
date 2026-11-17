@@ -1,9 +1,9 @@
 import AuthenticationService from "../../modules/auth/auth.service.js";
 import TokenService from "../services/token.service.js";
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from "@nestjs/common";
-import type { AuthenticatedRequest } from "../types/authenticated-request.type.js";
+import { NodeResponse } from "@nestjs/platform-node";
+import type { AppRequest } from "../types/app-request.type.js";
 import type { Jwt } from "../types/jwt.types.js";
-import type { FastifyReply } from "fastify";
 
 @Injectable()
 export class RenewToken implements CanActivate {
@@ -12,8 +12,8 @@ export class RenewToken implements CanActivate {
     async canActivate(context: ExecutionContext): Promise<boolean> {
         const http = context.switchToHttp();
 
-        const request = http.getRequest<AuthenticatedRequest>();
-        const reply = http.getResponse<FastifyReply>();
+        const request = http.getRequest<AppRequest>();
+        const reply = http.getResponse<NodeResponse>();
 
         const refreshToken = request.cookies?.refreshToken;
         const accessToken = request.cookies?.accessToken;

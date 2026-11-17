@@ -15,8 +15,9 @@ import {
     Logger,
     InternalServerErrorException,
 } from "@nestjs/common";
+import { HttpAdapterHost } from "@nestjs/core";
 import { Mailer } from "@nestjs/mail";
-import { FastifyReply } from "fastify";
+import { NodeResponse } from "@nestjs/platform-node";
 import type { SignUpProperties, SignInProperties } from "./auth.types.js";
 
 const cookieOptions = {
@@ -32,6 +33,7 @@ export default class AuthenticationService {
     constructor(
         private readonly prisma: PrismaService,
         private readonly mailer: Mailer,
+        private readonly adapterHost: HttpAdapterHost,
     ) {}
 
     async signUp(properties: SignUpProperties) {
@@ -440,20 +442,20 @@ export default class AuthenticationService {
         throw new InternalServerErrorException("Unable to send mail");
     }
 
-    setAuthCookies(reply: FastifyReply, tokens: { accessToken: string; refreshToken: string }) {
-        reply.cookie("accessToken", tokens.accessToken, {
+    setAuthCookies(response: NodeResponse, tokens: { accessToken: string; refreshToken: string }) {
+        this.adapterHost.httpAdapter.setCookie(response, "accessToken", tokens.accessToken, {
             ...cookieOptions,
             maxAge: Number(process.env.COOKIE_AT_AGE),
         });
 
-        reply.cookie("refreshToken", tokens.refreshToken, {
+        this.adapterHost.httpAdapter.setCookie(response, "refreshToken", tokens.refreshToken, {
             ...cookieOptions,
             maxAge: Number(process.env.COOKIE_RT_AGE),
         });
     }
 
-    clearAuthCookies(reply: FastifyReply) {
-        reply.clearCookie("accessToken", cookieOptions);
-        reply.clearCookie("refreshToken", cookieOptions);
+    clearAuthCookies(response: NodeResponse) {
+        this.adapterHost.httpAdapter.clearCookie(response, "accessToken");
+        this.adapterHost.httpAdapter.clearCookie(response, "refreshToken");
     }
 }
