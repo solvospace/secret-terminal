@@ -1,5 +1,7 @@
 {
     "$schema": "./node_modules/turbo/schema.json",
+    "concurrency": "20",
+    "ui": "stream",
     "tasks": {
         "clean": {
             "cache": false
@@ -9,15 +11,8 @@
             "persistent": true
         },
         "build": {
-            "dependsOn": [
-                "^build"
-            ],
-            "outputs": [
-                ".next/**",
-                "!.next/cache/**",
-                "!.next/dev/**",
-                "dist/**"
-            ]
+            "dependsOn": ["^build"],
+            "outputs": [".next/**", "!.next/cache/**", "!.next/dev/**", "dist/**"]
         },
         "start": {
             "cache": false,

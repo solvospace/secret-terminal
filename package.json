@@ -5,7 +5,7 @@
     "license": "AGPL-3.0-or-later",
     "repository": "https://github.com/solvospace/secret-terminal.git",
     "scripts": {
-        "dev": "concurrently \"turbo run dev --concurrency=20\" \"wait-on http://app.localhost:7575 && open http://app.localhost:7575\"",
+        "dev": "turbo run dev & sleep 3 && open http://app.localhost:7575",
         "clean": "turbo run clean",
         "clean:all": "bash ./scripts/clean.sh",
         "build": "turbo build --concurrency=4",
@@ -29,14 +29,12 @@
         "@commitlint/config-conventional": "catalog:",
         "@commitlint/types": "catalog:",
         "@types/node": "catalog:",
-        "concurrently": "catalog:",
         "husky": "catalog:",
         "lint-staged": "catalog:",
         "oxfmt": "catalog:",
         "oxlint": "catalog:",
         "turbo": "catalog:",
-        "typescript": "catalog:",
-        "wait-on": "catalog:"
+        "typescript": "catalog:"
     },
     "lint-staged": {
         "*.{js,jsx,ts,tsx,cjs,mjs,cts,mts}": [
