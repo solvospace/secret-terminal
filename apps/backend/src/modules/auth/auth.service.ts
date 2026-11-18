@@ -438,8 +438,8 @@ export default class AuthenticationService {
     }
 
     private handleMailError(error: unknown) {
-        this.logger.error("Failed to send mail", error instanceof Error ? error.stack : String(error));
-        throw new InternalServerErrorException("Unable to send mail");
+        this.logger.error("Failed to send mail", (error instanceof Error && error.stack) ?? String(error));
+        throw new InternalServerErrorException((error instanceof Error && error.message) ?? "Unable to send mail");
     }
 
     setAuthCookies(response: NodeResponse, tokens: { accessToken: string; refreshToken: string }) {
