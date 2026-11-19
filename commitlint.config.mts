@@ -12,7 +12,7 @@ const config: UserConfig = {
         "type-case": [2, "always", "lower-case"],
         "scope-empty": [2, "never"],
         "scope-case": [2, "always", ["lower-case"]],
-        "header-max-length": [2, "always", 250],
+        "header-max-length": [2, "always", 1000],
         "subject-case": [2, "always", ["sentence-case", "start-case", "lower-case"]],
         "subject-empty": [2, "never"],
         "body-leading-blank": [2, "always"],

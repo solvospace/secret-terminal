@@ -41,7 +41,7 @@ export function proxy(request: NextRequest) {
     }
 
     const url = request.nextUrl.clone();
-    url.pathname = `/s/${subdomain}${pathname}`;
+    url.pathname = `/sites/${subdomain}${pathname}`;
 
     return NextResponse.rewrite(url);
 }

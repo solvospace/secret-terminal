@@ -40,7 +40,6 @@
     "devDependencies": {
         "@eslint/js": "catalog:",
         "@tailwindcss/postcss": "catalog:",
-        "@types/dom-chromium-ai": "catalog:",
         "@types/react": "catalog:",
         "@types/react-dom": "catalog:",
         "babel-plugin-react-compiler": "catalog:",
