@@ -34,22 +34,37 @@ jobs:
             - name: Install Fly CLI
               uses: superfly/flyctl-actions/setup-flyctl@master
 
+            - name: Create development config
+              if: github.ref == 'refs/heads/dev'
+              run: |
+                  printf '%s' "$FLY_CONFIG" > apps/backend/fly.dev.toml
+
+              env:
+                  FLY_CONFIG: ${{ secrets.FLY_CONFIG_DEV }}
+
             - name: Deploy development
               if: github.ref == 'refs/heads/dev'
               run: |
                   flyctl deploy . \
-                    --config apps/backend/fly.dev.toml \
-                    --dockerfile apps/backend/Dockerfile \
-                    --remote-only
+                      --config apps/backend/fly.dev.toml \
+                      --dockerfile apps/backend/Dockerfile \
+                      --remote-only
               env:
                   FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN_DEV }}
+
+            - name: Create production config
+              if: github.ref == 'refs/heads/main'
+              run: |
+                  printf '%s' "$FLY_CONFIG" > apps/backend/fly.toml
+              env:
+                  FLY_CONFIG: ${{ secrets.FLY_CONFIG_PROD }}
 
             - name: Deploy production
               if: github.ref == 'refs/heads/main'
               run: |
                   flyctl deploy . \
-                    --config apps/backend/fly.toml \
-                    --dockerfile apps/backend/Dockerfile \
-                    --remote-only
+                      --config apps/backend/fly.toml \
+                      --dockerfile apps/backend/Dockerfile \
+                      --remote-only
               env:
                   FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN_PROD }}
