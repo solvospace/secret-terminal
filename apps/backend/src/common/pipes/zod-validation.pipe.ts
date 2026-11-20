@@ -13,9 +13,7 @@ export class ZodValidationPipe implements PipeTransform {
                 const issue = error.issues[0];
                 const field = String(issue.path.at(-1));
 
-                throw new UnprocessableEntityException({
-                    message: `${field}: ${issue.message}`,
-                });
+                throw new UnprocessableEntityException(`${field}: ${issue.message}`);
             }
 
             throw new BadRequestException("Invalid request.");
