@@ -1,13 +1,19 @@
-import { coinGeckoClient } from "../../integrations/client/client.js";
-import { coinGeckoEndpoints } from "../../integrations/client/endpoints.js";
-import { Injectable } from "@nestjs/common";
+import { coinGeckoEndpoints } from "../../integrations/http/endpoints.js";
+import { HTTP_CLIENTS } from "@/integrations/http/http.tokens.js";
+import { Inject, Injectable } from "@nestjs/common";
 import { formatValueIntoCommaSeparated, roundOffNumber } from "@secret-terminal/services/utils.service";
 import type { GlobalMarketApiData } from "@secret-terminal/types/global-market.types";
+import type { AxiosInstance } from "axios";
 
 @Injectable()
 export default class GlobalMarketService {
+    constructor(
+        @Inject(HTTP_CLIENTS.COINGECKO)
+        private readonly coinGeckoClient: AxiosInstance,
+    ) {}
+
     async retrieveGlobalMarketData() {
-        const response = await coinGeckoClient.get(coinGeckoEndpoints.coins.globalMarket);
+        const response = await this.coinGeckoClient.get(coinGeckoEndpoints.coins.globalMarket);
         const globalMarketData = this.createGlobalMarketStatistics(response.data.data);
 
         return {

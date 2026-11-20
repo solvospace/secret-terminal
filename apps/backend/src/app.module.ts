@@ -1,4 +1,5 @@
 import CookieMiddleware from "./common/middlewares/cookie.middleware.js";
+import HttpModule from "./integrations/http/http.module.js";
 import MailModule from "./integrations/mail/mail.module.js";
 import AiModule from "./modules/ai/ai.module.js";
 import CoinsModule from "./modules/coins/coins.module.js";
@@ -44,6 +45,7 @@ import { ThrottlerGuard, ThrottlerModule } from "@nestjs/throttler";
             ],
         }),
         PrismaModule,
+        HttpModule,
         MailModule,
         AuthenticationModule,
         UserModule,

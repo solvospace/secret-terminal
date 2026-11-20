@@ -1,13 +1,19 @@
 import { cleanResponse } from "../../common/services/clean-response.service.js";
-import { coinGeckoClient } from "../../integrations/client/client.js";
-import { coinGeckoEndpoints } from "../../integrations/client/endpoints.js";
-import { Injectable } from "@nestjs/common";
+import { coinGeckoEndpoints } from "../../integrations/http/endpoints.js";
+import { HTTP_CLIENTS } from "@/integrations/http/http.tokens.js";
+import { Inject, Injectable } from "@nestjs/common";
 import { getRowsPerPageDefaultValue } from "@secret-terminal/services/utils.service";
 import type { CoinDetailsServerResponse } from "@secret-terminal/types/coin-details.types";
 import type { CoingeckoCoin, CoinListApiParams } from "@secret-terminal/types/coin-list.types";
+import type { AxiosInstance } from "axios";
 
 @Injectable()
 export default class CoinsService {
+    constructor(
+        @Inject(HTTP_CLIENTS.COINGECKO)
+        private readonly coinGeckoClient: AxiosInstance,
+    ) {}
+
     async retrieveCoinList(params: CoinListApiParams) {
         const queryParams: CoinListApiParams = {
             vs_currency: "usd",
@@ -21,7 +27,7 @@ export default class CoinsService {
             ids: params.ids || null,
         };
 
-        const response = await coinGeckoClient.get(coinGeckoEndpoints.coins.coinListWithMarketData, {
+        const response = await this.coinGeckoClient.get(coinGeckoEndpoints.coins.coinListWithMarketData, {
             params: queryParams,
         });
 
@@ -33,7 +39,7 @@ export default class CoinsService {
     }
 
     async retrieveCoinById(id: string) {
-        const response = await coinGeckoClient.get(`${coinGeckoEndpoints.coins.coinDataById}/${id}`);
+        const response = await this.coinGeckoClient.get(`${coinGeckoEndpoints.coins.coinDataById}/${id}`);
 
         return {
             data: createCoinProperties(response.data),
