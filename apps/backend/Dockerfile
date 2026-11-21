@@ -1,6 +1,7 @@
 FROM node:24.22.3-bookworm-slim
 
 RUN apt-get update \
+    && apt-get upgrade -y \
     && apt-get install -y --no-install-recommends openssl ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
