@@ -3,7 +3,7 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "build": "pnpm run prisma:generate && nest build",
+        "build": "pnpm prisma:generate && nest build",
         "dev": "nest start --debug=9230 --watch",
         "start": "nest start",
         "start:dev": "nest start --watch",
@@ -15,8 +15,8 @@
         "test:cov": "vitest run --coverage",
         "test:debug": "vitest --inspect-brk --no-file-parallelism",
         "test:e2e": "vitest run --config ./vitest.config.e2e.ts",
-        "prisma:generate": "tsx scripts/prisma-generate.ts",
-        "prisma:migrate": "tsx scripts/prisma-migrate.ts"
+        "prisma:generate": "bash scripts/prisma-generate.sh",
+        "prisma:migrate": "bash scripts/prisma-migrate.sh"
     },
     "dependencies": {
         "@nestjs/common": "catalog:",
