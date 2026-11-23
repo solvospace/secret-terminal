@@ -25,7 +25,7 @@ export default class AuthController {
         @Body(new ZodValidationPipe(signInSchema)) body: SignInProperties,
         @Res({ passthrough: true }) response: NodeResponse,
     ) {
-        return await this.authService.signIn(body, response);
+        return await this.authService.signIn(response, body);
     }
 
     @Post("verify-account")
@@ -38,7 +38,7 @@ export default class AuthController {
 
     @Post("account-verification-code")
     async accountVerificationCode(@Body() body: { email: string }, @Res({ passthrough: true }) response: NodeResponse) {
-        return await this.authService.sendVerificationCode(response, body.email, null);
+        return await this.authService.sendVerificationCode(response, body.email);
     }
 
     @Post("refresh-token")

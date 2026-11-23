@@ -70,7 +70,7 @@ export default class AuthenticationService {
         };
     }
 
-    async signIn(properties: SignInProperties, response: NodeResponse) {
+    async signIn(response: NodeResponse, properties: SignInProperties) {
         if (!properties.email) {
             throw new UnprocessableEntityException("Email is required.");
         }
@@ -109,7 +109,7 @@ export default class AuthenticationService {
         };
     }
 
-    async sendVerificationCode(response: NodeResponse, email: string, userId?: string | null) {
+    async sendVerificationCode(response: NodeResponse, email: string, userId?: string) {
         let localUserId = userId;
 
         if (!localUserId) {
