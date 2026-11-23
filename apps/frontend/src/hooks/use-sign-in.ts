@@ -1,9 +1,9 @@
 "use client";
 
-import { SetStateAction, Dispatch, useEffect, useState, useRef } from "react";
-import { useUser } from "@/contexts/user.context";
+import authenticationFormSchemaMap from "@/schemas/authentication-form.schema";
+import HCaptcha from "@hcaptcha/react-hcaptcha";
 import { useLoading } from "@/contexts/loading.context";
-import { useForm } from "@tanstack/react-form";
+import { useUser } from "@/contexts/user.context";
 import {
     changePassword,
     forgotPassword,
@@ -14,9 +14,9 @@ import {
     getAccountVerificationCode,
 } from "@/services/authentication.service";
 import { retrieveProfile } from "@/services/user.service";
+import { useForm } from "@tanstack/react-form";
+import { SetStateAction, Dispatch, useEffect, useState, useRef } from "react";
 import type { UserFormData, FormType } from "@/interfaces/account-centre.interface";
-import authenticationFormSchemaMap from "@/schemas/authentication-form.schema";
-import HCaptcha from "@hcaptcha/react-hcaptcha";
 
 type Bindings = {
     defaultFormType: FormType;
@@ -190,13 +190,12 @@ export default function useSignIn(bindings: Bindings) {
                     throw new Error("Invalid form type");
             }
 
-            if ([200, 201].includes(response.status)) {
+            if (response.data.success) {
                 if (response.data.data.verified) {
                     fetchProfile();
                     setShowDialog(false);
                 } else {
                     setFormType("verifyAccount");
-
                     startResendCodeTimer();
                 }
             }
@@ -216,7 +215,6 @@ export default function useSignIn(bindings: Bindings) {
             if (response.data.data.id) {
                 setUser(response.data.data);
             }
-        } catch (error) {
         } finally {
             setIsLoading(false);
         }
