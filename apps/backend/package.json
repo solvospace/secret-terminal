@@ -19,6 +19,7 @@
         "prisma:migrate": "bash scripts/prisma-migrate.sh"
     },
     "dependencies": {
+        "@nestjs/authentication": "catalog:",
         "@nestjs/common": "catalog:",
         "@nestjs/config": "catalog:",
         "@nestjs/core": "catalog:",
@@ -27,12 +28,10 @@
         "@nestjs/throttler": "catalog:",
         "@prisma/adapter-pg": "catalog:",
         "@prisma/client": "catalog:",
-        "@types/bcrypt": "catalog:",
         "@types/jsonwebtoken": "catalog:",
         "@types/ms": "catalog:",
         "ai": "catalog:",
         "axios": "catalog:",
-        "bcrypt": "catalog:",
         "class-transformer": "catalog:",
         "class-validator": "catalog:",
         "hcaptcha": "catalog:",

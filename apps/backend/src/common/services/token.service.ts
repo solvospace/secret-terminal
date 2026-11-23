@@ -1,35 +1,63 @@
+import jwt from "jsonwebtoken";
+import { TokenPayload } from "../types/jwt.types.js";
+import { Injectable, UnauthorizedException } from "@nestjs/common";
 import type { StringValue } from "ms";
 
-import jwt from "jsonwebtoken";
+type TokenType = "accessToken" | "refreshToken";
 
-function generateAccessToken(payload: object) {
-    return jwt.sign({ payload }, process.env.JWT_ACCESS_TOKEN_SECRET as string, {
-        expiresIn: process.env.ACCESS_TOKEN_EXPIRES_IN as StringValue,
-    });
-}
+@Injectable()
+export default class TokenService {
+    generate(type: TokenType, payload: TokenPayload): string {
+        const secret = this.getSecret(type);
+        let expiresIn;
 
-function generateRefreshToken(payload: object) {
-    return jwt.sign({ payload }, process.env.JWT_REFRESH_TOKEN_SECRET as string, {
-        expiresIn: process.env.REFRESH_TOKEN_EXPIRES_IN as StringValue,
-    });
-}
+        switch (type) {
+            case "accessToken":
+                expiresIn = process.env.ACCESS_TOKEN_EXPIRES_IN;
+                break;
+            case "refreshToken":
+                expiresIn = process.env.REFRESH_TOKEN_EXPIRES_IN;
+                break;
+        }
 
-function verifyRefreshToken(token: string) {
-    try {
-        return jwt.verify(token, process.env.JWT_REFRESH_TOKEN_SECRET as string);
-    } catch {
-        return { error: "Invalid or expired token." };
+        if (!expiresIn) {
+            throw new Error(`${type} expiration is not configured.`);
+        }
+
+        return jwt.sign(payload, secret, {
+            expiresIn: expiresIn as StringValue,
+            algorithm: "HS256",
+        });
+    }
+
+    verify(type: TokenType, token: string) {
+        const secret = this.getSecret(type);
+
+        try {
+            return jwt.verify(token, secret, {
+                algorithms: ["HS256"],
+            });
+        } catch {
+            throw new UnauthorizedException("Invalid or expired token.");
+        }
+    }
+
+    private getSecret(type: TokenType): string {
+        let secret: string | undefined;
+
+        switch (type) {
+            case "accessToken":
+                secret = process.env.JWT_ACCESS_TOKEN_SECRET;
+                break;
+            case "refreshToken":
+                secret = process.env.JWT_REFRESH_TOKEN_SECRET;
+                break;
+        }
+
+        if (!secret) {
+            throw new Error(`${type} secret is not configured.`);
+        }
+
+        return secret;
     }
 }
-
-function verifyAccessToken(token: string) {
-    try {
-        return jwt.verify(token, process.env.JWT_ACCESS_TOKEN_SECRET as string);
-    } catch {
-        return { error: "Invalid or expired token." };
-    }
-}
-
-const TokenService = { generateAccessToken, generateRefreshToken, verifyRefreshToken, verifyAccessToken };
-
-export default TokenService;

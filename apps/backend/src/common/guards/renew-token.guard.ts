@@ -7,7 +7,10 @@ import type { Jwt } from "../types/jwt.types.js";
 
 @Injectable()
 export class RenewToken implements CanActivate {
-    constructor(private readonly authService: AuthenticationService) {}
+    constructor(
+        private readonly authService: AuthenticationService,
+        private readonly tokenService: TokenService,
+    ) {}
 
     async canActivate(context: ExecutionContext): Promise<boolean> {
         const http = context.switchToHttp();
@@ -22,7 +25,7 @@ export class RenewToken implements CanActivate {
             throw new UnauthorizedException("Your session has expired. Please sign in again.");
         }
 
-        const decodedRt = TokenService.verifyRefreshToken(refreshToken) as Jwt;
+        const decodedRt = this.tokenService.verify("refreshToken", refreshToken) as Jwt;
 
         if (decodedRt.error) {
             throw new UnauthorizedException("Your session has expired. Please sign in again.");
@@ -30,7 +33,7 @@ export class RenewToken implements CanActivate {
 
         const userId = decodedRt.payload.userId;
 
-        const decodedAt = accessToken ? (TokenService.verifyAccessToken(accessToken) as Jwt) : null;
+        const decodedAt = accessToken ? (this.tokenService.verify("accessToken", accessToken) as Jwt) : null;
 
         const accessTokenInvalid = !decodedAt || "error" in decodedAt;
 

@@ -4,8 +4,12 @@ import { Jwt } from "../types/jwt.types.js";
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from "@nestjs/common";
 import { NodeResponse } from "@nestjs/platform-node";
 
+const sessionExpiredMessage = "Your session has expired. Please sign in again.";
+
 @Injectable()
 export class CpTokenGuard implements CanActivate {
+    constructor(private readonly tokenService: TokenService) {}
+
     canActivate(context: ExecutionContext): boolean {
         const http = context.switchToHttp();
 
@@ -15,17 +19,17 @@ export class CpTokenGuard implements CanActivate {
         const cpt = request.cookies?.cpt;
 
         if (!cpt) {
-            throw new UnauthorizedException("Your session has expired. Please try again.");
+            throw new UnauthorizedException(sessionExpiredMessage);
         }
 
-        const decodedCpt = TokenService.verifyAccessToken(cpt) as Jwt;
+        const decodedCpt = this.tokenService.verify("accessToken", cpt) as Jwt;
 
         if (decodedCpt.error) {
             throw new UnauthorizedException(decodedCpt.error);
         }
 
-        if (decodedCpt.payload.purpose !== "change-password" || !decodedCpt.payload.userId) {
-            throw new UnauthorizedException("Your session has expired. Please try again.");
+        if (decodedCpt.payload.purpose !== process.env.CPT_PURPOSE || !decodedCpt.payload.userId) {
+            throw new UnauthorizedException(sessionExpiredMessage);
         }
 
         reply.header("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");

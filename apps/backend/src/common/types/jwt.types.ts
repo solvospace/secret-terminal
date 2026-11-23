@@ -1,6 +1,8 @@
-type JwtPayload = {
+import { type JwtPayload } from "jsonwebtoken";
+
+type TokenPayload = JwtPayload & {
     userId: string;
-    purpose: string;
+    purpose?: string;
 };
 
 type Jwt = {
@@ -14,4 +16,4 @@ type JwtError = {
     expiredAt: number;
 };
 
-export type { Jwt, JwtPayload, JwtError };
+export type { Jwt, TokenPayload, JwtError };

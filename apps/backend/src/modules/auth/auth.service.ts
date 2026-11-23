@@ -1,8 +1,8 @@
 import crypto from "node:crypto";
-import HashService from "../../common/services/hash.service.js";
 import TokenService from "../../common/services/token.service.js";
 import AccountVerificationMail from "./emails/account-verification.mail.js";
 import PasswordResetMail from "./emails/password-reset-mail.js";
+import HasherService from "@/common/services/hasher.service.js";
 import { PrismaService } from "../../prisma/prisma.service.js";
 import {
     Injectable,
@@ -34,6 +34,8 @@ export default class AuthenticationService {
         private readonly prisma: PrismaService,
         private readonly mailer: Mailer,
         private readonly adapterHost: HttpAdapterHost,
+        private readonly hasher: HasherService,
+        private readonly tokenService: TokenService,
     ) {}
 
     async signUp(properties: SignUpProperties) {
@@ -46,7 +48,7 @@ export default class AuthenticationService {
         }
 
         const verificationCode = this.generateCode();
-        const hashedPassword = await HashService.generateHash(properties.password);
+        const hashedPassword = await this.hasher.hash(properties.password);
 
         const user = await this.prisma.user.create({
             data: {
@@ -85,7 +87,7 @@ export default class AuthenticationService {
             throw new UnprocessableEntityException("Incorrect email or password.");
         }
 
-        const isMatch = await HashService.compareHashed(properties.password, foundUser.password);
+        const isMatch = await this.hasher.verify(properties.password, foundUser.password);
 
         if (!isMatch) {
             throw new UnprocessableEntityException("Incorrect email or password.");
@@ -208,7 +210,7 @@ export default class AuthenticationService {
         }
 
         const resetCode = this.generateCode();
-        const hashedCode = await HashService.generateHash(resetCode);
+        const hashedCode = await this.hasher.hash(resetCode);
 
         await this.prisma.$transaction(async (tx) => {
             await tx.resetCode.deleteMany({
@@ -262,7 +264,7 @@ export default class AuthenticationService {
             throw new UnauthorizedException("Reset code expired.");
         }
 
-        const isCodeMatched = await HashService.compareHashed(resetCode, resetCodeEntry.code);
+        const isCodeMatched = await this.hasher.verify(resetCode, resetCodeEntry.code);
 
         if (!isCodeMatched) {
             throw new UnauthorizedException("Invalid reset code.");
@@ -272,9 +274,9 @@ export default class AuthenticationService {
             where: { id: resetCodeEntry.id },
         });
 
-        const updatePasswordToken = TokenService.generateAccessToken({
+        const updatePasswordToken = this.tokenService.generate("accessToken", {
             userId: foundUser.id,
-            purpose: "change-password",
+            purpose: process.env.CPT_PURPOSE,
         });
 
         return {
@@ -299,7 +301,7 @@ export default class AuthenticationService {
             throw new NotFoundException("User doesn't exist.");
         }
 
-        const hashedPassword = await HashService.generateHash(password);
+        const hashedPassword = await this.hasher.hash(password);
 
         await this.prisma.user.update({
             where: { id: foundUser.id },
@@ -317,7 +319,7 @@ export default class AuthenticationService {
             throw new UnauthorizedException("Refresh token is missing.");
         }
 
-        const decoded = TokenService.verifyRefreshToken(token);
+        const decoded = this.tokenService.verify("refreshToken", token);
 
         if (
             typeof decoded !== "object" ||
@@ -375,8 +377,8 @@ export default class AuthenticationService {
 
         const tokenPayload = { userId };
 
-        const newAccessToken = TokenService.generateAccessToken(tokenPayload);
-        const newRefreshToken = TokenService.generateRefreshToken(tokenPayload);
+        const newAccessToken = this.tokenService.generate("accessToken", tokenPayload);
+        const newRefreshToken = this.tokenService.generate("refreshToken", tokenPayload);
 
         await this.prisma.$transaction(async (tx) => {
             if (token) {

@@ -8,7 +8,10 @@ const sessionExpiredMessage = "Your session has expired. Please sign in again.";
 
 @Injectable()
 export class TokenVerification implements CanActivate {
-    constructor(private readonly prisma: PrismaService) {}
+    constructor(
+        private readonly prisma: PrismaService,
+        private readonly tokenService: TokenService,
+    ) {}
 
     async canActivate(context: ExecutionContext): Promise<boolean> {
         const request = context.switchToHttp().getRequest<AppRequest>();
@@ -21,7 +24,7 @@ export class TokenVerification implements CanActivate {
             throw new UnauthorizedException(sessionExpiredMessage);
         }
 
-        const decodedRt = TokenService.verifyRefreshToken(refreshToken) as Jwt;
+        const decodedRt = this.tokenService.verify("refreshToken", refreshToken) as Jwt;
 
         if (decodedRt.error) {
             throw new UnauthorizedException(sessionExpiredMessage);
