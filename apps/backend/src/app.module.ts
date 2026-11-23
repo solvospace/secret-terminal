@@ -7,6 +7,7 @@ import GlobalMarketModule from "./modules/global-market/global-market.module.js"
 import MarketChartModule from "./modules/market-chart/market-chart.module.js";
 import NewsModule from "./modules/news/news.modules.js";
 import SearchModule from "./modules/search/search.module.js";
+import SharedModule from "./modules/shared/shared.module.js";
 import TrendingModule from "./modules/trending/trending.module.js";
 import WatchlistCoinsModule from "./modules/watchlist/coins/coins.module.js";
 import WatchlistModule from "./modules/watchlist/watchlist.module.js";
@@ -45,6 +46,7 @@ import { ThrottlerGuard, ThrottlerModule } from "@nestjs/throttler";
             ],
         }),
         PrismaModule,
+        SharedModule,
         HttpModule,
         MailModule,
         AuthenticationModule,
