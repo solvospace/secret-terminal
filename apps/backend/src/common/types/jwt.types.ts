@@ -6,7 +6,7 @@ type TokenPayload = JwtPayload & {
 };
 
 type Jwt = {
-    payload: JwtPayload;
+    payload: TokenPayload;
     error: string;
 };
 

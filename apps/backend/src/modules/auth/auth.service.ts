@@ -70,7 +70,7 @@ export default class AuthenticationService {
         };
     }
 
-    async signIn(properties: SignInProperties) {
+    async signIn(properties: SignInProperties, response: NodeResponse) {
         if (!properties.email) {
             throw new UnprocessableEntityException("Email is required.");
         }
@@ -94,20 +94,22 @@ export default class AuthenticationService {
         }
 
         if (!foundUser.verified) {
-            return this.sendVerificationCode(foundUser.email, foundUser.id);
+            return this.sendVerificationCode(response, foundUser.email, foundUser.id);
         }
 
         const tokens = await this.manageTokens(foundUser.id);
 
+        this.clearAuthCookies(response);
+        this.setAuthCookies(response, tokens);
+
         return {
-            tokens,
             status: HttpStatus.OK,
             data: { verified: foundUser.verified },
             message: "Welcome back! Glad to see you again.",
         };
     }
 
-    async sendVerificationCode(email: string, userId?: string) {
+    async sendVerificationCode(response: NodeResponse, email: string, userId?: string | null) {
         let localUserId = userId;
 
         if (!localUserId) {
@@ -136,15 +138,16 @@ export default class AuthenticationService {
 
         await this.sendAccountVerificationEmail(email, verificationCode);
 
+        this.clearAuthCookies(response);
+
         return {
-            tokens: null,
             data: { verified: false },
             message: "A verification code has been sent to your email.",
             status: HttpStatus.OK,
         };
     }
 
-    async verifyAccount({ email, code }: Record<string, string>) {
+    async verifyAccount(response: NodeResponse, { email, code }: Record<string, string>) {
         if (!email) {
             throw new UnprocessableEntityException("Email is required.");
         }
@@ -184,8 +187,10 @@ export default class AuthenticationService {
 
         const tokens = await this.manageTokens(foundUser.id);
 
+        this.clearAuthCookies(response);
+        this.setAuthCookies(response, tokens);
+
         return {
-            tokens,
             status: HttpStatus.OK,
             message: "Account verified successfully.",
         };
@@ -233,7 +238,7 @@ export default class AuthenticationService {
         };
     }
 
-    async verifyResetCode(properties: Record<string, string>) {
+    async verifyResetCode(response: NodeResponse, properties: Record<string, string>) {
         const { resetCode, email } = properties;
 
         if (!resetCode) {
@@ -279,14 +284,20 @@ export default class AuthenticationService {
             purpose: process.env.CPT_PURPOSE,
         });
 
+        this.clearAuthCookies(response);
+
+        this.adapterHost.httpAdapter.setCookie(response, "cpt", updatePasswordToken, {
+            ...cookieOptions,
+            maxAge: Number(process.env.CPT_AGE),
+        });
+
         return {
             message: "Verified!",
-            token: updatePasswordToken,
             status: HttpStatus.OK,
         };
     }
 
-    async changePassword(properties: Record<string, string>) {
+    async changePassword(response: NodeResponse, properties: Record<string, string>) {
         const { userId, password } = properties;
 
         if (!password) {
@@ -308,13 +319,15 @@ export default class AuthenticationService {
             data: { password: hashedPassword },
         });
 
+        this.adapterHost.httpAdapter.clearCookie(response, "cpt");
+
         return {
             message: "Password updated successfully.",
             status: HttpStatus.OK,
         };
     }
 
-    async refreshToken(token: string) {
+    async refreshToken(response: NodeResponse, token: string) {
         if (!token) {
             throw new UnauthorizedException("Refresh token is missing.");
         }
@@ -344,14 +357,16 @@ export default class AuthenticationService {
 
         const tokens = await this.manageTokens(user.id, token);
 
+        this.clearAuthCookies(response);
+        this.setAuthCookies(response, tokens);
+
         return {
-            tokens,
             message: "Done!",
             status: HttpStatus.OK,
         };
     }
 
-    async signOut(token: string) {
+    async signOut(response: NodeResponse, token: string) {
         const storedToken = await this.prisma.refreshToken.findUnique({
             where: { token },
         });
@@ -363,6 +378,8 @@ export default class AuthenticationService {
         await this.prisma.refreshToken.delete({
             where: { id: storedToken.id },
         });
+
+        this.clearAuthCookies(response);
 
         return {
             message: "You have been logged out. Have a great day.",

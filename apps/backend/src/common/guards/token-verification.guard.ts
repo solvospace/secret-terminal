@@ -2,7 +2,7 @@ import TokenService from "../services/token.service.js";
 import { PrismaService } from "../../prisma/prisma.service.js";
 import { AppRequest } from "../types/app-request.type.js";
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from "@nestjs/common";
-import type { Jwt } from "../types/jwt.types.js";
+import type { TokenPayload } from "../types/jwt.types.js";
 
 const sessionExpiredMessage = "Your session has expired. Please sign in again.";
 
@@ -24,11 +24,7 @@ export class TokenVerification implements CanActivate {
             throw new UnauthorizedException(sessionExpiredMessage);
         }
 
-        const decodedRt = this.tokenService.verify("refreshToken", refreshToken) as Jwt;
-
-        if (decodedRt.error) {
-            throw new UnauthorizedException(sessionExpiredMessage);
-        }
+        this.tokenService.verify("refreshToken", refreshToken) as TokenPayload;
 
         const storedToken = await this.prisma.refreshToken.findUnique({
             where: {

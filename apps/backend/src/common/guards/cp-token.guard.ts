@@ -1,6 +1,6 @@
 import TokenService from "../services/token.service.js";
 import { AppRequest } from "../types/app-request.type.js";
-import { Jwt } from "../types/jwt.types.js";
+import { TokenPayload } from "../types/jwt.types.js";
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from "@nestjs/common";
 import { NodeResponse } from "@nestjs/platform-node";
 
@@ -22,21 +22,17 @@ export class CpTokenGuard implements CanActivate {
             throw new UnauthorizedException(sessionExpiredMessage);
         }
 
-        const decodedCpt = this.tokenService.verify("accessToken", cpt) as Jwt;
+        const decodedCpt = this.tokenService.verify("accessToken", cpt) as TokenPayload;
 
-        if (decodedCpt.error) {
-            throw new UnauthorizedException(decodedCpt.error);
-        }
-
-        if (decodedCpt.payload.purpose !== process.env.CPT_PURPOSE || !decodedCpt.payload.userId) {
-            throw new UnauthorizedException(sessionExpiredMessage);
+        if (decodedCpt.purpose !== process.env.CPT_PURPOSE || !decodedCpt.userId) {
+            throw new UnauthorizedException("Invalid or expired token.");
         }
 
         reply.header("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
         reply.header("Pragma", "no-cache");
         reply.header("Expires", "0");
 
-        (request as AppRequest).userId = decodedCpt.payload.userId;
+        (request as AppRequest).userId = decodedCpt.userId;
 
         return true;
     }

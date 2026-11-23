@@ -3,7 +3,7 @@ import TokenService from "../services/token.service.js";
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from "@nestjs/common";
 import { NodeResponse } from "@nestjs/platform-node";
 import type { AppRequest } from "../types/app-request.type.js";
-import type { Jwt } from "../types/jwt.types.js";
+import type { TokenPayload } from "../types/jwt.types.js";
 
 @Injectable()
 export class RenewToken implements CanActivate {
@@ -25,19 +25,13 @@ export class RenewToken implements CanActivate {
             throw new UnauthorizedException("Your session has expired. Please sign in again.");
         }
 
-        const decodedRt = this.tokenService.verify("refreshToken", refreshToken) as Jwt;
+        const decodedRt = this.tokenService.verify("refreshToken", refreshToken) as TokenPayload;
 
-        if (decodedRt.error) {
-            throw new UnauthorizedException("Your session has expired. Please sign in again.");
-        }
+        const userId = decodedRt.userId;
 
-        const userId = decodedRt.payload.userId;
+        const decodedAt = accessToken ? (this.tokenService.verify("accessToken", accessToken) as TokenPayload) : null;
 
-        const decodedAt = accessToken ? (this.tokenService.verify("accessToken", accessToken) as Jwt) : null;
-
-        const accessTokenInvalid = !decodedAt || "error" in decodedAt;
-
-        if (accessTokenInvalid) {
+        if (decodedAt?.userId) {
             const tokens = await this.authService.manageTokens(userId, refreshToken);
 
             this.authService.clearAuthCookies(reply);

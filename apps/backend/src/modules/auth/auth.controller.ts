@@ -23,52 +23,29 @@ export default class AuthController {
     @UseGuards(CaptchaGuard)
     async signIn(
         @Body(new ZodValidationPipe(signInSchema)) body: SignInProperties,
-        @Res({ passthrough: true }) reply: NodeResponse,
+        @Res({ passthrough: true }) response: NodeResponse,
     ) {
-        const result = await this.authService.signIn(body);
-
-        this.authService.clearAuthCookies(reply);
-
-        if (result.tokens) {
-            this.authService.setAuthCookies(reply, result.tokens);
-        }
-
-        return result;
+        return await this.authService.signIn(body, response);
     }
 
     @Post("verify-account")
     async accountVerification(
         @Body() body: { email: string; code: string },
-        @Res({ passthrough: true }) reply: NodeResponse,
+        @Res({ passthrough: true }) response: NodeResponse,
     ) {
-        const result = await this.authService.verifyAccount(body);
-
-        this.authService.clearAuthCookies(reply);
-
-        if (result.tokens) {
-            this.authService.setAuthCookies(reply, result.tokens);
-        }
-
-        return result;
+        return await this.authService.verifyAccount(response, body);
     }
 
     @Post("account-verification-code")
-    async accountVerificationCode(@Body() body: { email: string }, @Res({ passthrough: true }) reply: NodeResponse) {
-        const result = await this.authService.sendVerificationCode(body.email);
-        this.authService.clearAuthCookies(reply);
-        return result;
+    async accountVerificationCode(@Body() body: { email: string }, @Res({ passthrough: true }) response: NodeResponse) {
+        return await this.authService.sendVerificationCode(response, body.email, null);
     }
 
     @Post("refresh-token")
     @UseGuards(TokenVerification)
-    async refreshToken(@Req() request: AppRequest, @Res({ passthrough: true }) reply: NodeResponse) {
+    async refreshToken(@Req() request: AppRequest, @Res({ passthrough: true }) response: NodeResponse) {
         const token = request.cookies.refreshToken!;
-        const result = await this.authService.refreshToken(token);
-
-        this.authService.clearAuthCookies(reply);
-        this.authService.setAuthCookies(reply, result.tokens);
-
-        return result;
+        return await this.authService.refreshToken(response, token);
     }
 
     @Post("forgot-password")
@@ -79,21 +56,9 @@ export default class AuthController {
     @Post("verify-reset-code")
     async verifyResetCode(
         @Body() body: { resetCode: string; email: string },
-        @Res({ passthrough: true }) reply: NodeResponse,
+        @Res({ passthrough: true }) response: NodeResponse,
     ) {
-        const result = await this.authService.verifyResetCode(body);
-
-        this.authService.clearAuthCookies(reply);
-
-        reply.cookie("cpt", result.token, {
-            httpOnly: true,
-            secure: true,
-            sameSite: "none",
-            path: "/",
-            maxAge: Number(process.env.CPT_AGE),
-        });
-
-        return result;
+        return await this.authService.verifyResetCode(response, body);
     }
 
     @Patch("change-password")
@@ -101,31 +66,18 @@ export default class AuthController {
     async changePassword(
         @Req() request: AppRequest,
         @Body() body: { password: string },
-        @Res({ passthrough: true }) reply: NodeResponse,
+        @Res({ passthrough: true }) response: NodeResponse,
     ) {
-        const result = await this.authService.changePassword({
+        return await this.authService.changePassword(response, {
             userId: request.userId,
             password: body.password,
         });
-
-        reply.clearCookie("cpt", {
-            httpOnly: true,
-            secure: true,
-            sameSite: "none",
-            path: "/",
-        });
-
-        return result;
     }
 
     @Post("sign-out")
     @UseGuards(TokenVerification)
-    async signOut(@Req() request: AppRequest, @Res({ passthrough: true }) reply: NodeResponse) {
+    async signOut(@Req() request: AppRequest, @Res({ passthrough: true }) response: NodeResponse) {
         const token = request.cookies.refreshToken!;
-        const result = await this.authService.signOut(token);
-
-        this.authService.clearAuthCookies(reply);
-
-        return result;
+        return await this.authService.signOut(response, token);
     }
 }
