@@ -10,7 +10,8 @@
             {
                 "args": "all"
             }
-        ]
+        ],
+        "no-debugger": "warn"
     },
     "env": {
         "builtin": true
