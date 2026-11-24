@@ -60,7 +60,11 @@ export default function useSignIn(bindings: Bindings) {
             formData.current = value;
 
             if (["signIn", "signUp"].includes(formType)) {
-                captchaRef.current?.execute();
+                try {
+                    await captchaRef.current?.execute({ async: true });
+                } catch {
+                    setSubmittingData(false);
+                }
             } else {
                 onFormSubmit(value);
             }
