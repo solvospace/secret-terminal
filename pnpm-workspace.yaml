@@ -4,6 +4,8 @@ packages:
 
 minimumReleaseAge: 2880 #2 days
 
+catalogMode: prefer
+
 allowBuilds:
     "@parcel/watcher": true
     "@prisma/engines": true
