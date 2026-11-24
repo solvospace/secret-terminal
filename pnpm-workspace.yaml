@@ -28,7 +28,9 @@ catalog:
     "vite": 8.3.8
     "vitest": 5.1.0
     "zod": 4.6.7
-    "prisma": 7.8.0
+    "prisma": 7.10.1
+    "@prisma/adapter-pg": 7.10.1
+    "@prisma/client": 7.10.1
     "husky": 9.1.7
     "@nestjs/core": 12.5.0
     "@nestjs/common": 12.5.0
@@ -60,8 +62,6 @@ catalog:
     "@types/react-dom": 19.2.3
     "@types/supertest": ^7.0.0
     "@vercel/analytics": ^1.6.1
-    "@prisma/adapter-pg": 7.8.0
-    "@prisma/client": 7.8.0
     ai: ^7.0.143
     ajv: ^8.20.0
     axios: ^1.19.0
