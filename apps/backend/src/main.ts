@@ -1,6 +1,4 @@
-import { existsSync } from "node:fs";
-import * as path from "node:path";
-import { loadEnvFile } from "node:process";
+import "./load-env.js";
 import helmet from "helmet";
 import { AppModule } from "./app.module.js";
 import { HttpExceptionFilter } from "./common/filters/http-exception.filter.js";
@@ -8,12 +6,6 @@ import { ResponseInterceptor } from "./common/interceptors/response.interceptor.
 import { ValidationPipe, VersioningType } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
 import { NodeAdapter, NestNodeApplication } from "@nestjs/platform-node";
-
-const envPath = path.resolve(process.cwd(), ".env");
-
-if (existsSync(envPath)) {
-    loadEnvFile(envPath);
-}
 
 const localRegex = process.env.CORS_LOCAL_REGEX ? new RegExp(process.env.CORS_LOCAL_REGEX, "i") : null;
 const companyRegexOne = process.env.CORS_COMPANY_REGEX_ONE ? new RegExp(process.env.CORS_COMPANY_REGEX_ONE, "i") : null;

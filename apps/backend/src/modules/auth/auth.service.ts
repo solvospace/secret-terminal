@@ -3,7 +3,9 @@ import TokenService from "../../common/services/token.service.js";
 import AccountVerificationMail from "./emails/account-verification.mail.js";
 import PasswordResetMail from "./emails/password-reset-mail.js";
 import HasherService from "@/common/services/hasher.service.js";
-import { PrismaService } from "../../prisma/prisma.service.js";
+import DatabaseService from "@/database/database.service.js";
+import { TokenPayload } from "@/common/types/jwt.types.js";
+import { refreshTokensTable, resetCodesTable, usersTable } from "@/database/schema/index.js";
 import {
     Injectable,
     HttpStatus,
@@ -18,6 +20,7 @@ import {
 import { HttpAdapterHost } from "@nestjs/core";
 import { Mailer } from "@nestjs/mail";
 import { NodeResponse } from "@nestjs/platform-node";
+import { and, eq } from "drizzle-orm";
 import type { SignUpProperties, SignInProperties } from "./auth.types.js";
 
 const cookieOptions = {
@@ -31,7 +34,7 @@ const cookieOptions = {
 export default class AuthenticationService {
     private readonly logger = new Logger(AuthenticationService.name);
     constructor(
-        private readonly prisma: PrismaService,
+        private readonly db: DatabaseService,
         private readonly mailer: Mailer,
         private readonly adapterHost: HttpAdapterHost,
         private readonly hasher: HasherService,
@@ -39,9 +42,10 @@ export default class AuthenticationService {
     ) {}
 
     async signUp(properties: SignUpProperties) {
-        const existingUser = await this.prisma.user.findUnique({
-            where: { email: properties.email },
-        });
+        const [existingUser] = await this.db.query
+            .select()
+            .from(usersTable)
+            .where(eq(usersTable.email, properties.email));
 
         if (existingUser) {
             throw new ConflictException("User already exists.");
@@ -50,14 +54,15 @@ export default class AuthenticationService {
         const verificationCode = this.generateCode();
         const hashedPassword = await this.hasher.hash(properties.password);
 
-        const user = await this.prisma.user.create({
-            data: {
+        const [user] = await this.db.query
+            .insert(usersTable)
+            .values({
                 name: properties.name,
                 email: properties.email,
                 password: hashedPassword,
                 verificationCode,
-            },
-        });
+            })
+            .returning();
 
         if (user.id) {
             await this.sendAccountVerificationEmail(user.email, verificationCode);
@@ -79,9 +84,17 @@ export default class AuthenticationService {
             throw new UnprocessableEntityException("Password is required.");
         }
 
-        const foundUser = await this.prisma.user.findUnique({
-            where: { email: properties.email },
-        });
+        let foundUser;
+
+        try {
+            [foundUser] = await this.db.query.select().from(usersTable).where(eq(usersTable.email, properties.email));
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                console.log(error.message);
+            } else {
+                console.log(JSON.stringify(error));
+            }
+        }
 
         if (!foundUser) {
             throw new UnprocessableEntityException("Incorrect email or password.");
@@ -113,10 +126,7 @@ export default class AuthenticationService {
         let localUserId = userId;
 
         if (!localUserId) {
-            const foundUser = await this.prisma.user.findUnique({
-                where: { email },
-                select: { id: true },
-            });
+            const [foundUser] = await this.db.query.select().from(usersTable).where(eq(usersTable.email, email));
 
             if (!foundUser) {
                 throw new UnprocessableEntityException("Incorrect email.");
@@ -128,13 +138,13 @@ export default class AuthenticationService {
         const verificationCode = this.generateCode();
         const verificationCodeExpiresAt = new Date(Date.now() + 10 * 60 * 1000);
 
-        await this.prisma.user.update({
-            where: { id: localUserId },
-            data: {
+        await this.db.query
+            .update(usersTable)
+            .set({
                 verificationCode,
                 verificationCodeExpiresAt,
-            },
-        });
+            })
+            .where(eq(usersTable.id, localUserId));
 
         await this.sendAccountVerificationEmail(email, verificationCode);
 
@@ -156,9 +166,7 @@ export default class AuthenticationService {
             throw new UnprocessableEntityException("Verification code is required.");
         }
 
-        const foundUser = await this.prisma.user.findUnique({
-            where: { email },
-        });
+        const [foundUser] = await this.db.query.select().from(usersTable).where(eq(usersTable.email, email));
 
         if (!foundUser) {
             throw new NotFoundException("User doesn't exist.");
@@ -176,14 +184,14 @@ export default class AuthenticationService {
             throw new UnauthorizedException("Verification code has expired.");
         }
 
-        await this.prisma.user.update({
-            where: { id: foundUser.id },
-            data: {
+        await this.db.query
+            .update(usersTable)
+            .set({
                 verified: true,
                 verificationCode: null,
                 verificationCodeExpiresAt: null,
-            },
-        });
+            })
+            .where(eq(usersTable.id, foundUser.id));
 
         const tokens = await this.manageTokens(foundUser.id);
 
@@ -201,9 +209,7 @@ export default class AuthenticationService {
             throw new UnprocessableEntityException("Email is required.");
         }
 
-        const foundUser = await this.prisma.user.findUnique({
-            where: { email },
-        });
+        const [foundUser] = await this.db.query.select().from(usersTable).where(eq(usersTable.email, email));
 
         const message = "If the email exists, a reset code has been sent.";
 
@@ -217,16 +223,11 @@ export default class AuthenticationService {
         const resetCode = this.generateCode();
         const hashedCode = await this.hasher.hash(resetCode);
 
-        await this.prisma.$transaction(async (tx) => {
-            await tx.resetCode.deleteMany({
-                where: { userId: foundUser.id },
-            });
-
-            await tx.resetCode.create({
-                data: {
-                    userId: foundUser.id,
-                    code: hashedCode,
-                },
+        await this.db.query.transaction(async (tx) => {
+            await tx.delete(resetCodesTable).where(eq(resetCodesTable.userId, foundUser.id));
+            await tx.insert(resetCodesTable).values({
+                userId: foundUser.id,
+                code: hashedCode,
             });
         });
 
@@ -249,17 +250,13 @@ export default class AuthenticationService {
             throw new UnprocessableEntityException("Email is required.");
         }
 
-        const foundUser = await this.prisma.user.findUnique({
-            where: { email },
-        });
+        const [foundUser] = await this.db.query.select().from(usersTable).where(eq(usersTable.email, email));
 
         if (!foundUser) {
             throw new NotFoundException("Invalid reset request.");
         }
 
-        const resetCodeEntry = await this.prisma.resetCode.findFirst({
-            where: { userId: foundUser.id },
-        });
+        const [resetCodeEntry] = await this.db.query.select().from(resetCodesTable).limit(1);
 
         if (!resetCodeEntry) {
             throw new UnprocessableEntityException("Invalid reset code.");
@@ -275,9 +272,7 @@ export default class AuthenticationService {
             throw new UnauthorizedException("Invalid reset code.");
         }
 
-        await this.prisma.resetCode.delete({
-            where: { id: resetCodeEntry.id },
-        });
+        await this.db.query.delete(resetCodesTable).where(eq(resetCodesTable.id, resetCodeEntry.id));
 
         const updatePasswordToken = this.tokenService.generate("accessToken", {
             userId: foundUser.id,
@@ -304,9 +299,7 @@ export default class AuthenticationService {
             throw new UnprocessableEntityException("Password is required.");
         }
 
-        const foundUser = await this.prisma.user.findUnique({
-            where: { id: userId },
-        });
+        const [foundUser] = await this.db.query.select().from(usersTable).where(eq(usersTable.id, userId));
 
         if (!foundUser) {
             throw new NotFoundException("User doesn't exist.");
@@ -314,10 +307,7 @@ export default class AuthenticationService {
 
         const hashedPassword = await this.hasher.hash(password);
 
-        await this.prisma.user.update({
-            where: { id: foundUser.id },
-            data: { password: hashedPassword },
-        });
+        await this.db.query.update(usersTable).set({ password: hashedPassword }).where(eq(usersTable.id, foundUser.id));
 
         this.adapterHost.httpAdapter.clearCookie(response, "cpt");
 
@@ -332,24 +322,13 @@ export default class AuthenticationService {
             throw new UnauthorizedException("Refresh token is missing.");
         }
 
-        const decoded = this.tokenService.verify("refreshToken", token);
+        const decoded = this.tokenService.verify("refreshToken", token) as TokenPayload;
 
-        if (
-            typeof decoded !== "object" ||
-            decoded === null ||
-            "error" in decoded ||
-            !("payload" in decoded) ||
-            typeof decoded.payload !== "object" ||
-            decoded.payload === null ||
-            !("userId" in decoded.payload) ||
-            typeof decoded.payload.userId !== "string"
-        ) {
+        if (!decoded.userId) {
             throw new UnauthorizedException("Invalid or expired refresh token.");
         }
 
-        const user = await this.prisma.user.findUnique({
-            where: { id: decoded.payload.userId },
-        });
+        const [user] = await this.db.query.select().from(usersTable).where(eq(usersTable.id, decoded.userId));
 
         if (!user) {
             throw new NotFoundException("User not found.");
@@ -367,17 +346,16 @@ export default class AuthenticationService {
     }
 
     async signOut(response: NodeResponse, token: string) {
-        const storedToken = await this.prisma.refreshToken.findUnique({
-            where: { token },
-        });
+        const [storedToken] = await this.db.query
+            .select()
+            .from(refreshTokensTable)
+            .where(eq(refreshTokensTable.token, token));
 
         if (!storedToken) {
             throw new UnauthorizedException("Please clear this site's cookies and sign in again.");
         }
 
-        await this.prisma.refreshToken.delete({
-            where: { id: storedToken.id },
-        });
+        await this.db.query.delete(refreshTokensTable).where(eq(refreshTokensTable.id, storedToken.id));
 
         this.clearAuthCookies(response);
 
@@ -397,21 +375,16 @@ export default class AuthenticationService {
         const newAccessToken = this.tokenService.generate("accessToken", tokenPayload);
         const newRefreshToken = this.tokenService.generate("refreshToken", tokenPayload);
 
-        await this.prisma.$transaction(async (tx) => {
+        await this.db.query.transaction(async (tx) => {
             if (token) {
-                await tx.refreshToken.deleteMany({
-                    where: {
-                        token,
-                        userId,
-                    },
-                });
+                await tx
+                    .delete(refreshTokensTable)
+                    .where(and(eq(refreshTokensTable.userId, userId), eq(refreshTokensTable.token, token)));
             }
 
-            await tx.refreshToken.create({
-                data: {
-                    userId,
-                    token: newRefreshToken,
-                },
+            await tx.insert(refreshTokensTable).values({
+                userId,
+                token: newRefreshToken,
             });
         });
 

@@ -1,33 +1,35 @@
-import { PrismaService } from "../../prisma/prisma.service.js";
+import DatabaseService from "@/database/database.service.js";
+import { watchlistsTable } from "@/database/schema/index.js";
 import { Injectable, HttpStatus, BadRequestException, UnprocessableEntityException } from "@nestjs/common";
+import { and, eq, desc } from "drizzle-orm";
 
 @Injectable()
 export default class WatchlistService {
-    constructor(private readonly prisma: PrismaService) {}
+    constructor(private readonly db: DatabaseService) {}
 
     async addWatchlist(body: Record<string, string>, userId: string) {
         if (!body.name) {
             throw new BadRequestException("Name is required.");
         }
 
-        const foundWatchlist = await this.prisma.watchlist.findFirst({
-            where: {
-                name: body.name,
-                userId,
-            },
-        });
+        const [foundWatchlist] = await this.db.query
+            .select()
+            .from(watchlistsTable)
+            .where(and(eq(watchlistsTable.name, body.name), eq(watchlistsTable.userId, userId)))
+            .limit(1);
 
         if (foundWatchlist) {
             throw new UnprocessableEntityException(`${body.name} already exists.`);
         }
 
-        const watchlist = await this.prisma.watchlist.create({
-            data: {
+        const [watchlist] = await this.db.query
+            .insert(watchlistsTable)
+            .values({
                 name: body.name,
                 description: body.description,
                 userId,
-            },
-        });
+            })
+            .returning();
 
         return {
             status: HttpStatus.CREATED,
@@ -41,15 +43,14 @@ export default class WatchlistService {
             throw new BadRequestException("Watchlist ID is required.");
         }
 
-        const updatedEntry = await this.prisma.watchlist.update({
-            where: {
-                id: watchlistId,
-            },
-            data: {
+        const [updatedEntry] = await this.db.query
+            .update(watchlistsTable)
+            .set({
                 name: body.name,
                 description: body.description,
-            },
-        });
+            })
+            .where(eq(watchlistsTable.id, watchlistId))
+            .returning();
 
         return {
             message: "Updated successfully.",
@@ -62,11 +63,7 @@ export default class WatchlistService {
             throw new BadRequestException("Watchlist ID is required.");
         }
 
-        await this.prisma.watchlist.delete({
-            where: {
-                id: watchlistId,
-            },
-        });
+        await this.db.query.delete(watchlistsTable).where(eq(watchlistsTable.id, watchlistId));
 
         return {
             message: "Deleted successfully.",
@@ -74,14 +71,11 @@ export default class WatchlistService {
     }
 
     async retrieveWatchlists(userId: string) {
-        const watchlists = await this.prisma.watchlist.findMany({
-            where: {
-                userId,
-            },
-            orderBy: {
-                updatedAt: "desc",
-            },
-        });
+        const watchlists = await this.db.query
+            .select()
+            .from(watchlistsTable)
+            .where(eq(watchlistsTable.userId, userId))
+            .orderBy(desc(watchlistsTable.updatedAt));
 
         return {
             data: watchlists,

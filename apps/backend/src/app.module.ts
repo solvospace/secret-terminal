@@ -11,11 +11,11 @@ import SharedModule from "./modules/shared/shared.module.js";
 import TrendingModule from "./modules/trending/trending.module.js";
 import WatchlistCoinsModule from "./modules/watchlist/coins/coins.module.js";
 import WatchlistModule from "./modules/watchlist/watchlist.module.js";
+import DatabaseModule from "@/database/database.module.js";
 import AuthenticationModule from "@/modules/auth/auth.module.js";
 import UserModule from "@/modules/user/user.module.js";
 import { AppController } from "./app.controller.js";
 import { AppService } from "./app.service.js";
-import { PrismaModule } from "@/prisma/prisma.module.js";
 import { MiddlewareConsumer, Module, NestModule } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { APP_GUARD, RouterModule } from "@nestjs/core";
@@ -45,7 +45,7 @@ import { ThrottlerGuard, ThrottlerModule } from "@nestjs/throttler";
                 },
             ],
         }),
-        PrismaModule,
+        DatabaseModule,
         SharedModule,
         HttpModule,
         MailModule,

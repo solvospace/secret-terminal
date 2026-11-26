@@ -1,0 +1,379 @@
+{
+    "id": "2cc010bb-253a-4f88-9688-f89becfdf1e2",
+    "prevId": "00000000-0000-0000-0000-000000000000",
+    "version": "7",
+    "dialect": "postgresql",
+    "tables": {
+        "auth.refresh_tokens": {
+            "name": "refresh_tokens",
+            "schema": "auth",
+            "columns": {
+                "id": {
+                    "name": "id",
+                    "type": "uuid",
+                    "primaryKey": true,
+                    "notNull": true,
+                    "default": "uuidv7()"
+                },
+                "token": {
+                    "name": "token",
+                    "type": "varchar",
+                    "primaryKey": false,
+                    "notNull": true
+                },
+                "created_at": {
+                    "name": "created_at",
+                    "type": "timestamp (6)",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "default": "now()"
+                },
+                "user_id": {
+                    "name": "user_id",
+                    "type": "uuid",
+                    "primaryKey": false,
+                    "notNull": true
+                }
+            },
+            "indexes": {},
+            "foreignKeys": {
+                "refresh_tokens_user_id_users_id_fk": {
+                    "name": "refresh_tokens_user_id_users_id_fk",
+                    "tableFrom": "refresh_tokens",
+                    "tableTo": "users",
+                    "schemaTo": "auth",
+                    "columnsFrom": ["user_id"],
+                    "columnsTo": ["id"],
+                    "onDelete": "cascade",
+                    "onUpdate": "cascade"
+                }
+            },
+            "compositePrimaryKeys": {},
+            "uniqueConstraints": {
+                "refresh_tokens_token_unique": {
+                    "name": "refresh_tokens_token_unique",
+                    "nullsNotDistinct": false,
+                    "columns": ["token"]
+                }
+            },
+            "policies": {},
+            "checkConstraints": {},
+            "isRLSEnabled": false
+        },
+        "auth.reset_codes": {
+            "name": "reset_codes",
+            "schema": "auth",
+            "columns": {
+                "id": {
+                    "name": "id",
+                    "type": "uuid",
+                    "primaryKey": true,
+                    "notNull": true,
+                    "default": "uuidv7()"
+                },
+                "code": {
+                    "name": "code",
+                    "type": "varchar",
+                    "primaryKey": false,
+                    "notNull": true
+                },
+                "created_at": {
+                    "name": "created_at",
+                    "type": "timestamp (6)",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "default": "now()"
+                },
+                "expires_at": {
+                    "name": "expires_at",
+                    "type": "timestamp (6)",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "default": "(now() + interval '15 minutes')"
+                },
+                "user_id": {
+                    "name": "user_id",
+                    "type": "uuid",
+                    "primaryKey": false,
+                    "notNull": true
+                }
+            },
+            "indexes": {},
+            "foreignKeys": {
+                "reset_codes_user_id_users_id_fk": {
+                    "name": "reset_codes_user_id_users_id_fk",
+                    "tableFrom": "reset_codes",
+                    "tableTo": "users",
+                    "schemaTo": "auth",
+                    "columnsFrom": ["user_id"],
+                    "columnsTo": ["id"],
+                    "onDelete": "cascade",
+                    "onUpdate": "cascade"
+                }
+            },
+            "compositePrimaryKeys": {},
+            "uniqueConstraints": {
+                "reset_codes_code_unique": {
+                    "name": "reset_codes_code_unique",
+                    "nullsNotDistinct": false,
+                    "columns": ["code"]
+                }
+            },
+            "policies": {},
+            "checkConstraints": {},
+            "isRLSEnabled": false
+        },
+        "auth.users": {
+            "name": "users",
+            "schema": "auth",
+            "columns": {
+                "id": {
+                    "name": "id",
+                    "type": "uuid",
+                    "primaryKey": true,
+                    "notNull": true,
+                    "default": "uuidv7()"
+                },
+                "name": {
+                    "name": "name",
+                    "type": "varchar",
+                    "primaryKey": false,
+                    "notNull": true
+                },
+                "email": {
+                    "name": "email",
+                    "type": "varchar",
+                    "primaryKey": false,
+                    "notNull": true
+                },
+                "password": {
+                    "name": "password",
+                    "type": "varchar",
+                    "primaryKey": false,
+                    "notNull": true
+                },
+                "created_at": {
+                    "name": "created_at",
+                    "type": "timestamp (6)",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "default": "now()"
+                },
+                "updated_at": {
+                    "name": "updated_at",
+                    "type": "timestamp (6)",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "default": "now()"
+                },
+                "verified": {
+                    "name": "verified",
+                    "type": "boolean",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "default": false
+                },
+                "verification_code": {
+                    "name": "verification_code",
+                    "type": "varchar",
+                    "primaryKey": false,
+                    "notNull": false
+                },
+                "verification_code_expires_at": {
+                    "name": "verification_code_expires_at",
+                    "type": "timestamp (6)",
+                    "primaryKey": false,
+                    "notNull": false,
+                    "default": "(now() + interval '10 minutes')"
+                }
+            },
+            "indexes": {},
+            "foreignKeys": {},
+            "compositePrimaryKeys": {},
+            "uniqueConstraints": {
+                "users_email_unique": {
+                    "name": "users_email_unique",
+                    "nullsNotDistinct": false,
+                    "columns": ["email"]
+                },
+                "users_verification_code_unique": {
+                    "name": "users_verification_code_unique",
+                    "nullsNotDistinct": false,
+                    "columns": ["verification_code"]
+                }
+            },
+            "policies": {},
+            "checkConstraints": {},
+            "isRLSEnabled": false
+        },
+        "watchlist.watchlist_coins": {
+            "name": "watchlist_coins",
+            "schema": "watchlist",
+            "columns": {
+                "id": {
+                    "name": "id",
+                    "type": "uuid",
+                    "primaryKey": true,
+                    "notNull": true,
+                    "default": "uuidv7()"
+                },
+                "coinId": {
+                    "name": "coinId",
+                    "type": "varchar",
+                    "primaryKey": false,
+                    "notNull": true
+                },
+                "name": {
+                    "name": "name",
+                    "type": "varchar",
+                    "primaryKey": false,
+                    "notNull": true
+                },
+                "symbol": {
+                    "name": "symbol",
+                    "type": "varchar",
+                    "primaryKey": false,
+                    "notNull": true
+                },
+                "imageUrl": {
+                    "name": "imageUrl",
+                    "type": "varchar",
+                    "primaryKey": false,
+                    "notNull": false
+                },
+                "created_at": {
+                    "name": "created_at",
+                    "type": "timestamp (6)",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "default": "now()"
+                },
+                "updated_at": {
+                    "name": "updated_at",
+                    "type": "timestamp (6)",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "default": "now()"
+                },
+                "watchlist_id": {
+                    "name": "watchlist_id",
+                    "type": "uuid",
+                    "primaryKey": false,
+                    "notNull": true
+                }
+            },
+            "indexes": {},
+            "foreignKeys": {
+                "watchlist_coins_watchlist_id_watchlists_id_fk": {
+                    "name": "watchlist_coins_watchlist_id_watchlists_id_fk",
+                    "tableFrom": "watchlist_coins",
+                    "tableTo": "watchlists",
+                    "schemaTo": "watchlist",
+                    "columnsFrom": ["watchlist_id"],
+                    "columnsTo": ["id"],
+                    "onDelete": "cascade",
+                    "onUpdate": "cascade"
+                }
+            },
+            "compositePrimaryKeys": {},
+            "uniqueConstraints": {
+                "watchlist_coins_watchlist_id_coin_id_unique": {
+                    "name": "watchlist_coins_watchlist_id_coin_id_unique",
+                    "nullsNotDistinct": false,
+                    "columns": ["watchlist_id", "coinId"]
+                }
+            },
+            "policies": {},
+            "checkConstraints": {},
+            "isRLSEnabled": false
+        },
+        "watchlist.watchlists": {
+            "name": "watchlists",
+            "schema": "watchlist",
+            "columns": {
+                "id": {
+                    "name": "id",
+                    "type": "uuid",
+                    "primaryKey": true,
+                    "notNull": true,
+                    "default": "uuidv7()"
+                },
+                "name": {
+                    "name": "name",
+                    "type": "varchar",
+                    "primaryKey": false,
+                    "notNull": true
+                },
+                "description": {
+                    "name": "description",
+                    "type": "varchar",
+                    "primaryKey": false,
+                    "notNull": false
+                },
+                "created_at": {
+                    "name": "created_at",
+                    "type": "timestamp (6)",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "default": "now()"
+                },
+                "updated_at": {
+                    "name": "updated_at",
+                    "type": "timestamp (6)",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "default": "now()"
+                },
+                "user_id": {
+                    "name": "user_id",
+                    "type": "uuid",
+                    "primaryKey": false,
+                    "notNull": true
+                }
+            },
+            "indexes": {},
+            "foreignKeys": {
+                "watchlists_user_id_users_id_fk": {
+                    "name": "watchlists_user_id_users_id_fk",
+                    "tableFrom": "watchlists",
+                    "tableTo": "users",
+                    "schemaTo": "auth",
+                    "columnsFrom": ["user_id"],
+                    "columnsTo": ["id"],
+                    "onDelete": "cascade",
+                    "onUpdate": "cascade"
+                }
+            },
+            "compositePrimaryKeys": {},
+            "uniqueConstraints": {
+                "watchlists_name_unique": {
+                    "name": "watchlists_name_unique",
+                    "nullsNotDistinct": false,
+                    "columns": ["name"]
+                },
+                "watchlists_user_id_name_unique": {
+                    "name": "watchlists_user_id_name_unique",
+                    "nullsNotDistinct": false,
+                    "columns": ["user_id", "name"]
+                }
+            },
+            "policies": {},
+            "checkConstraints": {},
+            "isRLSEnabled": false
+        }
+    },
+    "enums": {},
+    "schemas": {
+        "auth": "auth",
+        "watchlist": "watchlist"
+    },
+    "sequences": {},
+    "roles": {},
+    "policies": {},
+    "views": {},
+    "_meta": {
+        "columns": {},
+        "schemas": {},
+        "tables": {}
+    }
+}
