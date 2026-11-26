@@ -29,7 +29,7 @@ export const watchlistsTable = watchlistSchema.table(
                 onUpdate: "cascade",
             }),
     },
-    (table) => [unique("watchlists_user_id_name_unique").on(table.userId, table.name)],
+    (table) => [unique("watchlists_userId_name_key").on(table.userId, table.name)],
 );
 
 export const watchlistCoinsTable = watchlistSchema.table(
@@ -39,13 +39,13 @@ export const watchlistCoinsTable = watchlistSchema.table(
             .primaryKey()
             .default(sql`uuidv7()`),
 
-        coinId: varchar("coinId").notNull(),
+        coinId: varchar("coin_id").notNull(),
 
         name: varchar("name").notNull(),
 
         symbol: varchar("symbol").notNull(),
 
-        imageUrl: varchar("imageUrl"),
+        imageUrl: varchar("image_url"),
 
         createdAt: timestamp("created_at", { precision: 6 }).notNull().defaultNow(),
 
@@ -61,5 +61,5 @@ export const watchlistCoinsTable = watchlistSchema.table(
                 onUpdate: "cascade",
             }),
     },
-    (table) => [unique("watchlist_coins_watchlist_id_coin_id_unique").on(table.watchlistId, table.coinId)],
+    (table) => [unique("watchlist_coins_watchlistId_coinId_key").on(table.watchlistId, table.coinId)],
 );

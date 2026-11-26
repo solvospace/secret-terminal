@@ -1,5 +1,5 @@
 {
-    "id": "2cc010bb-253a-4f88-9688-f89becfdf1e2",
+    "id": "68cb1fcf-5cd7-4892-b4a8-248a857cfb8a",
     "prevId": "00000000-0000-0000-0000-000000000000",
     "version": "7",
     "dialect": "postgresql",
@@ -217,8 +217,8 @@
                     "notNull": true,
                     "default": "uuidv7()"
                 },
-                "coinId": {
-                    "name": "coinId",
+                "coin_id": {
+                    "name": "coin_id",
                     "type": "varchar",
                     "primaryKey": false,
                     "notNull": true
@@ -235,8 +235,8 @@
                     "primaryKey": false,
                     "notNull": true
                 },
-                "imageUrl": {
-                    "name": "imageUrl",
+                "image_url": {
+                    "name": "image_url",
                     "type": "varchar",
                     "primaryKey": false,
                     "notNull": false
@@ -277,10 +277,10 @@
             },
             "compositePrimaryKeys": {},
             "uniqueConstraints": {
-                "watchlist_coins_watchlist_id_coin_id_unique": {
-                    "name": "watchlist_coins_watchlist_id_coin_id_unique",
+                "watchlist_coins_watchlistId_coinId_key": {
+                    "name": "watchlist_coins_watchlistId_coinId_key",
                     "nullsNotDistinct": false,
-                    "columns": ["watchlist_id", "coinId"]
+                    "columns": ["watchlist_id", "coin_id"]
                 }
             },
             "policies": {},
@@ -351,8 +351,8 @@
                     "nullsNotDistinct": false,
                     "columns": ["name"]
                 },
-                "watchlists_user_id_name_unique": {
-                    "name": "watchlists_user_id_name_unique",
+                "watchlists_userId_name_key": {
+                    "name": "watchlists_userId_name_key",
                     "nullsNotDistinct": false,
                     "columns": ["user_id", "name"]
                 }

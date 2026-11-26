@@ -16,7 +16,7 @@ export const usersTable = authSchema.table("users", {
         .defaultNow()
         .$onUpdate(() => new Date()),
     verified: boolean("verified").notNull().default(false),
-    verificationCode: varchar("verificationCode").unique(),
+    verificationCode: varchar("verification_code").unique(),
     verificationCodeExpiresAt: timestamp("verification_code_expires_at", { precision: 6 }).default(
         sql`(now() + interval '10 minutes')`,
     ),

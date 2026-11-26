@@ -1,8 +1,9 @@
 import { drizzle } from "drizzle-orm/node-postgres";
 import { migrate } from "drizzle-orm/node-postgres/migrator";
 import { Pool } from "pg";
+import "@/load-env.js";
 
-async function main() {
+async function testMigration() {
     const pool = new Pool({ connectionString: process.env.DATABASE_URL });
     const db = drizzle(pool);
 
@@ -16,4 +17,4 @@ async function main() {
     }
 }
 
-main();
+await testMigration();
