@@ -8,6 +8,13 @@
             "when": 1795706577527,
             "tag": "0000_soft_the_hood",
             "breakpoints": true
+        },
+        {
+            "idx": 1,
+            "version": "7",
+            "when": 1795761507485,
+            "tag": "0001_rename-columns",
+            "breakpoints": true
         }
     ]
 }
