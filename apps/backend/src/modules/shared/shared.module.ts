@@ -1,7 +1,7 @@
 import AuthenticationService from "../auth/auth.service.js";
 import HasherService from "@/common/services/hasher.service.js";
 import TokenService from "@/common/services/token.service.js";
-import DatabaseService from "@/database/database.service.js";
+import DatabaseModule from "@/database/database.module.js";
 import { RenewToken } from "@/common/guards/renew-token.guard.js";
 import { TokenVerification } from "@/common/guards/token-verification.guard.js";
 import { PasswordHasher } from "@nestjs/authentication";
@@ -9,17 +9,10 @@ import { Global, Module } from "@nestjs/common";
 
 @Global()
 @Module({
-    providers: [
-        DatabaseService,
-        AuthenticationService,
-        TokenService,
-        TokenVerification,
-        RenewToken,
-        HasherService,
-        PasswordHasher,
-    ],
+    imports: [DatabaseModule],
+    providers: [AuthenticationService, TokenService, TokenVerification, RenewToken, HasherService, PasswordHasher],
     exports: [
-        DatabaseService,
+        DatabaseModule,
         AuthenticationService,
         TokenService,
         TokenVerification,
