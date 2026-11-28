@@ -1,9 +1,9 @@
 "use client";
 
-import useTrendingCoinsCategoriesAndNfts from "@/hooks/use-trending-coins-categories-and-nfts";
 import TrendingCoinsCategoriesAndNftsTable from "@/components/features/trending/trending-coins-categories-and-nfts-table";
-import { TrendingCoinsCategoriesAndNftsClient } from "@/interfaces/trending.interface";
+import useTrendingCoinsCategoriesAndNfts from "@/hooks/use-trending-coins-categories-and-nfts";
 import { Skeleton } from "@/components/ui/skeleton";
+import { TrendingCoinsCategoriesAndNftsClient } from "@/interfaces/trending.interface";
 
 function TrendingCoinsCategoriesAndNftsContainer() {
     const { fetchingTrendingCoinsCategoriesAndNfts, trendingCoinsCategoriesAndNfts } =
@@ -19,7 +19,7 @@ function TrendingCoinsCategoriesAndNftsContainer() {
                           return (
                               <Skeleton
                                   key={"indicator" + index}
-                                  className="group h-[242px]"
+                                  className="group"
                               />
                           );
                       })

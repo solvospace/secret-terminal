@@ -1,8 +1,8 @@
 "use client";
 
+import MarketSummaryCard from "@/components/features/market-summary/market-summary-card";
 import useMarketSummary from "@/hooks/use-market-summary";
 import { Skeleton } from "@/components/ui/skeleton";
-import MarketSummaryCard from "@/components/features/market-summary/market-summary-card";
 
 function MarketSummary() {
     const { marketSummary, fetchingMarketSummary } = useMarketSummary();
@@ -17,7 +17,7 @@ function MarketSummary() {
                           return (
                               <Skeleton
                                   key={"indicator" + index}
-                                  className="group h-[262px]"
+                                  className="group"
                               />
                           );
                       })

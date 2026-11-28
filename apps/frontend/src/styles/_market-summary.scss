@@ -12,6 +12,11 @@
         flex-wrap: wrap;
         gap: 12px;
 
+        [data-slot="skeleton"] {
+            height: 242px;
+            min-width: 250px;
+        }
+
         .group {
             width: 100%;
             flex: 1;
