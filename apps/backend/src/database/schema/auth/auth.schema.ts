@@ -18,7 +18,7 @@ export const usersTable = authSchema.table("users", {
     verified: boolean("verified").notNull().default(false),
     verificationCode: varchar("verification_code").unique(),
     verificationCodeExpiresAt: timestamp("verification_code_expires_at", { precision: 6 }).default(
-        sql`(now() + interval process.env.VERIFICATION_CODE_AGE)`,
+        sql`(now() + interval '${sql.raw(process.env.VERIFICATION_CODE_AGE!)}')`,
     ),
 });
 
@@ -44,7 +44,7 @@ export const resetCodesTable = authSchema.table("reset_codes", {
     createdAt: timestamp("created_at", { precision: 6 }).notNull().defaultNow(),
     expiresAt: timestamp("expires_at", { precision: 6 })
         .notNull()
-        .default(sql`(now() + interval process.env.RESET_CODE_AGE)`),
+        .default(sql`(now() + interval '${sql.raw(process.env.RESET_CODE_AGE!)}')`),
     userId: uuid("user_id")
         .notNull()
         .references(() => usersTable.id, {
