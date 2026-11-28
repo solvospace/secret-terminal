@@ -15,6 +15,20 @@
             "when": 1795706577527,
             "tag": "0000_soft_the_hood",
             "breakpoints": true
+        },
+        {
+            "idx": 2,
+            "version": "7",
+            "when": 1795864368827,
+            "tag": "0002_mean_tusk",
+            "breakpoints": true
+        },
+        {
+            "idx": 3,
+            "version": "7",
+            "when": 1795864947111,
+            "tag": "0003_lively_shriek",
+            "breakpoints": true
         }
     ]
 }

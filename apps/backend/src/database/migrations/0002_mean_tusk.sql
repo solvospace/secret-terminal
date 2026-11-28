@@ -1,0 +1,2 @@
+ALTER TABLE "auth"."reset_codes" ALTER COLUMN "expires_at" SET DEFAULT now() + interval '15 minutes';--> statement-breakpoint
+ALTER TABLE "auth"."users" ALTER COLUMN "verification_code_expires_at" SET DEFAULT now() + interval '10 minutes';

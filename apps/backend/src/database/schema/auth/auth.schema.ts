@@ -10,15 +10,15 @@ export const usersTable = authSchema.table("users", {
     name: varchar("name").notNull(),
     email: varchar("email").notNull().unique(),
     password: varchar("password").notNull(),
-    createdAt: timestamp("created_at", { precision: 6 }).notNull().defaultNow(),
-    updatedAt: timestamp("updated_at", { precision: 6 })
+    createdAt: timestamp("created_at", { precision: 6, withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp("updated_at", { precision: 6, withTimezone: true })
         .notNull()
         .defaultNow()
         .$onUpdate(() => new Date()),
     verified: boolean("verified").notNull().default(false),
     verificationCode: varchar("verification_code").unique(),
-    verificationCodeExpiresAt: timestamp("verification_code_expires_at", { precision: 6 }).default(
-        sql`(now() + interval '${sql.raw(process.env.VERIFICATION_CODE_AGE!)}')`,
+    verificationCodeExpiresAt: timestamp("verification_code_expires_at", { precision: 6, withTimezone: true }).default(
+        sql.raw(`now() + interval '${process.env.VERIFICATION_CODE_AGE}'`),
     ),
 });
 
@@ -27,7 +27,7 @@ export const refreshTokensTable = authSchema.table("refresh_tokens", {
         .primaryKey()
         .default(sql`uuidv7()`),
     token: varchar("token").notNull().unique(),
-    createdAt: timestamp("created_at", { precision: 6 }).notNull().defaultNow(),
+    createdAt: timestamp("created_at", { precision: 6, withTimezone: true }).notNull().defaultNow(),
     userId: uuid("user_id")
         .notNull()
         .references(() => usersTable.id, {
@@ -41,10 +41,10 @@ export const resetCodesTable = authSchema.table("reset_codes", {
         .primaryKey()
         .default(sql`uuidv7()`),
     code: varchar("code").notNull().unique(),
-    createdAt: timestamp("created_at", { precision: 6 }).notNull().defaultNow(),
-    expiresAt: timestamp("expires_at", { precision: 6 })
+    createdAt: timestamp("created_at", { precision: 6, withTimezone: true }).notNull().defaultNow(),
+    expiresAt: timestamp("expires_at", { precision: 6, withTimezone: true })
         .notNull()
-        .default(sql`(now() + interval '${sql.raw(process.env.RESET_CODE_AGE!)}')`),
+        .default(sql.raw(`now() + interval '${process.env.RESET_CODE_AGE}'`)),
     userId: uuid("user_id")
         .notNull()
         .references(() => usersTable.id, {

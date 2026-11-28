@@ -15,9 +15,9 @@ export const watchlistsTable = watchlistSchema.table(
 
         description: varchar("description"),
 
-        createdAt: timestamp("created_at", { precision: 6 }).notNull().defaultNow(),
+        createdAt: timestamp("created_at", { precision: 6, withTimezone: true }).notNull().defaultNow(),
 
-        updatedAt: timestamp("updated_at", { precision: 6 })
+        updatedAt: timestamp("updated_at", { precision: 6, withTimezone: true })
             .notNull()
             .defaultNow()
             .$onUpdate(() => new Date()),
@@ -47,9 +47,9 @@ export const watchlistCoinsTable = watchlistSchema.table(
 
         imageUrl: varchar("image_url"),
 
-        createdAt: timestamp("created_at", { precision: 6 }).notNull().defaultNow(),
+        createdAt: timestamp("created_at", { precision: 6, withTimezone: true }).notNull().defaultNow(),
 
-        updatedAt: timestamp("updated_at", { precision: 6 })
+        updatedAt: timestamp("updated_at", { precision: 6, withTimezone: true })
             .notNull()
             .defaultNow()
             .$onUpdate(() => new Date()),
