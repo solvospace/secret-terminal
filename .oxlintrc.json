@@ -8,7 +8,10 @@
         "eslint/no-unused-vars": [
             "warn",
             {
-                "args": "all"
+                "args": "all",
+                "argsIgnorePattern": "^_",
+                "varsIgnorePattern": "^_",
+                "caughtErrorsIgnorePattern": "^_"
             }
         ],
         "no-debugger": "warn"
