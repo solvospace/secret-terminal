@@ -6,15 +6,29 @@ try {
     for (const config of configs) {
         console.log(`\nDeploying migrations for: ${config}`);
 
-        const result = spawnSync("pnpm", ["exec", "drizzle-kit", "migrate", `--config=${config}`], { stdio: "inherit" });
+        const result = spawnSync("pnpm", ["exec", "drizzle-kit", "migrate", `--config=${config}`], {
+            encoding: "utf-8",
+            stdio: ["inherit", "pipe", "pipe"],
+        });
 
-        if (result.error) throw result.error;
+        if (result.error) {
+            throw result.error;
+        }
+
+        if (result.stdout) {
+            process.stdout.write(result.stdout);
+        }
+
+        if (result.stderr) {
+            process.stderr.write(result.stderr);
+        }
+
         if (result.status !== 0) {
-            throw new Error(`Migration failed with exit code ${result.status}`);
+            throw new Error(`Migration failed with exit code ${result.status ?? "unknown"}`);
         }
     }
 
-    console.log("\n ✅ Production migrations deployed successfully.");
+    console.log("\n✅ Production migrations deployed successfully.");
 } catch (error) {
     console.error("\nProduction migration failed:", error);
     process.exitCode = 1;
